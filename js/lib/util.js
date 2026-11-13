@@ -13,13 +13,17 @@ const ROMAN = ['', 'I', 'II', 'III'];
 const norm = (r) => (r === 'mod' ? 'member' : r === 'sub' ? 'leader' : r);
 /** Cargo para exibição: "Sub Líder II", "Master" ou "Membro". */
 export const roleLabel = (role, slot) => (norm(role) === 'leader' && slot ? `Sub Líder ${ROMAN[slot]}` : ROLE_LABEL[norm(role)] || 'Membro');
+/** Cargo como a guild enxerga: o Admin da plataforma aparece como membro comum. */
+export const pubRoleLabel = (role, slot) => roleLabel(role === 'owner' ? 'member' : role, slot);
 export const rank = (r) => ROLES.indexOf(norm(r));
 // 'mod' e 'sub' eram degraus que a guild não tem: tudo que pedia esses níveis agora pede Sub Líder.
 const need = (m) => (m === 'member' ? 'member' : m === 'owner' ? 'owner' : m === 'master' ? 'master' : 'leader');
 export const can = (min) => !!state.profile && state.profile.status === 'active' && rank(state.profile.role) >= rank(need(min));
 export function crown(role) {
-  if (norm(role) === 'member') return '';
-  const gold = ' gold';
+  // Para a guild só existem o Master (líder, coroa dourada) e os sub líderes (coroa cinza). O Admin aparece como membro.
+  const r = norm(role);
+  if (r !== 'master' && r !== 'leader') return '';
+  const gold = r === 'master' ? ' gold' : '';
   return `<svg class="crown${gold}" viewBox="0 0 24 24" fill="currentColor" aria-label="${ROLE_LABEL[norm(role)]}"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5L3 8z"/></svg>`;
 }
 

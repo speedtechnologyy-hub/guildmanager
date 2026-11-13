@@ -1,6 +1,6 @@
 import { sb, q } from '../supabase.js?v=20261113h';
 import { state } from '../store.js?v=20261113h';
-import { esc, clsBadge, clsRgb, clsIcon, crown, lineageName, className, mainChar, debounce, roleLabel, fmtDate } from '../lib/util.js?v=20261113h';
+import { esc, clsBadge, clsRgb, clsIcon, crown, lineageName, className, mainChar, debounce, pubRoleLabel, fmtDate } from '../lib/util.js?v=20261113h';
 import { empty, modal } from '../lib/ui.js?v=20261113h';
 import { attendanceStats } from '../lib/stats.js?v=20261113h';
 
@@ -35,7 +35,7 @@ export default async function members(root) {
     const c = e.target.closest('[data-c]'); if (c) { cls = c.dataset.c; draw(); return; }
     const card = e.target.closest('.mcard'); if (!card) return;
     const p = people.find((x) => x.id === card.dataset.id);
-    modal(`<h3>${crown(p.role)} ${esc(mainChar(p.characters)?.nick || p.display_name)}</h3><p class="muted small">${esc(p.display_name)} · ${roleLabel(p.role, p.sub_slot)} · na guild desde ${fmtDate(p.joined_at)}</p>
+    modal(`<h3>${crown(p.role)} ${esc(mainChar(p.characters)?.nick || p.display_name)}</h3><p class="muted small">${esc(p.display_name)} · ${pubRoleLabel(p.role, p.sub_slot)} · na guild desde ${fmtDate(p.joined_at)}</p>
       <div class="stat" style="margin:16px 0"><div><b>${att.total ? att.pct(p.id) + '%' : '-'}</b><span>presença 30 dias</span></div><div><b>${att.per[p.id] || 0}</b><span>guerras</span></div><div><b>${p.characters.length}</b><span>personagens</span></div></div>
       <div class="rows">${p.characters.map((c) => `<div>${clsBadge(c.class_code)}<div><div class="name">${esc(c.nick)} ${c.is_main ? '<span class="tag red">Main</span>' : ''}</div><div class="sub">${esc(lineageName(c.lineage_id) || className(c.class_code))}${c.level ? ', level ' + c.level : ''}</div></div></div>`).join('') || empty('Sem personagens.')}</div>`);
   });

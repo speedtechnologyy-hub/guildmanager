@@ -9,6 +9,9 @@ RedirectMatch 404 ^/(README\.md|package\.json)$
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteRule ^master/?$ /#/master [R=302,NE,L]
+  # atalhos: /entrar (login de quem já tem conta) e /instalar (passo a passo do app)
+  RewriteRule ^(entrar|acesso|login)/?$ /#/entrar [R=302,NE,L]
+  RewriteRule ^instalar/?$ /#/instalar [R=302,NE,L]
 </IfModule>
 
 <IfModule mod_headers.c>

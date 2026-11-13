@@ -151,7 +151,7 @@ main { flex: 1; }
 .tag { display: inline-block; padding: 1px 8px; font: 700 .72rem/1.6 var(--font-head); letter-spacing: .05em; border: 1px solid var(--line-soft); color: var(--muted); border-radius: 2px; vertical-align: middle; }
 .tag.gold { color: var(--accent); border-color: var(--line); }
 .tag.red { color: #fff; background: var(--primary); border-color: var(--primary); }
-.crown { width: 15px; height: 15px; display: inline-block; vertical-align: -2px; margin-left: 4px; color: #d9d9e0; }
+.crown { width: 15px; height: 15px; display: inline-block; vertical-align: -2px; margin-left: 4px; color: #9aa1ad; }
 .crown.gold { color: #e8b923; }
 .muted { color: var(--muted); }
 .small { font-size: .9rem; }

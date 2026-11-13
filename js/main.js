@@ -15,6 +15,7 @@ const ROUTES = [
   { re: /^\/master$/, page: 'master', pub: true },
   { re: /^\/convite\/([^/]+)$/, page: 'login', pub: true },
   { re: /^\/p\/([a-z0-9-]+)$/, page: 'page', pub: true },
+  { re: /^\/instalar$/, page: 'install', pub: true },
   { re: /^\/cadastro$/, page: 'signup', bare: true },
   { re: /^\/$/, page: 'lobby' },
   { re: /^\/guerras(?:\/([a-z0-9-]+))?$/, page: 'wars' },
@@ -38,9 +39,17 @@ async function go() {
   const params = route ? path.match(route.re).slice(1) : [];
 
   // portões de acesso
-  if (!state.session && !route?.pub) return nav('#/entrar');
+  // Sem conta: o domínio puro mostra só a vitrine. O login fica em #/entrar e o cadastro, no link de convite.
+  if (!state.session && !route?.pub) {
+    if (path !== '/') return nav('#/');
+    renderShell('bare');
+    const mod = await import('./pages/vitrine.js?v=20261113h');
+    if (my === token) mod.default($('#view'));
+    return;
+  }
   if (state.session && !state.profile && route?.page !== 'signup' && route?.page !== 'login') return nav('#/cadastro');
   if (state.profile && !IS_PREVIEW && (route?.page === 'login' || route?.page === 'signup' || route?.page === 'master')) return nav('#/');
+  if (route?.page === 'install' && !state.profile && state.session) return nav('#/cadastro');
 
   const bare = route?.bare || (route?.pub && (!state.profile || (IS_PREVIEW && route.page === 'login')));
   renderShell(bare ? 'bare' : 'full');

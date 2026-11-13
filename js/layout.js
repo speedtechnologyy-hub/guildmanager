@@ -78,6 +78,7 @@ export function renderShell(kind = 'full', force = false) {
           </button>
           <div class="menu" id="whoMenu" hidden>
             <a href="#/perfil">Meu perfil</a>
+            <a href="#/instalar">Instalar o app</a>
             <hr>
             <button type="button" id="logout">Sair</button>
           </div>

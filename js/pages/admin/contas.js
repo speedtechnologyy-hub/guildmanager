@@ -1,6 +1,6 @@
 import { sb, q } from '../../supabase.js?v=20261113h';
 import { state } from '../../store.js?v=20261113h';
-import { esc, can, fmtDate, roleLabel, ROLE_LABEL, initial, mainChar } from '../../lib/util.js?v=20261113h';
+import { esc, can, fmtDate, roleLabel, ROLE_LABEL, initial, mainChar, crown } from '../../lib/util.js?v=20261113h';
 import { toast, modal, closeModal, confirmBox, errMsg, empty } from '../../lib/ui.js?v=20261113h';
 import { GRANTABLE, LEVELS, canEdit, globalLevel, levelName } from '../../lib/admin-tabs.js?v=20261113h';
 import { savePerm } from './estudio/extra.js?v=20261113h';
@@ -56,7 +56,7 @@ export default async function contas(el) {
       if (can('master')) acts.push(`<button class="btn sm danger" data-act="del" data-id="${p.id}" type="button">Remover</button>`);
     }
     return `<div><div style="display:flex;gap:12px;align-items:center;min-width:0"><span class="av" style="flex:none">${esc(initial(nick(p)))}</span>
-      <div style="min-width:0"><div class="name">${esc(nick(p))} <span class="tag ${sc === 'ok' ? '' : 'red'}">${sl}</span> <span class="tag">${esc(roleLabel(p.role, p.sub_slot))}</span></div>
+      <div style="min-width:0"><div class="name">${esc(nick(p))}${crown(p.role)} <span class="tag ${sc === 'ok' ? '' : 'red'}">${sl}</span> <span class="tag">${esc(roleLabel(p.role, p.sub_slot))}</span></div>
       <div class="sub">${p.display_name !== nick(p) ? esc(p.display_name) + ' · ' : ''}${esc(priv[p.id] || 'sem WhatsApp')} · desde ${fmtDate(p.joined_at || p.created_at)}</div></div></div>
       <span class="right row" style="flex-wrap:wrap;gap:6px">${acts.join('')}</span></div>`;
   }

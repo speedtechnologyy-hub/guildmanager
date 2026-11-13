@@ -37,7 +37,7 @@ export const DEFAULTS = {
     { label: 'Membros', path: '/membros', min_role: 'member' },
   ],
   discord: {},
-  login_bg_url: null, app_bg_url: null,
+  login_bg_url: null, app_bg_url: null, vitrine_url: null,
 };
 
 const isObj = (v) => v && typeof v === 'object' && !Array.isArray(v);

@@ -39,6 +39,7 @@ export const render = {
   imagens: (c) => head('Imagens de fundo', 'Cada tela pode ter a sua. Sem imagem, o site usa o cenário de castelo gerado.') + `<div class="stack">
     <div class="card-s">${fImage(c, 'banner_url', 'Topo do lobby (hero)', { hint: 'Ideal: 1920x800 ou maior.' })}${fRange(c, 'theme.hero_overlay', 'Escurecer a imagem', { unit: '%' })}${fRange(c, 'theme.hero_h', 'Altura do topo', { min: 40, max: 100, unit: 'vh' })}</div>
     <div class="card-s">${fImage(c, 'login_bg_url', 'Tela de login', { hint: 'Se vazio, usa a imagem do topo.' })}${fRange(c, 'theme.login_dim', 'Escurecer a imagem', { unit: '%' })}</div>
+    <div class="card-s">${fImage(c, 'vitrine_url', 'Vitrine (quem abre o site sem conta)', { hint: 'Aparece sozinha, em tela cheia, sem botões. Se vazio, usa a imagem do topo. O login fica em /entrar.' })}</div>
     <div class="card-s">${fImage(c, 'app_bg_url', 'Fundo de todas as telas', { hint: 'Fica atrás do conteúdo das páginas internas.' })}${fRange(c, 'theme.app_bg_dim', 'Cobertura da cor de fundo', { unit: '%' })}</div></div>`,
 
   cores: (c) => head('Cores', 'Escolha um tema pronto ou ajuste cada cor. A prévia à direita muda na hora.') +
