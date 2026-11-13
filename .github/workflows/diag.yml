@@ -1,0 +1,31 @@
+name: Teste do site no ar
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tempos de resposta
+        run: |
+          K=sb_publishable_MPsKLkP6O15TGIFrOlYgAQ_vdO5E37G
+          U=https://uhlmxifsozrjajkghqql.supabase.co
+          t() { curl -s -o /tmp/o -m 30 -w "%{http_code} %{time_total}s %{size_download}b  $1\n" "${@:2}" "$1" || echo "FALHOU $1"; }
+          t https://guildmanager.top/
+          t https://guildmanager.top/js/main.js
+          t https://guildmanager.top/manifest.webmanifest
+          t "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.47.10/+esm"
+          t "$U/auth/v1/health" -H "apikey: $K"
+          t "$U/rest/v1/site_settings?select=key" -H "apikey: $K"; head -c 300 /tmp/o; echo
+          t "$U/rest/v1/cms_pages?select=id" -H "apikey: $K"; head -c 200 /tmp/o; echo
+          curl -sI https://guildmanager.top/js/main.js | head -12
+          curl -s https://guildmanager.top/ | grep -n "main.js\|vendor" 
+          curl -s https://guildmanager.top/js/main.js | head -3
+          curl -s https://guildmanager.top/js/supabase.js | head -30
+      - name: Abrir o site em navegador de verdade
+        run: |
+          cd .github/diag && npm init -y >/dev/null && npm i playwright@1.49.1 >/dev/null 2>&1
+          npx playwright install --with-deps chromium webkit >/dev/null 2>&1
+          node check.mjs
