@@ -24,6 +24,7 @@ export default async function login(root, [code]) {
           ${featureOn('login_discord') ? `<button class="btn oauth" type="button" data-p="discord">${DISCORD}${esc(t.login_discord || 'Entrar com Discord')}</button>` : ''}
         </div>
         ${code ? '<p class="hint" style="margin-top:18px"><a href="#/entrar">Já tenho conta</a></p>' : ''}
+        <p class="hint" style="margin-top:12px"><a href="#/instalar">Como instalar o app no celular</a></p>
       </section>
     </div>`;
 

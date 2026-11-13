@@ -79,7 +79,7 @@ export function renderShell(kind = 'full', force = false) {
     <header class="topbar"><div class="wrap">
       <a class="brand" href="#/"><img src="${esc(logoUrl())}" alt=""><b>${esc(s.guild_name)}</b></a>
       <button class="burger" type="button" aria-label="Abrir menu" aria-expanded="false">☰</button>
-      <nav class="nav" id="nav">${links}
+      <nav class="nav" id="nav">${links}${(matchMedia('(display-mode: standalone)').matches || navigator.standalone) ? '' : '<a href="#/instalar" class="instlink" data-path="/instalar">Instalar o app</a>'}
         <div class="who">
           <button type="button" id="whoBtn" aria-haspopup="true" aria-expanded="false">
             <span class="av" style="--c:${rgb}">${esc(initial(nick))}</span><span>${esc(nick)}</span>
