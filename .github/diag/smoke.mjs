@@ -11,8 +11,8 @@ for (const path of ['/', '/#/ranking', '/#/membros', '/#/guerras', '/#/perfil', 
   const notes = []; pg.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') notes.push(m.text().slice(0, 300)); });
   pg.on('requestfailed', (r) => notes.push('FAILED ' + r.url().slice(0, 100)));
   pg.on('response', (r) => { if (r.url().startsWith(BASE)) { own++; if (r.status() >= 400) errs.push(`RESP ${r.status()} ${r.url()}`); } });
-  await pg.route('**/@supabase/supabase-js**', (r) => r.fulfill({ body: stub, contentType: 'application/javascript' }));
-  await pg.route('**/fonts.g*/**', (r) => r.abort());
+  await pg.route(/supabase-js/, (r) => r.fulfill({ body: stub, contentType: 'application/javascript' }));
+  await pg.route(/fonts\.g/, (r) => r.abort());
   await pg.goto(BASE + path); await pg.waitForFunction(() => (document.querySelector('#view')?.innerText || '').trim().length > 60, null, { timeout: 8000 }).catch(() => {}); await pg.waitForTimeout(800);
   const text = (await pg.evaluate(() => document.querySelector('#view')?.innerText || '')).replace(/\s+/g, ' ');
   const ok = !errs.length && text.length > 60 && own <= 15;
