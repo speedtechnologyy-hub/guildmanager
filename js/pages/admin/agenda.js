@@ -37,7 +37,7 @@ export default async function agenda(el) {
     return `<h2>Horário das guerras</h2><p class="muted small">Cada guerra tem o seu horário fixo. Defina uma vez: a agenda, o contador e os avisos seguem daqui.</p>
       <form id="wf" class="stack" style="margin-top:14px">${ws.map((t) => { const r = ruleOf(t); return `<section class="plate" style="padding:20px" data-t="${t.id}"><h3>${esc(t.name)}</h3>
         <div class="form-grid" style="margin-top:12px"><label class="f">Início<input type="time" name="start${t.id}" required value="${hm(r?.start_time) || '21:00'}"></label>
-          <label class="f">Chamada abre às<input type="time" name="open${t.id}" value="${hm(r?.rsvp_open_time) || '12:00'}"></label>
+          <label class="f">Chamada abre às<input type="time" name="open${t.id}" value="${hm(r?.rsvp_open_time) || '08:00'}"></label>
           <label class="f">Fecha quantos min antes<input type="number" name="close${t.id}" min="0" value="${r?.rsvp_close_offset_min ?? 30}"></label></div>
         <label class="f" style="margin-top:12px">Banner no site<select name="show${t.id}">${[[0, 'Só no dia da guerra (a partir da meia-noite)'], [1, 'Desde 1 dia antes'], [2, 'Desde 2 dias antes']].map(([v, n]) => `<option value="${v}" ${(t.show_days_before ?? 0) === v ? 'selected' : ''}>${n}</option>`).join('')}</select><small class="muted">Quando o contador desta guerra começa a aparecer para os membros.</small></label>
         <div class="f" style="margin-top:12px"><strong>Dias</strong><div class="row" style="gap:10px;flex-wrap:wrap">${DAYS.map((d, i) => `<label class="check"><input type="checkbox" name="wd${t.id}" value="${i + 1}" ${defDays(t).includes(i + 1) ? 'checked' : ''}> ${d}</label>`).join('')}
