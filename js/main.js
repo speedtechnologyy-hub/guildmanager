@@ -12,7 +12,7 @@ import { loadingHTML, closeModal } from './lib/ui.js?v=20261113h';
 // Cada rota carrega o seu módulo só quando é visitada.
 const ROUTES = [
   { re: /^\/entrar$/, page: 'login', pub: true },
-  { re: /^\/master$/, page: 'master', pub: true },
+  { re: /^\/adminpainel$/, page: 'master', pub: true },
   { re: /^\/convite\/([^/]+)$/, page: 'login', pub: true },
   { re: /^\/p\/([a-z0-9-]+)$/, page: 'page', pub: true },
   { re: /^\/instalar$/, page: 'install', pub: true },
@@ -111,7 +111,7 @@ function refreshLive({ cssOnly } = {}) {
   if (shellMode() === 'full') renderShell('full', true);
   if (cssOnly) return;
   const path = (location.hash.slice(1) || '/').split('?')[0];
-  if (/^\/(admin|cadastro|master)/.test(path)) return;
+  if (/^\/(admin|cadastro)/.test(path)) return;
   clearTimeout(refreshTimer);
   const tryGo = () => {
     const a = document.activeElement;

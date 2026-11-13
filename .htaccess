@@ -5,10 +5,10 @@ DirectoryIndex index.html
 RedirectMatch 404 ^/(supabase|\.git|node_modules)(/|$)
 RedirectMatch 404 ^/(README\.md|package\.json)$
 
-# atalho: /master abre a rota oculta do GuildMaster
+# atalho: /adminpainel abre a entrada reservada do Admin (e-mail e senha)
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteRule ^master/?$ /#/master [R=302,NE,L]
+  RewriteRule ^adminpainel/?$ /#/adminpainel [R=302,NE,L]
   # atalhos: /entrar (login de quem já tem conta) e /instalar (passo a passo do app)
   RewriteRule ^(entrar|acesso|login)/?$ /#/entrar [R=302,NE,L]
   RewriteRule ^instalar/?$ /#/instalar [R=302,NE,L]
