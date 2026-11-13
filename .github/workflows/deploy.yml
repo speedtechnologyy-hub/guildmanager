@@ -3,9 +3,9 @@ name: Deploy para Hostinger
 on:
   # Por enquanto só manual: GitHub > Actions > "Deploy para Hostinger" > Run workflow.
   workflow_dispatch:
-  # Quando estiver tudo certo, descomente as 3 linhas abaixo para publicar a cada push na main:
-  # push:
-  #   branches: [main]
+  # Publica automaticamente a cada push na main:
+  push:
+    branches: [main]
 
 concurrency:
   group: deploy-hostinger
