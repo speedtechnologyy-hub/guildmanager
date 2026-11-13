@@ -15,12 +15,13 @@ function bars(vals) {
 
 export default async function resumo(el) {
   const head = (t) => sb.from(t).select('id', { count: 'exact', head: true });
-  const [m, inv, ev, integ, people, wars] = await Promise.all([
+  const [m, inv, ev, integ, people, wars, subs] = await Promise.all([
     head('profiles').eq('status', 'active'), head('invites').eq('active', true),
     head('events').gte('starts_at', new Date().toISOString()).eq('status', 'scheduled'),
     can('leader') ? sb.from('integration_settings').select('*').eq('id', 1).maybeSingle() : { data: null },
     q(sb.from('profiles').select('id,characters(*)').eq('status', 'active')),
     q(sb.from('events').select('id,starts_at,event_types!inner(kind)').eq('event_types.kind', 'war').lt('starts_at', new Date().toISOString()).order('starts_at', { ascending: false }).limit(8)),
+    head('profiles').eq('role', 'leader'),
   ]);
   const ids = wars.map((w) => w.id);
   const att = ids.length ? await q(sb.from('event_attendance').select('event_id,attended').in('event_id', ids)) : [];
@@ -32,11 +33,12 @@ export default async function resumo(el) {
     ['Logo e nome da guild', !!state.settings.logo_url, '#/admin/estudio'],
     ['Tipos de guerra com horários', ev.count > 0, '#/admin/agenda'],
     ['Discord configurado', !!(d.invite_url || d.voice_url), '#/admin/estudio'],
+    ['Sub líderes escolhidos', (subs.count || 0) > 0, '#/admin/estudio'],
     ['WhatsApp conectado', !!i?.whatsapp_connected, '#/admin/avisos'],
     ['Envio de avisos ligado', i ? !i.sends_paused : false, '#/admin/avisos'],
   ];
   el.innerHTML = `<h2>Visão geral</h2>
-    <div class="kpis"><div><b>${m.count ?? 0}</b><span>membros ativos</span></div><div><b>${ev.count ?? 0}</b><span>eventos na agenda</span></div><div><b>${inv.count ?? 0}</b><span>convites ativos</span></div><div><b>${noChar}</b><span>sem personagem</span></div></div>
+    <div class="kpis"><div><b>${m.count ?? 0}</b><span>membros ativos</span></div><div><b>${ev.count ?? 0}</b><span>guerras agendadas</span></div><div><b>${inv.count ?? 0}</b><span>convites ativos</span></div><div><b>${noChar}</b><span>sem personagem</span></div></div>
     <div class="dash"><div class="card"><h3>Classes (mains)</h3>${donut(parts)}<div class="legend">${parts.map((p) => `<span><i style="--c:${p.c}"></i>${esc(p.code)} ${p.n}</span>`).join('')}</div></div>
       <div class="card"><h3>Presença nas últimas guerras (%)</h3>${bars(series)}</div></div>
     ${can('leader') ? `<h3 style="margin-top:28px">Para deixar tudo pronto</h3><div class="rows" style="margin-top:10px">${chk.map(([t, ok, h]) => `<div><span class="st ${ok ? 'ok' : 'bad'}">${esc(t)}</span><span class="right">${ok ? '' : `<a class="btn sm" href="${h}">Configurar</a>`}</span></div>`).join('')}</div>` : ''}`;

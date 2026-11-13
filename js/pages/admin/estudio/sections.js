@@ -21,10 +21,13 @@ export const PRESETS = [
 const head = (t, d) => `<h3 class="sh">${esc(t)}</h3>${d ? `<p class="muted small">${d}</p>` : ''}`;
 const grid = (...x) => `<div class="g2">${x.join('')}</div>`;
 
+// [id, nome, grupo (só no primeiro de cada grupo)]
 export const SECTIONS = [
-  ['identidade', 'Identidade'], ['imagens', 'Imagens de fundo'], ['cores', 'Cores'], ['fontes', 'Fontes'], ['botoes', 'Botões e cartões'],
-  ['menu', 'Menu'], ['funcoes', 'Funções'], ['telas', 'Telas e blocos'], ['paginas', 'Páginas novas'], ['textos', 'Textos'],
-  ['whatsapp', 'WhatsApp (Evolution)'], ['seguranca', 'Versões e padrão'],
+  ['identidade', 'Identidade', 'Aparência'], ['imagens', 'Imagens de fundo'], ['cores', 'Cores'], ['fontes', 'Fontes'], ['botoes', 'Botões e cartões'], ['textos', 'Textos'],
+  ['menu', 'Menu', 'Estrutura'], ['funcoes', 'Funções e efeitos'], ['telas', 'Telas e blocos'], ['paginas', 'Páginas novas'],
+  ['equipe', 'Sub líderes e acessos', 'Equipe'],
+  ['whatsapp', 'WhatsApp (Evolution)', 'Integrações'],
+  ['seguranca', 'Versões e padrão', 'Segurança'],
 ];
 
 export const render = {
@@ -84,7 +87,7 @@ export const render = {
 
   menu: (c) => {
     const items = c.get('menu') || [];
-    const dests = [['/', 'Lobby'], ['/guerras', 'Guerras'], ['/bosses', 'Bosses'], ['/agenda', 'Agenda'], ['/ranking', 'Ranking'], ['/membros', 'Membros'], ['/voz', 'Voz'], ['/perfil', 'Meu perfil'],
+    const dests = [['/', 'Lobby'], ['/guerras', 'Guerras'], ['/ranking', 'Ranking'], ['/membros', 'Membros'], ['/voz', 'Voz'], ['/perfil', 'Meu perfil'],
       ...c.pages.map((p) => ['/p/' + p.slug, 'Página: ' + p.title]), ['__url', 'Link externo...']];
     return head('Menu', 'Crie botões novos, mude a ordem arrastando e escolha o estilo de cada um. Páginas novas com "mostrar no menu" entram sozinhas.') + `<div class="blist" data-list="menu">${items.map((m, i) => {
       const known = dests.some(([v]) => v === m.path) && !m.url;

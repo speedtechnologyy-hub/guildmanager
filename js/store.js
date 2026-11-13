@@ -16,10 +16,10 @@ export const DEFAULTS = {
     // opcionais: vazio = usa o padrão da pele
     frame: '', heading_color: '', hero_title: '', link: '', topbar_bg: '', footer_bg: '',
     btn_style: 'metal', btn_radius: 0, btn_bg: '', btn_text: '', btn_primary_text: '', btn_upper: true,
-    radius: 0, wrap_w: 1120, font_scale: 100, hero_h: 92, hero_overlay: 40, topbar_style: 'glass',
+    radius: 0, wrap_w: 1120, font_scale: 100, hero_h: 70, hero_overlay: 40, topbar_style: 'glass',
     app_bg_dim: 70, login_dim: 55, nav_align: 'right',
   },
-  features: {}, effects: {}, layouts: {}, custom_fonts: [],
+  features: {}, effects: {}, layouts: {}, custom_fonts: [], admin_access: {},
   texts: {
     login_title: 'Área de membros',
     login_subtitle: 'Entre com Google ou Discord. Ainda não tem conta? Peça um convite à liderança.',
@@ -33,8 +33,6 @@ export const DEFAULTS = {
   menu: [
     { label: 'Lobby', path: '/', min_role: 'member' },
     { label: 'Guerras', path: '/guerras', min_role: 'member' },
-    { label: 'Bosses', path: '/bosses', min_role: 'member' },
-    { label: 'Agenda', path: '/agenda', min_role: 'member' },
     { label: 'Ranking', path: '/ranking', min_role: 'member' },
     { label: 'Membros', path: '/membros', min_role: 'member' },
   ],
@@ -55,6 +53,7 @@ export function normalize(s) {
     effects: isObj(s.effects) ? s.effects : {},
     layouts: isObj(s.layouts) ? s.layouts : {},
     custom_fonts: Array.isArray(s.custom_fonts) ? s.custom_fonts : [],
+    admin_access: isObj(s.admin_access) ? s.admin_access : {},
   };
 }
 

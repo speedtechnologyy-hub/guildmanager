@@ -25,7 +25,7 @@ export const shellMode = () => shellKind;
 /** Menu final: itens do master + páginas marcadas "no menu" + atalhos automáticos. */
 function menuItems() {
   const s = state.settings;
-  const items = (s.menu || []).filter((i) => i.enabled !== false && can(i.min_role || 'member'))
+  const items = (s.menu || []).filter((i) => i.enabled !== false && can(i.min_role || 'member') && !['/bosses', '/agenda'].includes(i.path))
     .filter((i) => { const f = i.path && pathFeature(i.path); return !f || featureAllowed(f); });
   for (const p of state.pages) {
     if (!p.show_in_menu || items.some((i) => i.path === '/p/' + p.slug)) continue;

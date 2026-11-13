@@ -7,12 +7,12 @@ import { toast, errMsg, confirmBox } from '../../lib/ui.js';
 import { clone, getPath, setPath, sortable, move } from './estudio/kit.js';
 import { SECTIONS, PRESETS, render } from './estudio/sections.js';
 import { newBlock, newItem } from './estudio/blocks-ui.js';
-import { pagesList, renderPages, renderWhats, renderBackup } from './estudio/extra.js';
+import { pagesList, renderPages, renderWhats, renderBackup, renderTeam, setSubLeader } from './estudio/extra.js';
 
 /** Chaves de site_settings que o Estúdio controla (rascunho + publicação). */
-const KEYS = ['theme', 'texts', 'menu', 'features', 'effects', 'layouts', 'custom_fonts', 'guild_name', 'logo_url', 'favicon_url', 'banner_url', 'login_bg_url', 'app_bg_url', 'discord', 'timezone', 'site_url'];
+const KEYS = ['admin_access', 'theme', 'texts', 'menu', 'features', 'effects', 'layouts', 'custom_fonts', 'guild_name', 'logo_url', 'favicon_url', 'banner_url', 'login_bg_url', 'app_bg_url', 'discord', 'timezone', 'site_url'];
 const EXT_TYPE = { woff2: 'font/woff2', woff: 'font/woff', ttf: 'font/ttf', otf: 'font/otf' };
-const SCREENS_PREVIEW = [['/', 'Lobby'], ['/entrar', 'Login'], ['/guerras', 'Guerras'], ['/bosses', 'Bosses'], ['/agenda', 'Agenda'], ['/ranking', 'Ranking'], ['/membros', 'Membros'], ['/perfil', 'Perfil']];
+const SCREENS_PREVIEW = [['/', 'Lobby'], ['/entrar', 'Login'], ['/guerras', 'Guerras'], ['/ranking', 'Ranking'], ['/membros', 'Membros'], ['/perfil', 'Perfil']];
 const FONT_OK = /^[A-Za-z0-9 ]{2,40}$/;
 
 export default async function estudio(root) {
@@ -44,7 +44,7 @@ export default async function estudio(root) {
       <button class="sbtn" type="button" id="discard">Descartar</button><button class="sbtn pri" type="button" id="pub">Publicar</button>
     </header>
     <div class="st-body">
-      <nav class="st-nav" id="nav">${SECTIONS.map(([k, n]) => `<button type="button" data-sec="${k}">${esc(n)}</button>`).join('')}</nav>
+      <nav class="st-nav" id="nav">${SECTIONS.map(([k, n, g], i) => `${g ? `<small class="gp">${esc(g)}</small>` : ''}<button type="button" data-sec="${k}">${esc(n)}</button>`).join('')}</nav>
       <div class="st-panel" id="panel"></div>
       <div class="st-prev"><div class="st-tools"><select id="scr">${SCREENS_PREVIEW.map(([p, n]) => `<option value="${p}">${n}</option>`).join('')}</select>
         <div class="seg dev"><button type="button" data-dev="100%" class="on">Computador</button><button type="button" data-dev="820px">Tablet</button><button type="button" data-dev="390px">Celular</button></div>
@@ -114,6 +114,7 @@ export default async function estudio(root) {
     try {
       if (ui.section === 'paginas') { if (!c.pagesFull.length && !c.pageEdit) await pagesList(c); html = renderPages(c); }
       else if (ui.section === 'whatsapp') html = renderWhats();
+      else if (ui.section === 'equipe') html = await renderTeam(c);
       else if (ui.section === 'seguranca') html = await renderBackup(c);
       else html = render[ui.section](c);
     } catch (err) { html = `<p class="muted">${esc(errMsg(err))}</p>`; }
@@ -145,6 +146,8 @@ export default async function estudio(root) {
     if (t.matches('[data-p]') && t.type !== 'range') onInput(e);
     if (t.dataset.featon) { c.set(`features.${t.dataset.featon}.enabled`, t.checked); commit(); }
     if (t.dataset.featrole) { c.set(`features.${t.dataset.featrole}.min_role`, t.value); commit(); }
+    if (t.dataset.acc) { c.set(`admin_access.${t.dataset.acc}`, t.checked); commit(); }
+    if (t.dataset.subslot) { try { await setSubLeader(+t.dataset.subslot, t.value); toast('Sub líder atualizado.', 'ok'); } catch (err) { toast(errMsg(err), 'bad'); } draw(); }
     if (t.dataset.fx) { c.set(`effects.${t.dataset.fx}`, t.checked); commit(); }
     if (t.dataset.dest != null) {
       const m = draft.menu[+t.dataset.dest];

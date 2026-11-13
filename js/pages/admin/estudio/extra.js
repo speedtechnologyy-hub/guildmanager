@@ -2,6 +2,7 @@ import { sb, q } from '../../../supabase.js';
 import { esc } from '../../../lib/util.js';
 import { fText, fArea, fSelect, fCheck, fImage } from './kit.js';
 import { blockList } from './blocks-ui.js';
+import { GRANTABLE } from '../../../lib/admin-tabs.js';
 
 const head = (t, d) => `<h3 class="sh">${esc(t)}</h3>${d ? `<p class="muted small">${d}</p>` : ''}`;
 
@@ -49,4 +50,24 @@ export async function renderBackup(c) {
     <button class="sbtn" type="button" data-restore ${b ? '' : 'disabled'}>Voltar à versão anterior</button></div>
     <div class="card-s"><strong>Visual padrão</strong><p class="muted small">Volta cores, fontes, botões, imagens e efeitos ao original. Vai para o rascunho: confira na prévia e clique em Publicar.</p><button class="sbtn danger" type="button" data-defaults>Preparar visual padrão</button></div>
     <div class="card-s"><strong>Rascunho</strong><p class="muted small">Joga fora tudo que ainda não foi publicado.</p><button class="sbtn" type="button" data-discard>Descartar alterações</button></div></div>`;
+}
+
+/** Troca quem ocupa uma das 3 vagas de sub líder (userId vazio = deixa a vaga livre). */
+export async function setSubLeader(slot, userId) {
+  await q(sb.from('profiles').update({ role: 'member', sub_slot: null }).eq('role', 'leader').eq('sub_slot', slot));
+  if (userId) await q(sb.from('profiles').update({ role: 'leader', sub_slot: slot }).eq('id', userId));
+}
+
+export async function renderTeam(c) {
+  const people = await q(sb.from('profiles').select('id,display_name,role,sub_slot,characters(nick,is_main)').eq('status', 'active').order('display_name'));
+  const nick = (p) => p.characters?.find((x) => x.is_main)?.nick || p.display_name;
+  const eligible = people.filter((p) => p.role !== 'owner');
+  const slot = (n) => {
+    const cur = people.find((p) => p.role === 'leader' && p.sub_slot === n);
+    return `<label class="sf">Sub líder ${n}<select data-subslot="${n}"><option value="">— vaga livre —</option>${eligible.map((p) => `<option value="${p.id}" ${cur?.id === p.id ? 'selected' : ''}>${esc(nick(p))}${p.display_name !== nick(p) ? ` (${esc(p.display_name)})` : ''}</option>`).join('')}</select></label>`;
+  };
+  return head('Sub líderes e acessos', 'Escolha quem são os sub líderes e o que cada função libera para eles.') + `<div class="stack">
+    <div class="card-s"><strong>Vagas de sub líder</strong><p class="muted small">Quem for escolhido passa a ver o painel, dentro dos limites abaixo. O membro precisa já estar cadastrado no site.</p>${[1, 2, 3].map(slot).join('')}</div>
+    <div class="card-s"><strong>O que os sub líderes podem fazer</strong><p class="muted small">Desligue uma função para escondê-la do painel deles. Presença, fama, prints e cidades também são barrados no banco de dados, não só na tela. O GuildMaster sempre tem acesso a tudo. As mudanças valem quando você clicar em Publicar.</p>
+      ${GRANTABLE.map((t) => `<label class="sw"><input type="checkbox" data-acc="${t.id}" ${c.get(`admin_access.${t.id}`) !== false ? 'checked' : ''}><i></i><span>${esc(t.name)}<small>${esc(t.group)}${t.db ? ' · protegido também no banco' : ''}</small></span></label>`).join('')}</div></div>`;
 }

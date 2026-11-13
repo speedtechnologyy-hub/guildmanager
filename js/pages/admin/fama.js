@@ -17,7 +17,7 @@ const iso = (d) => `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.ge
 const br = (d) => `${pad(d.getUTCDate())}/${pad(d.getUTCMonth() + 1)}`;
 
 export default async function fama(el) {
-  const owner = can('owner');
+  const owner = can('leader'); // o master libera ou bloqueia sub líderes em Estúdio > Equipe
   let monday = mondayOf(new Date());
 
   async function load() {

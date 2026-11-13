@@ -57,7 +57,7 @@ export default async function avisos(el) {
     const types = state.types.filter((t) => t.active);
     const m = modal(`<h3>${r ? 'Editar' : 'Nova'} regra de aviso</h3><form class="stack" id="f" style="margin-top:14px">
       <label class="f">Nome<input name="name" required value="${esc(r?.name || '')}"></label>
-      <div class="form-grid"><label class="f">Vale para<select name="scope">${['war:Guerras', 'boss:Bosses', 'event:Eventos'].map((s) => { const [k, n] = s.split(':'); return `<option value="k:${k}" ${!r?.event_type_id && r?.kind === k ? 'selected' : ''}>${n} (todos)</option>`; }).join('')}${types.map((t) => `<option value="t:${t.id}" ${r?.event_type_id === t.id ? 'selected' : ''}>${esc(t.name)}</option>`).join('')}</select></label>
+      <div class="form-grid"><label class="f">Vale para<select name="scope">${['war:Guerras'].map((s) => { const [k, n] = s.split(':'); return `<option value="k:${k}" ${!r?.event_type_id && r?.kind === k ? 'selected' : ''}>${n} (todos)</option>`; }).join('')}${types.map((t) => `<option value="t:${t.id}" ${r?.event_type_id === t.id ? 'selected' : ''}>${esc(t.name)}</option>`).join('')}</select></label>
       <label class="f">Quem recebe<select name="aud">${Object.entries(AUD).map(([k, v]) => `<option value="${k}" ${r?.audience === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label></div>
       <label class="f">Quando avisar<small>Minutos antes do início, separados por vírgula. Use 0 para avisar na hora. Ex.: 30, 10, 0</small><input name="off" required value="${esc((r?.offsets_min || [10]).join(', '))}"></label>
       <label class="f">Só para as classes<small>Deixe em branco para todas. Ex.: TK, FM</small><input name="cls" value="${esc((r?.audience_classes || []).join(', '))}"></label>

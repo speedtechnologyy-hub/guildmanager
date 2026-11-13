@@ -18,8 +18,6 @@ const ROUTES = [
   { re: /^\/cadastro$/, page: 'signup', bare: true },
   { re: /^\/$/, page: 'lobby' },
   { re: /^\/guerras(?:\/([a-z0-9-]+))?$/, page: 'wars' },
-  { re: /^\/bosses$/, page: 'bosses' },
-  { re: /^\/agenda$/, page: 'agenda' },
   { re: /^\/ranking$/, page: 'ranking' },
   { re: /^\/membros$/, page: 'members' },
   { re: /^\/voz$/, page: 'voice' },

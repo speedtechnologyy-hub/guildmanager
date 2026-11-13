@@ -4,8 +4,8 @@ import { esc, can, clsBadge, fmtDateTime, mainChar } from '../../lib/util.js';
 import { toast, busy, errMsg, empty } from '../../lib/ui.js';
 
 export default async function presenca(el) {
-  const evs = await q(sb.from('events').select('id,title,starts_at,status,event_types(name,rsvp_enabled)').neq('status', 'cancelled').lte('starts_at', new Date(Date.now() + 6 * 3600e3).toISOString()).order('starts_at', { ascending: false }).limit(25));
-  if (!evs.length) { el.innerHTML = '<h2>Presença</h2>' + empty('Nenhum evento recente para marcar.'); return; }
+  const evs = await q(sb.from('events').select('id,title,starts_at,status,event_types!inner(name,rsvp_enabled,kind)').eq('event_types.kind', 'war').neq('status', 'cancelled').lte('starts_at', new Date(Date.now() + 6 * 3600e3).toISOString()).order('starts_at', { ascending: false }).limit(25));
+  if (!evs.length) { el.innerHTML = '<h2>Presença</h2>' + empty('Nenhuma guerra recente para marcar.'); return; }
   el.innerHTML = `<h2>Presença</h2><label class="f" style="margin:14px 0">Evento<select id="ev">${evs.map((e) => `<option value="${e.id}">${esc(e.title)} · ${fmtDateTime(e.starts_at)}${e.status === 'done' ? ' (encerrado)' : ''}</option>`).join('')}</select></label><div id="v"></div>`;
   const v = el.querySelector('#v'); let rows = [], evId;
   async function load() {

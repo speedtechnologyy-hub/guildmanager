@@ -13,7 +13,7 @@ function toLocalInput(iso) {
 }
 
 export default async function calendario(el) {
-  const owner = can('owner');
+  const owner = can('leader'); // o master libera ou bloqueia sub líderes em Estúdio > Equipe
   const now = new Date();
   let y = now.getFullYear(), m = now.getMonth(), sel = dayKey(now);
   let evs = [], res = {}, prints = {}, att = {};

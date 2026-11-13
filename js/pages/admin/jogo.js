@@ -6,15 +6,13 @@ import { toast, modal, closeModal, busy, errMsg, confirmBox, empty } from '../..
 export default async function jogo(el) {
   async function load() {
     await loadGame();
-    const bosses = await q(sb.from('bosses').select('*').order('sort'));
-    const types = await q(sb.from('event_types').select('*').order('sort'));
+    const bosses = [];
+    const types = [];
     const sect = (title, id, body, add) => `<section class="section" style="margin-top:28px"><div class="row" style="justify-content:space-between"><h2>${title}</h2><button class="btn" data-add="${id}" type="button">${add}</button></div><div class="rows" style="margin-top:12px">${body || empty('Nada cadastrado.')}</div></section>`;
     const btns = (k, id) => `<span class="right row"><button class="btn sm" data-ed="${k}" data-id="${esc(id)}" type="button">Editar</button><button class="btn sm danger" data-rm="${k}" data-id="${esc(id)}" type="button">Excluir</button></span>`;
-    el.innerHTML = `<h1 style="font-size:1.6rem">Jogo</h1><p class="muted small">Classes, linhagens, tipos de evento e bosses usados em todo o site.</p>
+    el.innerHTML = `<h1 style="font-size:1.6rem">Classes e linhagens</h1><p class="muted small">Usadas no cadastro dos personagens e no ranking.</p>
       ${sect('Classes', 'class', state.classes.map((c) => `<div>${clsBadge(c.code)}<div><div class="name">${esc(c.name)}</div><div class="sub">${c.active ? 'ativa' : 'desativada'}</div></div>${btns('class', c.code)}</div>`).join(''), 'Nova classe')}
-      ${sect('Linhagens', 'lineage', state.lineages.map((l) => `<div>${clsBadge(l.class_code)}<div><div class="name">${esc(l.name)}</div><div class="sub">${l.active ? 'ativa' : 'desativada'}</div></div>${btns('lineage', l.id)}</div>`).join(''), 'Nova linhagem')}
-      ${sect('Tipos de evento', 'type', types.map((t) => `<div><span class="swatch" style="width:14px;height:14px;background:${esc(t.color)};display:inline-block;border-radius:50%"></span><div><div class="name">${esc(t.name)}</div><div class="sub">${{ war: 'guerra', boss: 'boss', event: 'evento' }[t.kind]} · ${t.rsvp_enabled ? 'com chamada' : 'sem chamada'}${t.has_cities ? ' · cidades e aposta' : ''} · ${t.active ? 'ativo' : 'desativado'}</div></div>${btns('type', t.id)}</div>`).join(''), 'Novo tipo')}
-      ${sect('Bosses', 'boss', bosses.map((b) => `<div><div><div class="name">${esc(b.name)}</div><div class="sub">${b.respawn_minutes ? 'respawn de ' + b.respawn_minutes + ' min' : 'horário fixo'} · ${b.active ? 'ativo' : 'desativado'}</div></div>${btns('boss', b.id)}</div>`).join(''), 'Novo boss')}`;
+      ${sect('Linhagens', 'lineage', state.lineages.map((l) => `<div>${clsBadge(l.class_code)}<div><div class="name">${esc(l.name)}</div><div class="sub">${l.active ? 'ativa' : 'desativada'}</div></div>${btns('lineage', l.id)}</div>`).join(''), 'Nova linhagem')}`;
     el._d = { bosses, types };
   }
   const defs = {

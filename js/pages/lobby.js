@@ -48,7 +48,6 @@ export default async function lobby(root) {
     const classes = state.classes.filter((c) => c.active);
     const pct = people.length ? Math.round(people.reduce((a, p) => a + att.pct(p.id), 0) / people.length) : 0;
     const rank = people.map((p) => ({ p, ch: mainChar(p.characters), n: att.per[p.id] || 0 })).filter((x) => x.n > 0).sort((a, b) => b.n - a.n).slice(0, 3);
-    const others = evs.filter((e) => e !== war && new Date(e.starts_at) < Date.now() + 36 * 3600e3).slice(0, 6);
     const podiumOrder = rank.length === 3 ? [rank[1], rank[0], rank[2]] : rank;
 
     const S = {
@@ -70,7 +69,6 @@ export default async function lobby(root) {
         return `<div class="pl p${pos}" style="--c:${x.ch ? clsRgb(x.ch.class_code) : '163,151,135'}"><span class="medal">${pos}</span>${x.ch ? `<div style="width:30px;height:30px;margin:0 auto;color:rgb(${clsRgb(x.ch.class_code)})">${clsIcon(x.ch.class_code)}</div>` : ''}<div class="nm">${esc(x.ch?.nick || x.p.display_name)}</div><div class="pc">${att.pct(x.p.id)}%<small>${x.n} de ${att.total} guerras</small></div></div>`; }).join('')}</div>
         <p class="muted small"><a href="#/ranking">Ver ranking completo</a></p></div>` : ''}`,
       announcements: () => `${ann.length ? `<div class="section"><h2>Avisos</h2><div class="stack">${ann.map((a) => plate(`<h3>${a.pinned ? '<span class="tag red">Fixado</span> ' : ''}${esc(a.title)}</h3><div class="md">${md(a.body || '')}</div><p class="muted small">${fmtDate(a.created_at)}</p>`)).join('')}</div></div>` : ''}`,
-      timeline: () => `<div class="section"><h2>Próximas horas</h2>${others.length ? `<div class="timeline">${others.map((e) => `<div class="tl" style="--tc:${esc(e.event_types?.color || '#d4a017')}"><time>${relDay(e.starts_at)} · ${fmtTime(e.starts_at)}</time><h4>${esc(e.title)}</h4><div class="cd">começa em <span data-cd="${e.starts_at}" data-done="agora"></span></div>${rsvpState(e) === 'open' && e.event_types?.rsvp_enabled !== false ? `<div style="margin-top:8px;display:flex;gap:8px">${rsvpButtons(e, mine[e.id], { compact: true })}</div>` : ''}</div>`).join('')}</div>` : empty('Nada marcado para as próximas 36 horas.')}</div>`,
       chars: () => `<div class="section"><h2>Seus personagens</h2>${plate('<div id="chars"></div>')}</div>`,
       discord: () => `${state.settings.discord?.invite_url ? `<div class="section">${plate(`<h3>Chamada de voz</h3><p class="muted">A guerra acontece no Discord.</p><p style="margin-top:12px"><a class="btn" href="${esc(state.settings.discord.invite_url)}" target="_blank" rel="noopener">Entrar no Discord</a></p>`)}</div>` : ''}`,
     };

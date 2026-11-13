@@ -4,8 +4,6 @@ import { can } from './util.js';
 /** Funções que o GuildMaster liga e desliga no Estúdio. `route` é a página do roteador. */
 export const FEATURES = [
   { id: 'wars', label: 'Guerras', desc: 'Chamada de guerra, presença e histórico.', path: '/guerras', route: 'wars' },
-  { id: 'bosses', label: 'Bosses', desc: 'Horários e registro de bosses.', path: '/bosses', route: 'bosses' },
-  { id: 'agenda', label: 'Agenda', desc: 'Calendário de eventos da guild.', path: '/agenda', route: 'agenda' },
   { id: 'ranking', label: 'Ranking', desc: 'Presença e fama por membro.', path: '/ranking', route: 'ranking' },
   { id: 'members', label: 'Membros', desc: 'Lista de guerreiros e personagens.', path: '/membros', route: 'members' },
   { id: 'voice', label: 'Voz (Discord)', desc: 'Botão e página da sala de voz.', path: '/voz', route: 'voice' },
@@ -24,21 +22,18 @@ export const EFFECTS = [
 
 /** Seções do lobby que podem ser reordenadas e ocultadas. */
 export const LOBBY_BLOCKS = [
-  { id: 'pulse', label: 'Números da guild' },
-  { id: 'call', label: 'Chamada de guerra' },
-  { id: 'classes', label: 'Classes' },
-  { id: 'podium', label: 'Os mais presentes' },
-  { id: 'announcements', label: 'Avisos' },
-  { id: 'timeline', label: 'Próximas horas' },
   { id: 'chars', label: 'Seus personagens' },
+  { id: 'announcements', label: 'Avisos' },
+  { id: 'pulse', label: 'Números da guild' },
+  { id: 'podium', label: 'Os mais presentes' },
   { id: 'discord', label: 'Chamada de voz (Discord)' },
+  { id: 'call', label: 'Chamada de guerra (repete a do topo)', off: true },
+  { id: 'classes', label: 'Classes', off: true },
 ];
 
 /** Telas padrão onde dá para colocar blocos extras no topo e no rodapé. */
 export const SCREENS = [
   { id: 'wars', label: 'Guerras', path: '/guerras' },
-  { id: 'bosses', label: 'Bosses', path: '/bosses' },
-  { id: 'agenda', label: 'Agenda', path: '/agenda' },
   { id: 'ranking', label: 'Ranking', path: '/ranking' },
   { id: 'members', label: 'Membros', path: '/membros' },
   { id: 'voice', label: 'Voz', path: '/voz' },
@@ -66,7 +61,7 @@ export function normalizeLobby(list) {
   const saved = Array.isArray(list) ? list : [];
   const known = new Set(LOBBY_BLOCKS.map((b) => b.id));
   const out = saved.filter((b) => b.custom || known.has(b.id)).map((b) => ({ on: true, ...b }));
-  LOBBY_BLOCKS.forEach((b) => { if (!out.some((x) => x.id === b.id)) out.push({ id: b.id, on: true }); });
+  LOBBY_BLOCKS.forEach((b) => { if (!out.some((x) => x.id === b.id)) out.push({ id: b.id, on: !b.off }); });
   return out;
 }
 export const screenBlocks = (screen, where) => (state.settings.layouts?.[`${where}_${screen}`] || []).filter((b) => b.on !== false);
