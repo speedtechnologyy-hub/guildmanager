@@ -25,7 +25,7 @@ jobs:
           password: ${{ secrets.FTP_PASS }}
           protocol: ftp
           port: 21
-          server-dir: ${{ secrets.FTP_DIR || 'public_html/' }}
+          server-dir: ${{ secrets.FTP_DIR || './' }}
           exclude: |
             **/.git*
             **/.git*/**
