@@ -27,6 +27,11 @@ export default async function login(root, [code]) {
       </section>
     </div>`;
 
+  if (state.authFail) {
+    state.authFail = false;
+    $('#notice', root).innerHTML = '<div class="notice bad" style="margin-bottom:18px">Seu login não terminou: o navegador mudou no meio do caminho. Abra o link de cadastro direto no Chrome ou Safari (não pelo app do WhatsApp ou Discord) e toque em Google ou Discord de novo.</div>';
+  }
+
   async function oauth(btn) {
     const provider = btn.dataset.p;
     await busy(btn, async () => {

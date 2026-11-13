@@ -142,7 +142,11 @@ async function boot() {
   }
   await syncSession(sess.data.session);
   // remove o ?code= do OAuth da barra de endereço
-  if (location.search) history.replaceState(null, '', location.pathname + location.hash);
+  if (location.search) {
+    // voltou do Google/Discord mas o login não fechou (ex.: o link abriu em outro navegador): avisa em vez de mostrar só o banner
+    if (/[?&](code|error)=/.test(location.search) && !state.user) { state.authFail = true; history.replaceState(null, '', location.pathname + '#/entrar'); }
+    else history.replaceState(null, '', location.pathname + location.hash);
+  }
 
   let lastUser = state.user?.id ?? null;
   sb.auth.onAuthStateChange((evt, session) => {

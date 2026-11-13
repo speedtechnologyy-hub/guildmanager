@@ -9,22 +9,25 @@ const base = () => (state.settings.site_url || location.origin + location.pathna
 
 export default async function convites(el) {
   async function load() {
-    const [inv, pend, waiting] = await Promise.all([
+    const [inv, pend, waiting, inc] = await Promise.all([
       q(sb.from('invites').select('*').order('created_at', { ascending: false })),
       q(sb.from('pending_members').select('*').order('created_at', { ascending: false })),
       q(sb.from('profiles').select('id,display_name,created_at').eq('status', 'pending').order('created_at')),
+      q(sb.rpc('incomplete_signups')).catch(() => []),
     ]);
     const wa = waiting.length ? Object.fromEntries((await q(sb.from('profile_private').select('id,whatsapp').in('id', waiting.map((w) => w.id)))).map((r) => [r.id, r.whatsapp])) : {};
     const waitBox = waiting.length ? `<section class="plate" style="padding:20px;margin-bottom:24px"><h3>Aguardando aprovação (${waiting.length})</h3><p class="muted small">Essas pessoas entraram pelo link de cadastro. Só liberam o acesso depois que você aprovar.</p>
       <div class="rows" style="margin-top:12px">${waiting.map((w) => `<div><div><div class="name">${esc(w.display_name)}</div><div class="sub">WhatsApp ${esc(wa[w.id] || 'não informado')} · ${w.created_at ? `pediu em ${fmtDateTime(w.created_at)}` : ""}</div></div>
         <span class="right row"><button class="btn sm primary" data-ok="${w.id}" type="button">Aprovar</button><button class="btn sm danger" data-no="${w.id}" type="button">Recusar</button></span></div>`).join('')}</div></section>` : '';
+    const incBox = inc.length ? `<section class="plate" style="padding:20px;margin-bottom:24px"><h3>Começaram o cadastro e não terminaram (${inc.length})</h3><p class="muted small">Essas pessoas entraram com Google ou Discord, mas não chegaram a enviar o cadastro, por isso ainda não aparecem para aprovar. Peça para abrirem o link de cadastro de novo, direto no Chrome ou Safari, e concluírem a tela "Quase lá".</p>
+      <div class="rows" style="margin-top:12px">${inc.map((w) => `<div><div><div class="name">${esc(w.display_name || w.email || 'Sem nome')}</div><div class="sub">${esc(w.email || '')} · ${esc(w.provider)} · ${fmtDateTime(w.created_at)}</div></div></div>`).join('')}</div></section>` : '';
     const perm = inv.find((i) => i.label === 'Link de cadastro' && i.active && !i.max_uses && !i.expires_at && i.role_on_join === 'member');
     const permBox = perm
       ? `<section class="plate" style="padding:20px"><h3>Link de cadastro</h3><p class="muted small">Envie este link para quem vai entrar na guild. Cada pessoa cria o acesso e cadastra o personagem sozinha, e você acompanha tudo em Membros.</p>
           <div class="row" style="margin-top:12px"><input readonly value="${esc(`${base()}/#/convite/${perm.code}`)}" style="flex:1;min-width:200px" aria-label="Link de cadastro"><button class="btn primary" data-copy="${esc(`${base()}/#/convite/${perm.code}`)}" type="button">Copiar link</button></div>
           <p class="muted small" style="margin-top:8px">${perm.uses} cadastros por este link. Para parar de aceitar, desative-o na lista abaixo.</p></section>`
       : `<section class="plate" style="padding:20px"><h3>Link de cadastro</h3><p class="muted small">Gere um link fixo para enviar a quem vai entrar na guild. Sem validade e sem limite de usos.</p><div style="margin-top:12px"><button class="btn primary" id="mkperm" type="button">Gerar link de cadastro</button></div></section>`;
-    el.innerHTML = `${waitBox}${permBox}<div class="row" style="justify-content:space-between;margin-top:30px"><h2>Todos os links de convite</h2><button class="btn primary" id="new" type="button">Criar link</button></div>
+    el.innerHTML = `${waitBox}${incBox}${permBox}<div class="row" style="justify-content:space-between;margin-top:30px"><h2>Todos os links de convite</h2><button class="btn primary" id="new" type="button">Criar link</button></div>
       <p class="muted small">Quem entra pelo link cria o acesso com Google ou Discord e cadastra o WhatsApp.</p>
       <div class="rows" style="margin:14px 0 30px">${inv.length ? inv.map((i) => {
         const exp = i.expires_at && new Date(i.expires_at) < new Date(), full = i.max_uses && i.uses >= i.max_uses;
