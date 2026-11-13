@@ -1,0 +1,35 @@
+name: Diagnóstico do site
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: O que o site serve
+        run: |
+          for p in / /master /js/main.js /js/pages/master.js /js/pages/login.js /.htaccess /index.html; do
+            echo "== https://guildmanager.top$p"
+            curl -s -o /dev/null -m 20 -w "%{http_code} %{content_type} %{size_download}b\n" "https://guildmanager.top$p" || echo falhou
+          done
+          echo "== main.js contém master?"
+          curl -s -m 20 https://guildmanager.top/js/main.js | grep -c "page: 'master'" || true
+          echo "== index.html referencia"
+          curl -s -m 20 https://guildmanager.top/ | grep -o 'main.js[^"]*' || true
+          echo "== servidor"
+          curl -sI -m 20 https://guildmanager.top/ | grep -iE "^(server|x-powered|x-hcdn|cf-|via|cache)" || true
+      - name: O que está no FTP
+        env:
+          H: ${{ secrets.FTP_HOST }}
+          U: ${{ secrets.FTP_USER }}
+          P: ${{ secrets.FTP_PASS }}
+        run: |
+          echo "== raiz do FTP"
+          curl -s -m 30 --user "$U:$P" "ftp://$H/" --list-only || echo falhou
+          echo "== public_html"
+          curl -s -m 30 --user "$U:$P" "ftp://$H/public_html/" --list-only || echo falhou
+          echo "== js/pages na raiz"
+          curl -s -m 30 --user "$U:$P" "ftp://$H/js/pages/" --list-only | head -30 || echo falhou
+          echo "== js/pages em public_html"
+          curl -s -m 30 --user "$U:$P" "ftp://$H/public_html/js/pages/" --list-only | head -30 || echo falhou
