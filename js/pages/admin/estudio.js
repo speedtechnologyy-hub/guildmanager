@@ -7,7 +7,7 @@ import { toast, errMsg, confirmBox } from '../../lib/ui.js';
 import { clone, getPath, setPath, sortable, move } from './estudio/kit.js';
 import { SECTIONS, PRESETS, render } from './estudio/sections.js';
 import { newBlock, newItem } from './estudio/blocks-ui.js';
-import { pagesList, renderPages, renderWhats, renderBackup, renderTeam, setSubLeader } from './estudio/extra.js';
+import { pagesList, renderPages, renderWhats, renderBackup, renderTeam, setSubLeader, savePerm } from './estudio/extra.js';
 
 /** Chaves de site_settings que o Estúdio controla (rascunho + publicação). */
 const KEYS = ['admin_access', 'theme', 'texts', 'menu', 'features', 'effects', 'layouts', 'custom_fonts', 'guild_name', 'logo_url', 'favicon_url', 'banner_url', 'login_bg_url', 'app_bg_url', 'discord', 'timezone', 'site_url'];
@@ -146,7 +146,8 @@ export default async function estudio(root) {
     if (t.matches('[data-p]') && t.type !== 'range') onInput(e);
     if (t.dataset.featon) { c.set(`features.${t.dataset.featon}.enabled`, t.checked); commit(); }
     if (t.dataset.featrole) { c.set(`features.${t.dataset.featrole}.min_role`, t.value); commit(); }
-    if (t.dataset.acc) { c.set(`admin_access.${t.dataset.acc}`, t.checked); commit(); }
+    if (t.dataset.acc) { c.set(`admin_access.${t.dataset.acc}`, t.value); commit(); draw(); }
+    if (t.dataset.pp) { try { await savePerm(t.dataset.pp, t.dataset.tab, t.value); toast('Acesso atualizado.', 'ok'); } catch (err) { toast(errMsg(err), 'bad'); } }
     if (t.dataset.subslot) { try { await setSubLeader(+t.dataset.subslot, t.value); toast('Sub líder atualizado.', 'ok'); } catch (err) { toast(errMsg(err), 'bad'); } draw(); }
     if (t.dataset.fx) { c.set(`effects.${t.dataset.fx}`, t.checked); commit(); }
     if (t.dataset.dest != null) {

@@ -2,7 +2,8 @@ import { sb, q } from '../../../supabase.js';
 import { esc } from '../../../lib/util.js';
 import { fText, fArea, fSelect, fCheck, fImage } from './kit.js';
 import { blockList } from './blocks-ui.js';
-import { GRANTABLE } from '../../../lib/admin-tabs.js';
+import { GRANTABLE, LEVELS } from '../../../lib/admin-tabs.js';
+import { can } from '../../../lib/util.js';
 
 const head = (t, d) => `<h3 class="sh">${esc(t)}</h3>${d ? `<p class="muted small">${d}</p>` : ''}`;
 
@@ -58,16 +59,37 @@ export async function setSubLeader(slot, userId) {
   if (userId) await q(sb.from('profiles').update({ role: 'leader', sub_slot: slot }).eq('id', userId));
 }
 
+const opt = (v, cur, n) => `<option value="${v}" ${cur === v ? 'selected' : ''}>${n}</option>`;
+
+/** Salva na hora o nível de uma pessoa numa função ('' = volta a seguir a regra geral). */
+export async function savePerm(userId, tab, val) {
+  const row = await q(sb.from('admin_perms').select('perms').eq('user_id', userId).maybeSingle());
+  const perms = { ...(row?.perms || {}) };
+  if (val) perms[tab] = val; else delete perms[tab];
+  await q(sb.from('admin_perms').upsert({ user_id: userId, perms, updated_at: new Date().toISOString() }));
+}
+
 export async function renderTeam(c) {
-  const people = await q(sb.from('profiles').select('id,display_name,role,sub_slot,characters(nick,is_main)').eq('status', 'active').order('display_name'));
+  if (!can('owner')) return head('Sub líderes e acessos', 'Só o GuildMaster define quem acessa o quê.');
+  const [people, perms] = await Promise.all([
+    q(sb.from('profiles').select('id,display_name,role,sub_slot,characters(nick,is_main)').eq('status', 'active').order('display_name')),
+    q(sb.from('admin_perms').select('user_id,perms')),
+  ]);
+  const pm = Object.fromEntries((perms || []).map((r) => [r.user_id, r.perms || {}]));
   const nick = (p) => p.characters?.find((x) => x.is_main)?.nick || p.display_name;
   const eligible = people.filter((p) => p.role !== 'owner');
+  const staff = people.filter((p) => p.role !== 'owner' && p.role !== 'member');
   const slot = (n) => {
     const cur = people.find((p) => p.role === 'leader' && p.sub_slot === n);
     return `<label class="sf">Sub líder ${n}<select data-subslot="${n}"><option value="">— vaga livre —</option>${eligible.map((p) => `<option value="${p.id}" ${cur?.id === p.id ? 'selected' : ''}>${esc(nick(p))}${p.display_name !== nick(p) ? ` (${esc(p.display_name)})` : ''}</option>`).join('')}</select></label>`;
   };
-  return head('Sub líderes e acessos', 'Escolha quem são os sub líderes e o que cada função libera para eles.') + `<div class="stack">
+  const gl = (id) => { const v = c.get(`admin_access.${id}`); return v === true ? 'edit' : v === false ? 'none' : v || (id === 'estudio' ? 'none' : 'edit'); };
+  const lvName = Object.fromEntries(LEVELS);
+  return head('Sub líderes e acessos', 'Cada função tem três níveis: sem acesso, só ver ou ver e editar. Vale para todas as áreas do painel, inclusive o Estúdio. O GuildMaster sempre tem acesso total.') + `<div class="stack">
     <div class="card-s"><strong>Vagas de sub líder</strong><p class="muted small">Quem for escolhido passa a ver o painel, dentro dos limites abaixo. O membro precisa já estar cadastrado no site.</p>${[1, 2, 3].map(slot).join('')}</div>
-    <div class="card-s"><strong>O que os sub líderes podem fazer</strong><p class="muted small">Desligue uma função para escondê-la do painel deles. Presença, fama, prints e cidades também são barrados no banco de dados, não só na tela. O GuildMaster sempre tem acesso a tudo. As mudanças valem quando você clicar em Publicar.</p>
-      ${GRANTABLE.map((t) => `<label class="sw"><input type="checkbox" data-acc="${t.id}" ${c.get(`admin_access.${t.id}`) !== false ? 'checked' : ''}><i></i><span>${esc(t.name)}<small>${esc(t.group)}${t.db ? ' · protegido também no banco' : ''}</small></span></label>`).join('')}</div></div>`;
+    <div class="card-s"><strong>Regra geral</strong><p class="muted small">Vale para todos os sub líderes que não tiverem uma regra própria. Salva quando você clicar em Publicar.</p>
+      ${GRANTABLE.map((t) => `<label class="sf lvrow"><span>${esc(t.name)}<small>${esc(t.group)}</small></span><select data-acc="${t.id}">${LEVELS.map(([v, n]) => opt(v, gl(t.id), n)).join('')}</select></label>`).join('')}</div>
+    <div class="card-s"><strong>Por pessoa</strong><p class="muted small">Dê a um sub líder um nível diferente da regra geral, por exemplo, uma pessoa edita tudo e outra só vê. Salva na hora.</p>
+      ${staff.length ? staff.map((p) => `<details class="pp"><summary>${esc(nick(p))}<em>${p.role === 'leader' && p.sub_slot ? `Sub líder ${p.sub_slot}` : esc(p.role)}</em></summary><div class="stack">
+        ${GRANTABLE.map((t) => `<label class="sf lvrow"><span>${esc(t.name)}</span><select data-pp="${p.id}" data-tab="${t.id}">${opt('', pm[p.id]?.[t.id] || '', `Regra geral (${lvName[gl(t.id)]})`)}${LEVELS.map(([v, n]) => opt(v, pm[p.id]?.[t.id] || '', n)).join('')}</select></label>`).join('')}</div></details>`).join('') : '<p class="muted small">Nenhum sub líder ainda. Escolha alguém nas vagas acima.</p>'}</div></div>`;
 }

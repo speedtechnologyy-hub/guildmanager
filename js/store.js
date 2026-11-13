@@ -1,7 +1,7 @@
 import { sb, q } from './supabase.js';
 
 export const state = {
-  session: null, user: null, profile: null, priv: null, chars: [],
+  session: null, user: null, profile: null, priv: null, chars: [], perms: {},
   settings: {}, classes: [], lineages: [], types: [], pages: [],
 };
 
@@ -86,13 +86,15 @@ export async function loadPages() {
 
 export async function loadProfile() {
   const uid = state.user?.id;
-  state.profile = null; state.priv = null; state.chars = [];
+  state.profile = null; state.priv = null; state.chars = []; state.perms = {};
   if (!uid) return;
-  const [prof, priv, chars] = await Promise.all([
+  const [prof, priv, chars, perms] = await Promise.all([
     sb.from('profiles').select('*').eq('id', uid).maybeSingle(),
     sb.from('profile_private').select('*').eq('id', uid).maybeSingle(),
     sb.from('characters').select('*').eq('user_id', uid).order('is_main', { ascending: false }).order('created_at'),
+    sb.from('admin_perms').select('perms').eq('user_id', uid).maybeSingle(),
   ]);
+  state.perms = perms.data?.perms || {};
   state.profile = prof.data;
   if (!prof.data) return;
   state.priv = priv.data;

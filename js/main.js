@@ -22,7 +22,7 @@ const ROUTES = [
   { re: /^\/membros$/, page: 'members' },
   { re: /^\/voz$/, page: 'voice' },
   { re: /^\/perfil$/, page: 'profile' },
-  { re: /^\/admin(?:\/([a-z]+))?$/, page: 'admin' },
+  { re: /^\/admin(?:\/([a-z-]+))?$/, page: 'admin' },
 ];
 
 let cleanup = null;

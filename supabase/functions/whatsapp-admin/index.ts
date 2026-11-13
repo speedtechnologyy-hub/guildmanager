@@ -1,4 +1,4 @@
-// Gerencia a conexão do WhatsApp (Evolution API v2) pelo painel. Só o dono usa.
+// Gerencia a conexão do WhatsApp (Evolution API v2) pelo painel. Dono e sub líderes com acesso a "avisos" (o painel define o nível).
 // Ações: status, connect (devolve o QR code), logout, test.
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
@@ -20,19 +20,31 @@ class Fail extends Error {
 }
 const MESSAGES: Record<string, string> = {
   unauthorized: 'Faça login para continuar.',
-  forbidden: 'Só o dono pode gerenciar o WhatsApp.',
+  forbidden: 'Você não tem permissão para esta ação do WhatsApp.',
   not_configured: 'Informe a URL do servidor e o nome da instância e salve antes de conectar.',
   no_key: 'A chave da Evolution ainda não foi adicionada aos segredos do Supabase (EVOLUTION_API_KEY).',
   evolution_error: 'A Evolution API respondeu com erro. Confira a URL, a chave e o nome da instância.',
   no_whatsapp: 'Cadastre o seu WhatsApp no perfil para receber o teste.',
 };
 
-async function requireOwner(req: Request) {
+const LV: Record<string, number> = { none: 0, view: 1, edit: 2, false: 0, true: 2 };
+const RANK: Record<string, number> = { member: 0, mod: 1, sub: 2, leader: 3, owner: 4 };
+
+// Dono sempre pode. Sub líder precisa da função "avisos": só ver para consultar o status, editar para conectar.
+async function requireAccess(req: Request, need: number) {
   const token = (req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '');
   const { data, error } = await admin.auth.getUser(token);
   if (error || !data.user) throw new Fail('unauthorized', 401);
   const { data: prof } = await admin.from('profiles').select('role,status').eq('id', data.user.id).maybeSingle();
-  if (!prof || prof.role !== 'owner' || prof.status !== 'active') throw new Fail('forbidden', 403);
+  if (!prof || prof.status !== 'active') throw new Fail('forbidden', 403);
+  if (prof.role === 'owner') return data.user;
+  if ((RANK[prof.role] ?? 0) < RANK.leader) throw new Fail('forbidden', 403);
+  const [{ data: mine }, { data: gen }] = await Promise.all([
+    admin.from('admin_perms').select('perms').eq('user_id', data.user.id).maybeSingle(),
+    admin.from('site_settings').select('value').eq('key', 'admin_access').maybeSingle(),
+  ]);
+  const lv = LV[String(mine?.perms?.avisos)] ?? LV[String(gen?.value?.avisos)] ?? 2;
+  if (lv < need) throw new Fail('forbidden', 403);
   return data.user;
 }
 
@@ -69,8 +81,8 @@ const setConnected = (v: boolean) => admin.from('integration_settings').update({
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
   try {
-    const user = await requireOwner(req);
     const { action } = await req.json().catch(() => ({}));
+    const user = await requireAccess(req, action === 'status' ? 1 : 2);
     const c = await config();
 
     if (action === 'status') {
