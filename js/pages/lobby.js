@@ -39,7 +39,7 @@ export default async function lobby(root) {
         <p class="tagline rise d1">Salve, ${esc(main?.nick || state.profile.display_name)}. ${esc(t.hero_tagline)}</p></div>
       ${war ? `<aside class="nextwar rise d2"><small>${esc(war.event_types?.name || 'Guerra')}</small><h3>${esc(war.title)}</h3>
         <div class="big" data-cd="${war.starts_at}" data-done="É AGORA">--</div>
-        <p class="sub">${relDay(war.starts_at)}, às ${fmtTime(war.starts_at)} · ${going} confirmados</p>
+        <p class="sub">${relDay(war.starts_at)}, às ${fmtTime(war.starts_at)} · ${going} confirmados</p>${war.bet_closes_at && new Date(war.bet_closes_at) > Date.now() ? `<p class="sub">Aposta fecha em <b data-cd="${war.bet_closes_at}" data-done="encerrada"></b></p>` : ''}
         <div class="acts">${rsvpButtons(war, mine[war.id], { go: 'Eu vou', no: 'Não vou' })}</div></aside>` : ''}`;
 
     const mains = people.map((p) => mainChar(p.characters)).filter(Boolean);

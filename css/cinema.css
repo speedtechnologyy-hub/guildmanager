@@ -108,3 +108,19 @@
 }
 @media (max-width: 560px) { .podium { grid-template-columns: 1fr; } .podium .p1 { order: -1; } }
 @media (prefers-reduced-motion: reduce) { #view > * { animation: none; } }
+
+/* ---------- calendário de guerras ---------- */
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; margin-top: 14px; }
+.cal-h { padding: 6px; text-align: center; font: 700 .72rem var(--font-head); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.cal-c { min-height: 84px; padding: 6px; display: flex; flex-direction: column; gap: 4px; text-align: left; background: color-mix(in srgb, var(--bg) 85%, #fff); border: 1px solid var(--line-soft); cursor: pointer; overflow: hidden; }
+.cal-c.off { background: none; border-color: transparent; cursor: default; }
+.cal-c:not(.off):hover { border-color: var(--line); } .cal-c.sel { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.cal-c.today b { color: var(--ember); } .cal-c b { font: 700 .9rem var(--font-head); }
+.cal-e { display: block; padding: 3px 5px; font-size: .72rem; line-height: 1.25; border-left: 3px solid var(--tc); background: color-mix(in srgb, var(--tc) 14%, transparent); overflow-wrap: anywhere; }
+.cal-e em { display: block; font-style: normal; color: var(--muted); }
+.shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; margin-top: 12px; }
+.shots figure { margin: 0; border: 1px solid var(--line-soft); background: var(--bg); }
+.shots img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+.shots figcaption { display: flex; justify-content: space-between; align-items: center; gap: 6px; padding: 6px 8px; font-size: .78rem; color: var(--muted); }
+.shots button[data-view] { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+@media (max-width: 640px) { .cal-c { min-height: 62px; } .cal-e em { display: none; } }
