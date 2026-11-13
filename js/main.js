@@ -38,7 +38,7 @@ async function go() {
 
   // portões de acesso
   if (!state.session && !route?.pub) return nav('#/entrar');
-  if (state.session && !state.profile && route?.page !== 'signup' && route?.page !== 'login' && route?.page !== 'master') return nav('#/cadastro');
+  if (state.session && !state.profile && route?.page !== 'signup' && route?.page !== 'login') return nav('#/cadastro');
   if (state.profile && (route?.page === 'login' || route?.page === 'signup' || route?.page === 'master')) return nav('#/');
 
   const bare = route?.bare || (route?.pub && !state.profile);
