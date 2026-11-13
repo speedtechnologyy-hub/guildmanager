@@ -168,4 +168,16 @@
 em.pc { margin-left: auto; font-style: normal; min-width: 20px; padding: 1px 7px; border-radius: 10px; background: #e5484d; color: #fff; font-weight: 800; font-size: .72rem; text-align: center; }
 @keyframes pdPulse { 50% { opacity: .55; transform: scale(.9); } }
 @media (prefers-reduced-motion: reduce) { .nbadge, .pendbar .pdot { flex: none; animation: none; } }
-@media (max-width: 820px) { .pendbar { top: 56px; } .pendbar .pbtn { font-size: .85rem; gap: 8px; padding: 9px 12px; } }
+@media (max-width: 820px) {  .pendbar .pbtn { font-size: .85rem; gap: 8px; padding: 9px 12px; } }
+
+/* app instalado no iPhone: o topo não fica mais escondido embaixo do relógio e da ilha */
+:root { --sat: env(safe-area-inset-top, 0px); }
+.topbar { height: calc(66px + var(--sat)); padding-top: var(--sat); box-sizing: border-box; }
+.hero { margin-top: calc(-66px - var(--sat)); padding-top: calc(66px + var(--sat)); }
+.pendbar { top: calc(66px + var(--sat)); }
+.day { top: calc(66px + var(--sat)); }
+.side { top: calc(90px + var(--sat)); }
+.gate { min-height: calc(100vh - 66px - var(--sat)); }
+@media (max-width: 920px) { .nav { inset: calc(66px + var(--sat)) 0 0 0; } }
+@media (max-width: 820px) { .pendbar { top: calc(66px + var(--sat)); } }
+@media (max-width: 920px) { .nav a .nbadge { position: static; display: inline-block; margin-left: 10px; vertical-align: middle; } }
