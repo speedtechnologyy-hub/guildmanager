@@ -1,0 +1,13 @@
+{
+  "name": "Guild Manager",
+  "short_name": "Guild",
+  "description": "Área de membros da guild",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0807",
+  "theme_color": "#0a0807",
+  "icons": [
+    { "src": "assets/crest.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

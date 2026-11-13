@@ -1,0 +1,6 @@
+{
+  "name": "guildmanager",
+  "private": true,
+  "type": "module",
+  "description": "Área de membros para guild de WYD — site estático (sem build) + Supabase"
+}
