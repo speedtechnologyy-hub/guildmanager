@@ -17,17 +17,38 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # O servidor limita a quantidade de pedidos por minuto (erro 429). Para o navegador não pedir
-      # os mesmos arquivos de novo a cada visita, JS e CSS vão para uma pasta com o número da versão
-      # e ficam guardados no aparelho. Só o index.html é conferido a cada acesso.
-      - name: Publicar JS e CSS em pasta versionada (cache longo)
+      # O servidor bloqueia quem pede muitos arquivos de uma vez (erro 429). Por isso o site vai ao ar
+      # como UM arquivo de JS e UM de CSS, numa pasta com o número da versão e guardados no aparelho.
+      # Só o index.html é conferido a cada acesso.
+      - name: Montar o site (um JS, um CSS)
         run: |
+          (cd /tmp && npm init -y >/dev/null && npm i esbuild@0.24.0 playwright@1.49.1 2>&1 | tail -2)
           V=$(date +%Y%m%d%H%M)-${GITHUB_SHA::7}
           mkdir -p "v/$V"
-          mv js css "v/$V/"
-          sed -i -E "s#(href|src)=\"(js|css)/#\\1=\"v/$V/\\2/#g" index.html
+          find js -name '*.js' -print0 | xargs -0 sed -i -E "s/\?v=2026[0-9a-z-]+//g"
+          /tmp/node_modules/.bin/esbuild js/main.js --bundle --format=esm --minify --target=es2020,safari14 --outfile="v/$V/app.js"
+          cat css/app.css css/cinema.css css/wyd.css css/premium.css css/studio.css css/studio-ui.css > "v/$V/app.css"
+          V="$V" python3 - <<'PY'
+          import os, re
+          v = os.environ['V']; s = open('index.html').read()
+          s = re.sub(r'\s*<link rel="modulepreload" href="js/[^>]*>', '', s)
+          s, n = re.subn(r'(\s*<link rel="stylesheet" href="css/[^>]*>)+', f'\n  <link rel="stylesheet" href="v/{v}/app.css">\n  <link rel="modulepreload" href="v/{v}/app.js">', s, count=1)
+          assert n == 1 and 'href="css/' not in s
+          s, n = re.subn(r'src="js/main\.js[^"]*"', f'src="v/{v}/app.js"', s)
+          assert n == 1
+          open('index.html', 'w').write(s)
+          PY
+          rm -rf js css
           printf '<IfModule mod_headers.c>\n  <FilesMatch "\\.(js|css)$">\n    Header set Cache-Control "public, max-age=31536000, immutable"\n  </FilesMatch>\n</IfModule>\n' > v/.htaccess
-          grep -n 'v/' index.html | head -5; cat v/.htaccess
+          ls -la "v/$V"; grep -n "v/$V" index.html
+
+      - name: Testar as telas antes de publicar
+        run: |
+          cp .github/diag/smoke.mjs .github/diag/stub.js /tmp/
+          (cd /tmp && npx playwright install --with-deps chromium 2>&1 | tail -1)
+          python3 -m http.server 8799 >/dev/null 2>&1 &
+          sleep 1
+          cd /tmp && node smoke.mjs
 
       - name: Enviar por FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
