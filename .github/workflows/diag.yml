@@ -14,16 +14,12 @@ jobs:
           U=https://uhlmxifsozrjajkghqql.supabase.co
           t() { curl -s -o /tmp/o -m 30 -w "%{http_code} %{time_total}s %{size_download}b  $1\n" "${@:2}" "$1" || echo "FALHOU $1"; }
           t https://guildmanager.top/
-          t https://guildmanager.top/js/main.js
-          t https://guildmanager.top/manifest.webmanifest
-          t "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.47.10/+esm"
-          t "$U/auth/v1/health" -H "apikey: $K"
-          t "$U/rest/v1/site_settings?select=key" -H "apikey: $K"; head -c 300 /tmp/o; echo
-          t "$U/rest/v1/cms_pages?select=id" -H "apikey: $K"; head -c 200 /tmp/o; echo
-          curl -sI https://guildmanager.top/js/main.js | head -12
-          curl -s https://guildmanager.top/ | grep -n "main.js\|vendor" 
-          curl -s https://guildmanager.top/js/main.js | head -3
-          curl -s https://guildmanager.top/js/supabase.js | head -30
+          M=$(curl -s https://guildmanager.top/ | grep -o 'v/[^"]*js/main.js' | head -1); echo "main: $M"
+          curl -sI "https://guildmanager.top/$M" | grep -i "HTTP/\|cache-control\|content-type"
+          curl -sI "https://guildmanager.top/${M/js\/main.js/css/app.css}" | grep -i "HTTP/\|cache-control"
+          curl -sI https://guildmanager.top/ | grep -i "HTTP/\|cache-control"
+          curl -sI https://guildmanager.top/js/main.js | grep -i "HTTP/"
+          t "$U/rest/v1/site_settings?select=key" -H "apikey: $K"
       - name: Abrir o site em navegador de verdade
         run: |
           cd .github/diag && npm init -y >/dev/null && npm i playwright 2>&1 | tail -3

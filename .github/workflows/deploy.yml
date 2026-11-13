@@ -17,10 +17,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Carimbar versão nos arquivos (evita cache antigo)
+      # O servidor limita a quantidade de pedidos por minuto (erro 429). Para o navegador não pedir
+      # os mesmos arquivos de novo a cada visita, JS e CSS vão para uma pasta com o número da versão
+      # e ficam guardados no aparelho. Só o index.html é conferido a cada acesso.
+      - name: Publicar JS e CSS em pasta versionada (cache longo)
         run: |
           V=$(date +%Y%m%d%H%M)-${GITHUB_SHA::7}
-          grep -rlE '\?v=2026[0-9a-z]+' js index.html | xargs sed -i -E "s/\?v=2026[0-9a-z]+/?v=$V/g"
+          mkdir -p "v/$V"
+          mv js css "v/$V/"
+          sed -i -E "s#(href|src)=\"(js|css)/#\\1=\"v/$V/\\2/#g" index.html
+          printf '<IfModule mod_headers.c>\n  <FilesMatch "\\.(js|css)$">\n    Header set Cache-Control "public, max-age=31536000, immutable"\n  </FilesMatch>\n</IfModule>\n' > v/.htaccess
+          grep -n 'v/' index.html | head -5; cat v/.htaccess
 
       - name: Enviar por FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5

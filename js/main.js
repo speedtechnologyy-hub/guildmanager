@@ -60,6 +60,13 @@ async function go() {
     const pend = state.profile.status === 'pending';
     view.innerHTML = `<div class="wrap"><div class="page-head"><h1>${pend ? 'Cadastro em análise' : 'Acesso desativado'}</h1><p>${pend ? 'Recebemos o seu cadastro. Assim que a liderança aprovar, o acesso à guild é liberado. Volte mais tarde ou aguarde o aviso no WhatsApp.' : `Sua conta está ${state.profile.status === 'banned' ? 'bloqueada' : 'inativa'}. Fale com a liderança da guild.`}</p><p style="margin-top:18px"><button class="btn" id="out">Sair</button></p></div></div>`;
     $('#out').onclick = () => sb.auth.signOut();
+    if (pend) {
+      // confere a aprovação sozinho: quando a liderança aprovar, a pessoa entra sem precisar fazer nada
+      const check = async () => { await loadProfile(); if (state.profile?.status !== 'pending') { clearInterval(timer); if (state.profile) await loadGame(); renderShell(state.profile ? 'full' : 'bare', true); go(); } };
+      const timer = setInterval(check, 20000);
+      cleanup = () => clearInterval(timer);
+      view.querySelector('.page-head').insertAdjacentHTML('beforeend', '<p class="muted small" style="margin-top:14px">Esta tela confere sozinha a cada 20 segundos. Assim que aprovarem, você entra direto.</p>');
+    }
     return;
   }
   if (!route) { view.innerHTML = '<div class="wrap"><div class="page-head"><h1>Página não encontrada</h1><p><a href="#/">Voltar ao lobby</a></p></div></div>'; return; }

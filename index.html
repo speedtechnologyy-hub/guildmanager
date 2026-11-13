@@ -47,15 +47,16 @@
   <div id="toasts" aria-live="polite"></div>
   <div id="modal-root"></div>
   <noscript><p style="padding:40px;text-align:center">Ative o JavaScript para usar a área de membros.</p></noscript>
-  <script type="module" src="js/main.js?v=20261113h"></script>
   <script>
-    // Se o site não terminar de abrir em 25 s, troca o carregando por um aviso com botão.
-    setTimeout(function () {
+    // Se algum arquivo do site não carregar, troca o carregando por um aviso com botão.
+    function gmFail() {
       var a = document.getElementById('app');
       if (a && a.children.length === 1 && a.firstElementChild.className === 'loading') {
-        a.innerHTML = '<div class="wrap"><div class="page-head"><h1>O site demorou para abrir</h1><p>Confira a sua internet e tente de novo.</p><p style="margin-top:14px"><button class="btn primary" onclick="location.reload()">Tentar de novo</button></p></div></div>';
+        a.innerHTML = '<div class="wrap"><div class="page-head"><h1>O site não abriu agora</h1><p>O servidor pode ter limitado os acessos por um instante. Aguarde um minuto e toque em tentar de novo.</p><p style="margin-top:14px"><button class="btn primary" onclick="location.reload()">Tentar de novo</button></p></div></div>';
       }
-    }, 25000);
+    }
+    setTimeout(gmFail, 25000);
   </script>
+  <script type="module" src="js/main.js?v=20261113h" onerror="gmFail()"></script>
 </body>
 </html>
