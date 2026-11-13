@@ -14,11 +14,10 @@ jobs:
           U=https://uhlmxifsozrjajkghqql.supabase.co
           t() { curl -s -o /tmp/o -m 30 -w "%{http_code} %{time_total}s %{size_download}b  $1\n" "${@:2}" "$1" || echo "FALHOU $1"; }
           t https://guildmanager.top/
-          M=$(curl -s https://guildmanager.top/ | grep -o 'v/[^"]*js/main.js' | head -1); echo "main: $M"
-          curl -sI "https://guildmanager.top/$M" | grep -i "HTTP/\|cache-control\|content-type"
-          curl -sI "https://guildmanager.top/${M/js\/main.js/css/app.css}" | grep -i "HTTP/\|cache-control"
-          curl -sI https://guildmanager.top/ | grep -i "HTTP/\|cache-control"
-          curl -sI https://guildmanager.top/js/main.js | grep -i "HTTP/"
+          M=$(curl -s https://guildmanager.top/ | grep -o 'v/[^"]*app.js' | head -1 || true); echo "app: $M"
+          curl -sI "https://guildmanager.top/$M" | grep -i "HTTP/\|cache-control\|content-type\|content-length" || true
+          curl -sI "https://guildmanager.top/${M/app.js/app.css}" | grep -i "HTTP/\|cache-control" || true
+          curl -sI https://guildmanager.top/ | grep -i "HTTP/\|cache-control" || true
           t "$U/rest/v1/site_settings?select=key" -H "apikey: $K"
       - name: Abrir o site em navegador de verdade
         run: |

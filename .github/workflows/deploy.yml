@@ -6,6 +6,7 @@ on:
   # Publica automaticamente a cada push na main:
   push:
     branches: [main]
+    paths-ignore: ['.github/workflows/diag.yml', '.github/diag/check.mjs']
 
 concurrency:
   group: deploy-hostinger

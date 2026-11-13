@@ -1,6 +1,6 @@
 import { chromium, webkit } from 'playwright';
 const BASE = 'https://guildmanager.top';
-for (const [name, eng, paths] of [['webkit', webkit, ['/', '/']], ['chromium', chromium, ['/#/adminpainel', '/#/entrar']]]) {
+for (const [name, eng, paths] of [['webkit', webkit, ['/', '/', '/#/entrar', '/#/adminpainel', '/', '/#/entrar', '/', '/']], ['chromium', chromium, ['/#/adminpainel', '/#/entrar', '/', '/']]]) {
   const b = await eng.launch();
   const ctx = await b.newContext({ viewport: { width: 390, height: 844 } });   // mesmo contexto: a 2ª visita usa o cache
   for (const path of paths) {
