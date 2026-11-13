@@ -77,5 +77,5 @@ export function runIntro() {
     <div class="mark"><img src="${esc(logoUrl())}" alt=""><h1>${esc(state.settings.guild_name)}</h1><p>${esc(state.settings.texts.intro_tagline || '')}</p></div>`;
   const end = () => { el.innerHTML = ''; };
   el.onclick = end;
-  setTimeout(end, 4200);
+  setTimeout(end, 2400);
 }

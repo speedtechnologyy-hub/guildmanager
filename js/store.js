@@ -89,13 +89,13 @@ export async function loadProfile() {
   const uid = state.user?.id;
   state.profile = null; state.priv = null; state.chars = [];
   if (!uid) return;
-  const { data } = await sb.from('profiles').select('*').eq('id', uid).maybeSingle();
-  state.profile = data;
-  if (!data) return;
-  const [priv, chars] = await Promise.all([
+  const [prof, priv, chars] = await Promise.all([
+    sb.from('profiles').select('*').eq('id', uid).maybeSingle(),
     sb.from('profile_private').select('*').eq('id', uid).maybeSingle(),
     sb.from('characters').select('*').eq('user_id', uid).order('is_main', { ascending: false }).order('created_at'),
   ]);
+  state.profile = prof.data;
+  if (!prof.data) return;
   state.priv = priv.data;
   state.chars = chars.data || [];
 }

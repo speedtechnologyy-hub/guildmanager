@@ -93,8 +93,7 @@ async function syncSession(session) {
   state.session = session;
   state.user = session?.user ?? null;
   await loadProfile();
-  if (state.profile) await loadGame();
-  await loadPages();
+  if (state.profile) await Promise.all([loadGame(), loadPages().catch(() => {})]);
 }
 
 /** Mudança do master chegou (tempo real ou prévia): refaz tema, topo e, se preciso, a tela aberta. */
@@ -118,12 +117,11 @@ function refreshLive({ cssOnly } = {}) {
 async function boot() {
   initEmbers();
   initPointer();
-  await loadSettings();
+  // configurações, sessão e páginas em paralelo (antes eram uma fila de 3 idas ao servidor)
+  const [, sess] = await Promise.all([loadSettings(), sb.auth.getSession(), loadPages().catch(() => {})]);
   applyTheme();
   applyBrand();
-
-  const { data } = await sb.auth.getSession();
-  await syncSession(data.session);
+  await syncSession(sess.data.session);
   // remove o ?code= do OAuth da barra de endereço
   if (location.search) history.replaceState(null, '', location.pathname + location.hash);
 
