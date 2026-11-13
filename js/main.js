@@ -129,6 +129,10 @@ async function boot() {
   const [, sess] = await Promise.all([loadSettings(), sb.auth.getSession(), loadPages().catch(() => {})]);
   applyTheme();
   applyBrand();
+  if (state.offline) {
+    document.getElementById('app').innerHTML = '<div class="wrap"><div class="page-head"><h1>Sem resposta do servidor</h1><p>Não foi possível carregar o site agora. Confira a sua internet e tente de novo.</p><p style="margin-top:14px"><button class="btn primary" onclick="location.reload()">Tentar de novo</button></p></div></div>';
+    return;
+  }
   await syncSession(sess.data.session);
   // remove o ?code= do OAuth da barra de endereço
   if (location.search) history.replaceState(null, '', location.pathname + location.hash);

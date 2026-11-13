@@ -64,7 +64,9 @@ export async function loadSettings() {
     rows.forEach((r) => { s[r.key] = r.value; });
     state.raw = s;
     state.settings = normalize(s);
+    state.offline = false;
   } catch (e) {
+    state.offline = true;
     console.warn('configurações indisponíveis, usando padrão', e);
     state.raw = {};
     state.settings = normalize({});
