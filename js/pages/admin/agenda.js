@@ -14,7 +14,8 @@ export default async function agenda(el) {
       q(sb.from('events').select('*, event_types(name)').gte('starts_at', new Date(Date.now() - 864e5).toISOString()).order('starts_at').limit(60)),
     ]);
     bosses = await q(sb.from('bosses').select('id,name').eq('active', true));
-    el.innerHTML = `${warCard(rules)}<div class="row" style="justify-content:space-between;margin-top:30px"><h2>Horários fixos</h2>${can('leader') ? '<button class="btn primary" data-act="rule" type="button">Novo horário</button>' : ''}</div>
+    const opts = await q(sb.from('events').select('id,title,starts_at,status,event_types!inner(name,optional)').eq('event_types.optional', true).neq('status', 'done').gt('starts_at', new Date().toISOString()).order('starts_at').limit(8));
+    el.innerHTML = `${warCard(rules)}${optCard(opts)}<div class="row" style="justify-content:space-between;margin-top:30px"><h2>Horários fixos</h2>${can('leader') ? '<button class="btn primary" data-act="rule" type="button">Novo horário</button>' : ''}</div>
       <p class="muted small">Cada horário gera os eventos automaticamente, com a chamada abrindo e fechando nos horários definidos.</p>
       <div class="rows" style="margin:14px 0">${rules.length ? rules.map((r) => `<div><div><div class="name">${esc(r.title)} <span class="tag ${r.active ? 'red' : ''}">${r.active ? 'ativo' : 'pausado'}</span></div>
         <div class="sub">${r.weekdays.map((d) => DAYS[d - 1]).join(', ')} às ${hm(r.start_time)} · ${esc(r.event_types?.name || '')}${r.bosses ? ' · ' + esc(r.bosses.name) : ''}${r.rsvp_open_time ? ' · chamada abre ' + hm(r.rsvp_open_time) : ''} · fecha ${r.rsvp_close_offset_min} min antes</div></div>
@@ -41,6 +42,14 @@ export default async function agenda(el) {
           <button class="btn sm" type="button" data-pre="1,2,3,4,5" data-for="${t.id}">Seg a Sex</button><button class="btn sm" type="button" data-pre="1,2,3,4" data-for="${t.id}">Seg a Qui</button><button class="btn sm" type="button" data-pre="7" data-for="${t.id}">Domingo</button></div></div></section>`; }).join('')}
         <div><button class="btn primary" type="submit">Salvar horários das guerras</button></div></form>`;
   }
+  function optCard(list) {
+    if (!list.length) return '';
+    const owner = can('owner');
+    return `<h2 style="margin-top:30px">Guerras que nem sempre acontecem</h2>
+      <p class="muted small">A Noatun só rola dependendo da guerra de cidades. Ela fica oculta para os membros até o GuildMaster marcar que vai ter. Marcando, ela aparece na agenda e entra nos avisos de WhatsApp (liga ou desliga em <a href="#/admin/avisos">Avisos</a>).</p>
+      <div class="rows" style="margin-top:12px">${list.map((e) => { const on = e.status === 'scheduled'; return `<div><div><div class="name">${esc(e.title)} <span class="tag ${on ? 'red' : ''}">${on ? 'vai ter' : 'não confirmada'}</span></div><div class="sub">${fmtDateTime(e.starts_at)}</div></div>
+        ${owner ? `<span class="right row"><button class="btn sm ${on ? '' : 'primary'}" data-act="opt" data-id="${e.id}" data-on="${on ? 0 : 1}" type="button">${on ? 'Não vai ter' : 'Vai ter'}</button></span>` : ''}</div>`; }).join('')}</div>`;
+  }
   el.onsubmit = (ev) => {
     const f = ev.target; if (f.id !== 'wf') return; ev.preventDefault();
     busy(f.querySelector('[type=submit]'), async () => {
@@ -54,7 +63,9 @@ export default async function agenda(el) {
           if (old) await q(sb.from('schedule_rules').update(row).eq('id', old.id)); else await q(sb.from('schedule_rules').insert(row));
         }
         const ids = rules.filter((r) => wtypes().some((t) => t.id === r.event_type_id)).map((r) => r.id);
+        const optIds = rules.filter((r) => wtypes().some((t) => t.id === r.event_type_id && t.optional)).map((r) => r.id);
         if (ids.length) await q(sb.from('events').delete().in('schedule_rule_id', ids).eq('status', 'scheduled').gt('starts_at', new Date().toISOString()));
+        if (optIds.length) await q(sb.from('events').delete().in('schedule_rule_id', optIds).eq('status', 'cancelled').gt('starts_at', new Date().toISOString()));
         await q(sb.rpc('generate_events_now'));
         toast('Horários salvos e agenda atualizada.', 'ok'); await load();
       } catch (err) { toast(errMsg(err), 'bad'); }
@@ -66,6 +77,7 @@ export default async function agenda(el) {
     const b = e.target.closest('[data-act]'); if (!b) return; const a = b.dataset.act, id = b.dataset.id;
     try {
       if (a === 'gen') { await busy(b, () => q(sb.rpc('generate_events_now'))); toast('Agenda gerada.', 'ok'); await load(); }
+      else if (a === 'opt') { await q(sb.from('events').update({ status: b.dataset.on === '1' ? 'scheduled' : 'cancelled' }).eq('id', id)); toast(b.dataset.on === '1' ? 'Marcada: vai ter.' : 'Marcada: não vai ter.', 'ok'); await load(); }
       else if (a === 'cancel' || a === 'restore') { await q(sb.from('events').update({ status: a === 'cancel' ? 'cancelled' : 'scheduled' }).eq('id', id)); await load(); }
       else if (a === 'delev' && await confirmBox('Excluir este evento e as respostas dele?', 'Excluir')) { await q(sb.from('events').delete().eq('id', id)); await load(); }
       else if (a === 'delrule' && await confirmBox('Excluir este horário fixo? Os eventos já criados continuam.', 'Excluir')) { await q(sb.from('schedule_rules').delete().eq('id', id)); await load(); }

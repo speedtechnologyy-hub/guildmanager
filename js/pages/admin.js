@@ -3,7 +3,7 @@ import { loadingHTML } from '../lib/ui.js';
 
 const TABS = [
   ['resumo', 'Resumo', 'mod'], ['convites', 'Convites e cadastro', 'mod'], ['membros', 'Membros', 'leader'],
-  ['agenda', 'Agenda', 'sub'], ['presenca', 'Presença', 'mod'], ['calendario', 'Calendário de guerras', 'leader'], ['avisos', 'WhatsApp e avisos', 'leader'],
+  ['agenda', 'Agenda', 'sub'], ['presenca', 'Presença', 'mod'], ['calendario', 'Calendário de guerras', 'leader'], ['fama', 'Fama da semana', 'leader'], ['avisos', 'WhatsApp e avisos', 'leader'],
   ['jogo', 'Jogo', 'leader'], ['aparencia', 'Aparência', 'leader'], ['paginas', 'Páginas', 'leader'], ['log', 'Registro', 'leader'],
 ];
 
