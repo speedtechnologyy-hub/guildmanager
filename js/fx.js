@@ -68,7 +68,7 @@ export function initPointer() {
 /** Abertura em letterbox: roda uma vez por sessão; clique para pular. */
 export function runIntro() {
   const el = document.getElementById('intro');
-  if (!el || reduce) return;
+  if (!el || reduce || state.settings.effects?.intro === false) return;
   try {
     if (sessionStorage.getItem('gm_intro')) return;
     sessionStorage.setItem('gm_intro', '1');

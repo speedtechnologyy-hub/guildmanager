@@ -29,9 +29,9 @@ export default async function resumo(el) {
   const noChar = people.filter((p) => !p.characters.length).length;
   const d = state.settings.discord || {}; const i = integ.data;
   const chk = [
-    ['Logo e nome da guild', !!state.settings.logo_url, '#/admin/aparencia'],
+    ['Logo e nome da guild', !!state.settings.logo_url, '#/admin/estudio'],
     ['Tipos de guerra com horários', ev.count > 0, '#/admin/agenda'],
-    ['Discord configurado', !!(d.invite_url || d.voice_url), '#/admin/aparencia'],
+    ['Discord configurado', !!(d.invite_url || d.voice_url), '#/admin/estudio'],
     ['WhatsApp conectado', !!i?.whatsapp_connected, '#/admin/avisos'],
     ['Envio de avisos ligado', i ? !i.sends_paused : false, '#/admin/avisos'],
   ];

@@ -2,7 +2,7 @@ import { sb, q } from './supabase.js';
 
 export const state = {
   session: null, user: null, profile: null, priv: null, chars: [],
-  settings: {}, classes: [], lineages: [], types: [],
+  settings: {}, classes: [], lineages: [], types: [], pages: [],
 };
 
 export const DEFAULTS = {
@@ -13,13 +13,21 @@ export const DEFAULTS = {
     bg: '#060a14', surface: '#0e1526', text: '#efe8d8', muted: '#9aa3b5',
     primary: '#a3162b', accent: '#e2b552',
     heading_font: 'Cinzel', body_font: 'Alegreya Sans', display_font: 'Cinzel Decorative',
+    // opcionais: vazio = usa o padrão da pele
+    frame: '', heading_color: '', hero_title: '', link: '', topbar_bg: '', footer_bg: '',
+    btn_style: 'metal', btn_radius: 0, btn_bg: '', btn_text: '', btn_primary_text: '', btn_upper: true,
+    radius: 0, wrap_w: 1120, font_scale: 100, hero_h: 92, hero_overlay: 40, topbar_style: 'glass',
+    app_bg_dim: 70, login_dim: 55, nav_align: 'right',
   },
+  features: {}, effects: {}, layouts: {}, custom_fonts: [],
   texts: {
     login_title: 'Área de membros',
     login_subtitle: 'Entre com Google ou Discord. Ainda não tem conta? Peça um convite à liderança.',
     nick_hint: 'Escreva o nick exatamente como está no jogo, com as mesmas maiúsculas, minúsculas e símbolos.',
     hero_tagline: 'Quem responde a chamada, vai para a guerra.',
     intro_tagline: 'Área de membros',
+    login_google: 'Entrar com Google',
+    login_discord: 'Entrar com Discord',
     footer: '',
   },
   menu: [
@@ -31,24 +39,50 @@ export const DEFAULTS = {
     { label: 'Membros', path: '/membros', min_role: 'member' },
   ],
   discord: {},
+  login_bg_url: null, app_bg_url: null,
 };
+
+const isObj = (v) => v && typeof v === 'object' && !Array.isArray(v);
+/** Junta o que veio do banco com os padrões, sem deixar nada indefinido. */
+export function normalize(s) {
+  return {
+    ...DEFAULTS, ...s,
+    theme: { ...DEFAULTS.theme, ...(isObj(s.theme) ? s.theme : {}) },
+    texts: { ...DEFAULTS.texts, ...(isObj(s.texts) ? s.texts : {}) },
+    menu: Array.isArray(s.menu) && s.menu.length ? s.menu : DEFAULTS.menu,
+    discord: isObj(s.discord) ? s.discord : {},
+    features: isObj(s.features) ? s.features : {},
+    effects: isObj(s.effects) ? s.effects : {},
+    layouts: isObj(s.layouts) ? s.layouts : {},
+    custom_fonts: Array.isArray(s.custom_fonts) ? s.custom_fonts : [],
+  };
+}
 
 export async function loadSettings() {
   try {
     const rows = await q(sb.from('site_settings').select('key,value'));
     const s = {};
     rows.forEach((r) => { s[r.key] = r.value; });
-    state.settings = {
-      ...DEFAULTS, ...s,
-      theme: { ...DEFAULTS.theme, ...(s.theme || {}) },
-      texts: { ...DEFAULTS.texts, ...(s.texts || {}) },
-      menu: Array.isArray(s.menu) && s.menu.length ? s.menu : DEFAULTS.menu,
-      discord: s.discord || {},
-    };
+    state.raw = s;
+    state.settings = normalize(s);
   } catch (e) {
     console.warn('configurações indisponíveis, usando padrão', e);
-    state.settings = { ...DEFAULTS };
+    state.raw = {};
+    state.settings = normalize({});
   }
+}
+
+/** Aplica uma mudança vinda do tempo real (ou de uma prévia). value null = voltou ao padrão. */
+export function setSetting(key, value) {
+  state.raw = { ...(state.raw || {}) };
+  if (value === undefined) delete state.raw[key]; else state.raw[key] = value;
+  state.settings = normalize(state.raw);
+}
+
+/** Páginas criadas pelo master que este usuário pode ver (a RLS já filtra). */
+export async function loadPages() {
+  const { data } = await sb.from('cms_pages').select('id,slug,title,published,visibility,show_in_menu,menu_order').eq('published', true).order('menu_order');
+  state.pages = data || [];
 }
 
 export async function loadProfile() {

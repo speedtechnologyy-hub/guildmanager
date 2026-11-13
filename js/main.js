@@ -1,8 +1,11 @@
 import { sb } from './supabase.js';
-import { state, loadSettings, loadProfile, loadGame } from './store.js';
+import { state, loadSettings, loadProfile, loadGame, loadPages } from './store.js';
 import { applyTheme, applyBrand } from './theme.js';
 import { initEmbers, initPointer, runIntro } from './fx.js';
-import { renderShell, updateNav } from './layout.js';
+import { renderShell, updateNav, shellMode } from './layout.js';
+import { routeFeature, featureAllowed, screenBlocks } from './lib/features.js';
+import { renderBlocks } from './lib/blocks.js';
+import { startLive, listenPreview, IS_PREVIEW } from './lib/live.js';
 import { startTicker, tick, esc, $, can } from './lib/util.js';
 import { loadingHTML, closeModal } from './lib/ui.js';
 
@@ -39,9 +42,9 @@ async function go() {
   // portões de acesso
   if (!state.session && !route?.pub) return nav('#/entrar');
   if (state.session && !state.profile && route?.page !== 'signup' && route?.page !== 'login') return nav('#/cadastro');
-  if (state.profile && (route?.page === 'login' || route?.page === 'signup' || route?.page === 'master')) return nav('#/');
+  if (state.profile && !IS_PREVIEW && (route?.page === 'login' || route?.page === 'signup' || route?.page === 'master')) return nav('#/');
 
-  const bare = route?.bare || (route?.pub && !state.profile);
+  const bare = route?.bare || (route?.pub && (!state.profile || (IS_PREVIEW && route.page === 'login')));
   renderShell(bare ? 'bare' : 'full');
   const view = $('#view');
   view.innerHTML = loadingHTML;
@@ -54,10 +57,27 @@ async function go() {
   if (!route) { view.innerHTML = '<div class="wrap"><div class="page-head"><h1>Página não encontrada</h1><p><a href="#/">Voltar ao lobby</a></p></div></div>'; return; }
   if (route.page === 'admin' && !can('mod')) return nav('#/');
 
+  // função desligada pelo master: some para os membros; o master ainda entra, com aviso
+  const fid = routeFeature(route.page);
+  let offNote = false;
+  if (fid && !featureAllowed(fid)) {
+    if (!can('owner')) { view.innerHTML = '<div class="wrap"><div class="page-head"><h1>Função indisponível</h1><p>Esta área está desativada no momento.</p><p style="margin-top:14px"><a href="#/">Voltar ao lobby</a></p></div></div>'; updateNav(); return; }
+    offNote = true;
+  }
+
+  // blocos extras que o master colocou no topo e no rodapé desta tela
+  let host = view;
+  const top = screenBlocks(route.page, 'top'), bottom = screenBlocks(route.page, 'bottom');
+  if (top.length || bottom.length) {
+    view.innerHTML = `<div class="wrap blks" id="gm-top" style="padding-top:24px">${renderBlocks(top)}</div><div id="gm-page"></div><div class="wrap blks" id="gm-bottom" style="padding-bottom:24px">${renderBlocks(bottom)}</div>`;
+    host = view.querySelector('#gm-page');
+  }
+
   try {
     const mod = await import(`./pages/${route.page}.js`);
     if (my !== token) return;
-    const out = await mod.default(view, params);
+    const out = await mod.default(host, params);
+    if (offNote && my === token) view.insertAdjacentHTML('afterbegin', '<div class="wrap"><div class="flag-off">Esta função está desativada ou restrita para os membros. Só você enxerga esta tela.</div></div>');
     if (my !== token) { out?.(); return; }
     cleanup = out || null;
   } catch (e) {
@@ -74,6 +94,25 @@ async function syncSession(session) {
   state.user = session?.user ?? null;
   await loadProfile();
   if (state.profile) await loadGame();
+  await loadPages();
+}
+
+/** Mudança do master chegou (tempo real ou prévia): refaz tema, topo e, se preciso, a tela aberta. */
+let refreshTimer = 0;
+function refreshLive({ cssOnly } = {}) {
+  applyTheme(); applyBrand();
+  if (shellMode() === 'full') renderShell('full', true);
+  if (cssOnly) return;
+  const path = (location.hash.slice(1) || '/').split('?')[0];
+  if (/^\/(admin|cadastro|master)/.test(path)) return;
+  clearTimeout(refreshTimer);
+  const tryGo = () => {
+    const a = document.activeElement;
+    const typing = a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.closest('#view');
+    if (document.querySelector('#modal-root .overlay') || typing) { refreshTimer = setTimeout(tryGo, 2500); return; }
+    go();
+  };
+  refreshTimer = setTimeout(tryGo, 150);
 }
 
 async function boot() {
@@ -106,6 +145,8 @@ async function boot() {
   });
 
   addEventListener('hashchange', go);
+  if (IS_PREVIEW) listenPreview(() => refreshLive({}));
+  startLive(refreshLive);
   runIntro();
   startTicker();
   await go();
