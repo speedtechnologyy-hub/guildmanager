@@ -114,7 +114,8 @@ Deno.serve(async (req) => {
       const w = await checkWhatsapp(number);
       if (!w.exists) throw new Fail('whatsapp_not_found');
 
-      const email = user.email ?? null;
+      // só vale o e-mail confirmado (evita reivindicar cadastro prévio com e-mail não verificado)
+      const email = user.email_confirmed_at ? (user.email ?? null) : null;
       const discord = user.identities?.find((i) => i.provider === 'discord');
       const discordId = discord
         ? String(discord.identity_data?.provider_id ?? discord.identity_data?.sub ?? discord.id)

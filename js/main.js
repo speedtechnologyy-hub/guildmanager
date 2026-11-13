@@ -9,6 +9,7 @@ import { loadingHTML, closeModal } from './lib/ui.js';
 // Cada rota carrega o seu módulo só quando é visitada.
 const ROUTES = [
   { re: /^\/entrar$/, page: 'login', pub: true },
+  { re: /^\/master$/, page: 'master', pub: true },
   { re: /^\/convite\/([^/]+)$/, page: 'login', pub: true },
   { re: /^\/p\/([a-z0-9-]+)$/, page: 'page', pub: true },
   { re: /^\/cadastro$/, page: 'signup', bare: true },
@@ -37,8 +38,8 @@ async function go() {
 
   // portões de acesso
   if (!state.session && !route?.pub) return nav('#/entrar');
-  if (state.session && !state.profile && route?.page !== 'signup' && route?.page !== 'login') return nav('#/cadastro');
-  if (state.profile && (route?.page === 'login' || route?.page === 'signup')) return nav('#/');
+  if (state.session && !state.profile && route?.page !== 'signup' && route?.page !== 'login' && route?.page !== 'master') return nav('#/cadastro');
+  if (state.profile && (route?.page === 'login' || route?.page === 'signup' || route?.page === 'master')) return nav('#/');
 
   const bare = route?.bare || (route?.pub && !state.profile);
   renderShell(bare ? 'bare' : 'full');
