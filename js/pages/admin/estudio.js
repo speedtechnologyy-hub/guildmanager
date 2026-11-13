@@ -10,7 +10,7 @@ import { newBlock, newItem } from './estudio/blocks-ui.js?v=20261113h';
 import { pagesList, renderPages, renderWhats, renderBackup, renderTeam, setSubLeader, savePerm, setMaster } from './estudio/extra.js?v=20261113h';
 
 /** Chaves de site_settings que o Estúdio controla (rascunho + publicação). */
-const KEYS = ['admin_access', 'theme', 'texts', 'menu', 'features', 'effects', 'layouts', 'custom_fonts', 'guild_name', 'logo_url', 'favicon_url', 'banner_url', 'login_bg_url', 'vitrine_url', 'app_bg_url', 'discord', 'timezone', 'site_url'];
+const KEYS = ['admin_access', 'theme', 'texts', 'menu', 'features', 'effects', 'layouts', 'custom_fonts', 'guild_name', 'logo_url', 'favicon_url', 'banner_url', 'login_bg_url', 'vitrine_url', 'app_bg_url', 'discord', 'music', 'timezone', 'site_url'];
 const EXT_TYPE = { woff2: 'font/woff2', woff: 'font/woff', ttf: 'font/ttf', otf: 'font/otf' };
 const SCREENS_PREVIEW = [['/', 'Lobby'], ['/entrar', 'Login'], ['/guerras', 'Guerras'], ['/ranking', 'Ranking'], ['/membros', 'Membros'], ['/perfil', 'Perfil']];
 const FONT_OK = /^[A-Za-z0-9 ]{2,40}$/;

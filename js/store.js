@@ -38,6 +38,12 @@ export const DEFAULTS = {
   ],
   discord: {},
   login_bg_url: null, app_bg_url: null, vitrine_url: null,
+  // Player de música: links de playlist do Spotify (playlist, álbum ou música). Vazio = a aba não aparece.
+  music: {
+    eletronica: 'https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n',
+    funk: '', trap: '',
+    rock: 'https://open.spotify.com/playlist/37i9dQZF1DWXRqgorJj26U',
+  },
 };
 
 const isObj = (v) => v && typeof v === 'object' && !Array.isArray(v);
@@ -49,6 +55,7 @@ export function normalize(s) {
     texts: { ...DEFAULTS.texts, ...(isObj(s.texts) ? s.texts : {}) },
     menu: Array.isArray(s.menu) && s.menu.length ? s.menu : DEFAULTS.menu,
     discord: isObj(s.discord) ? s.discord : {},
+    music: { ...DEFAULTS.music, ...(isObj(s.music) ? s.music : {}) },
     features: isObj(s.features) ? s.features : {},
     effects: isObj(s.effects) ? s.effects : {},
     layouts: isObj(s.layouts) ? s.layouts : {},

@@ -138,3 +138,16 @@
 .inst .steps b { font-size: 1rem; }
 .inst .steps span { color: var(--muted); font-size: .92rem; }
 .vitrine-go { position: absolute; left: 50%; bottom: calc(40px + env(safe-area-inset-bottom)); transform: translateX(-50%); min-width: 220px; justify-content: center; z-index: 2; }
+
+/* Player de música (Spotify embutido, só toca quando a pessoa clica) */
+.gmp { position: fixed; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 60; }
+.gmp-fab { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; color: var(--accent, #e2b552); background: color-mix(in srgb, var(--surface, #0e1526) 88%, transparent); border: 1px solid color-mix(in srgb, var(--accent, #e2b552) 45%, transparent); backdrop-filter: blur(10px); box-shadow: 0 8px 24px rgba(0,0,0,.45); }
+.gmp.open .gmp-fab { display: none; }
+.gmp-box { display: none; width: min(380px, calc(100vw - 32px)); padding: 10px; border-radius: var(--radius, 14px); background: color-mix(in srgb, var(--surface, #0e1526) 94%, transparent); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(14px); box-shadow: 0 16px 48px rgba(0,0,0,.6); }
+.gmp.open .gmp-box { display: block; }
+.gmp-tabs { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+.gmp-tabs button { padding: 7px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.14); background: transparent; color: var(--muted); font: 600 .85rem var(--font-head); cursor: pointer; }
+.gmp-tabs button.on { color: #111; background: var(--accent, #e2b552); border-color: transparent; }
+.gmp-tabs .gmp-x { margin-left: auto; padding: 7px 10px; }
+.gmp-frame iframe { border-radius: 12px; display: block; color-scheme: normal; }
+@media (max-width: 760px) { .gmp { bottom: calc(76px + env(safe-area-inset-bottom)); } }

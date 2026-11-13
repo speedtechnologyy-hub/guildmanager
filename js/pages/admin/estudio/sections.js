@@ -24,7 +24,7 @@ const grid = (...x) => `<div class="g2">${x.join('')}</div>`;
 // [id, nome, grupo (só no primeiro de cada grupo)]
 export const SECTIONS = [
   ['identidade', 'Identidade', 'Aparência'], ['imagens', 'Imagens de fundo'], ['cores', 'Cores'], ['fontes', 'Fontes'], ['botoes', 'Botões e cartões'], ['textos', 'Textos'],
-  ['menu', 'Menu', 'Estrutura'], ['funcoes', 'Funções e efeitos'], ['telas', 'Telas e blocos'], ['paginas', 'Páginas novas'],
+  ['musica', 'Player de música', 'Estrutura'], ['menu', 'Menu'], ['funcoes', 'Funções e efeitos'], ['telas', 'Telas e blocos'], ['paginas', 'Páginas novas'],
   ['equipe', 'Sub líderes e acessos', 'Equipe'],
   ['whatsapp', 'WhatsApp (Evolution)', 'Integrações'],
   ['seguranca', 'Versões e padrão', 'Segurança'],
@@ -70,6 +70,9 @@ export const render = {
     <h4 class="sh2">Cartões e largura</h4>${fRange(c, 'theme.radius', 'Cantos dos cartões', { max: 32, unit: 'px' })}${fRange(c, 'theme.wrap_w', 'Largura do conteúdo', { min: 860, max: 1600, step: 20, unit: 'px' })}
     <h4 class="sh2">Barra do topo</h4>${grid(fSelect(c, 'theme.topbar_style', 'Estilo', [['glass', 'Vidro'], ['solid', 'Sólida'], ['clear', 'Transparente']]), fSelect(c, 'theme.nav_align', 'Posição do menu', [['right', 'Direita'], ['center', 'Centro'], ['left', 'Esquerda']]))}</div>`,
 
+  musica: (c) => head('Player de música', 'Um botão de música fica no canto das telas e toca sem sair do site. Só toca quando a pessoa clica em play. Cole o link de uma playlist, álbum ou música do Spotify. Deixe vazio para esconder a aba.') + `<div class="stack">
+    ${[['eletronica', 'Eletrônica'], ['funk', 'Funk'], ['trap', 'Trap'], ['rock', 'Rock']].map(([k, n]) => fText(c, 'music.' + k, n, { ph: 'https://open.spotify.com/playlist/...' })).join('')}
+    <p class="muted small">No Spotify: abra a playlist, toque nos três pontinhos, Compartilhar, Copiar link. Quem não está logado no Spotify ouve só um trecho de 30 segundos, e quem tem conta grátis ouve anúncios.</p></div>`,
   textos: (c) => head('Textos', 'Frases do lobby, do login e do rodapé.') + `<div class="stack">${[['hero_tagline', 'Frase do lobby'], ['intro_tagline', 'Frase da abertura'], ['login_title', 'Título do login'], ['login_subtitle', 'Subtítulo do login'], ['login_google', 'Botão do Google'], ['login_discord', 'Botão do Discord'], ['nick_hint', 'Dica do nick'], ['footer', 'Rodapé']].map(([k, n]) => fText(c, 'texts.' + k, n)).join('')}</div>`,
 
   funcoes: (c) => head('Funções', 'Desligue o que a guild não usa ou restrinja por cargo. Some do menu e da navegação na hora para todos.') + `<div class="stack">

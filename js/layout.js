@@ -1,5 +1,6 @@
 import { sb } from './supabase.js?v=20261113h';
 import { state } from './store.js?v=20261113h';
+import { mountPlayer, unmountPlayer } from './lib/player.js?v=20261113h';
 import { esc, can, clsRgb, initial, mainChar } from './lib/util.js?v=20261113h';
 import { logoUrl } from './theme.js?v=20261113h';
 import { featureAllowed, pathFeature } from './lib/features.js?v=20261113h';
@@ -48,12 +49,14 @@ export function updateNav() {
   document.getElementById('nav')?.classList.remove('open');
 }
 
+const syncPlayer = () => (state.profile?.status === 'active' && shellKind === 'full' ? mountPlayer() : unmountPlayer());
+
 /** kind: 'full' (barra + rodapé) ou 'bare' (login e cadastro). */
 export function renderShell(kind = 'full', force = false) {
   const app = document.getElementById('app');
-  if (!force && kind === shellKind) { updateNav(); return; }
+  if (!force && kind === shellKind) { updateNav(); syncPlayer(); return; }
   shellKind = kind;
-  if (kind === 'bare') { app.innerHTML = '<main id="view"></main>'; return; }
+  if (kind === 'bare') { app.innerHTML = '<main id="view"></main>'; unmountPlayer(); return; }
 
   const s = state.settings;
   const main = mainChar(state.chars);
@@ -98,5 +101,6 @@ export function renderShell(kind = 'full', force = false) {
   menu.addEventListener('click', () => { menu.hidden = true; });
   document.addEventListener('click', () => { menu.hidden = true; });
   document.getElementById('logout').onclick = () => sb.auth.signOut();
+  syncPlayer();
   updateNav();
 }
