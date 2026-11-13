@@ -8,9 +8,9 @@ export default function vitrine(root) {
   // celular: arte vertical da guild; computador: o banner escolhido no painel
   const phone = matchMedia('(max-width: 760px)').matches;
   const img = phone ? 'assets/mobile-bg.jpg' : (s.vitrine_url || s.banner_url || s.login_bg_url);
-  // No app instalado (tela inicial do celular) aparece o botão Entrar. No navegador comum, só o banner.
+  // O botão Entrar aparece no computador e no app instalado. No navegador do celular, só o banner.
   const app = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
-  const btn = app ? '<a class="btn primary vitrine-go" href="#/entrar">Entrar</a>' : '';
+  const btn = (app || !phone) ? '<a class="btn primary vitrine-go" href="#/entrar">Entrar</a>' : '';
   root.innerHTML = img
     ? `<div class="vitrine"><img src="${esc(img)}" alt="${esc(s.guild_name)}">${btn}</div>`
     : `<div class="vitrine">${sceneHTML('login')}${btn}</div>`;
