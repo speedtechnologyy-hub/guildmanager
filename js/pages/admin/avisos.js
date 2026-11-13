@@ -20,12 +20,12 @@ export default async function avisos(el) {
   }
   function draw() {
     el.innerHTML = `<h2>WhatsApp</h2>
-      <section class="plate" style="padding:20px;margin:14px 0 26px">${owner ? `<form class="stack" id="cf"><div class="form-grid">
+      <section class="plate" style="padding:20px;margin:14px 0 26px">${owner ? `<details class="adv"${cfg.evolution_base_url && cfg.evolution_instance ? '' : ' open'}><summary>Configuração técnica (só na primeira vez)</summary><form class="stack" id="cf" style="margin-top:12px"><div class="form-grid">
         <label class="f">Endereço da Evolution API<input name="url" placeholder="https://evolution.seudominio.com" value="${esc(cfg.evolution_base_url || '')}"></label>
         <label class="f">Nome da instância<input name="inst" placeholder="guilda" value="${esc(cfg.evolution_instance || '')}"></label>
         <label class="f">Intervalo entre mensagens (s)<div class="row"><input type="number" name="dmin" min="1" value="${cfg.delay_min_s ?? 4}" style="width:80px"> a <input type="number" name="dmax" min="1" value="${cfg.delay_max_s ?? 12}" style="width:80px"></div></label></div>
         <p class="muted small">A chave da API fica guardada só no servidor (segredo EVOLUTION_API_KEY do Supabase), nunca aparece aqui.</p>
-        <div><button class="btn" type="submit">Salvar configuração</button></div></form>` : '<p class="muted">Só o dono configura a conexão.</p>'}
+        <div><button class="btn" type="submit">Salvar configuração</button></div></form></details>` : '<p class="muted">Só o dono configura a conexão.</p>'}
         <div id="conn" style="margin-top:18px"></div>
         <label class="check" style="margin-top:18px"><input type="checkbox" id="pause" ${cfg.sends_paused ? 'checked' : ''} ${owner ? '' : 'disabled'}> Pausar todos os envios</label>
         <p class="muted small">Enquanto estiver pausado, nenhum aviso sai. Comece pausado, teste, e desmarque quando estiver tudo certo.</p></section>

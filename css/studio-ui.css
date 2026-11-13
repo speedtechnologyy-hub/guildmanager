@@ -81,3 +81,5 @@
   .st-nav { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--s-line); } .st-nav button { white-space: nowrap; }
   .st-panel { max-height: 70vh; border-right: 0; } .st-prev { height: 78vh; } .g2 { grid-template-columns: 1fr; }
 }
+.adv > summary { cursor: pointer; color: var(--muted); font-size: .9rem; }
+.adv[open] > summary { margin-bottom: 4px; }
