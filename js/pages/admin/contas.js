@@ -1,6 +1,7 @@
 import { sb, q } from '../../supabase.js?v=20261113h';
 import { state } from '../../store.js?v=20261113h';
 import { esc, can, fmtDate, roleLabel, ROLE_LABEL, initial, mainChar, crown } from '../../lib/util.js?v=20261113h';
+import { refreshPending } from '../../lib/pending.js?v=20261113h';
 import { toast, modal, closeModal, confirmBox, errMsg, empty } from '../../lib/ui.js?v=20261113h';
 import { GRANTABLE, LEVELS, canEdit, globalLevel, levelName } from '../../lib/admin-tabs.js?v=20261113h';
 import { savePerm } from './estudio/extra.js?v=20261113h';
@@ -61,7 +62,7 @@ export default async function contas(el) {
       <span class="right row" style="flex-wrap:wrap;gap:6px">${acts.join('')}</span></div>`;
   }
 
-  const setStatus = async (id, status, msg) => { await q(sb.from('profiles').update({ status }).eq('id', id)); toast(msg, 'ok'); await load(); };
+  const setStatus = async (id, status, msg) => { await q(sb.from('profiles').update({ status }).eq('id', id)); toast(msg, 'ok'); refreshPending(true); await load(); };
 
   el.onclick = async (e) => {
     const f = e.target.closest('[data-f]'); if (f) { ui.f = f.dataset.f; return draw(); }

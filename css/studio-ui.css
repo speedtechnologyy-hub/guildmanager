@@ -156,3 +156,16 @@
 .gmp-fab { position: relative; } .gmp-dot { display: none; position: absolute; top: 6px; right: 6px; width: 9px; height: 9px; border-radius: 50%; background: #3ddc84; }
 .gmp.playing .gmp-dot { display: block; }
 @media (max-width: 760px) { .gmp { bottom: calc(76px + env(safe-area-inset-bottom)); } }
+
+/* aviso de cadastros aguardando aprovação */
+.nbadge { position: absolute; top: 2px; right: -4px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: #e5484d; color: #fff; font: 800 .68rem/18px var(--font-body, system-ui); letter-spacing: 0; text-align: center; box-shadow: 0 0 0 2px var(--bg, #060a14), 0 0 12px #e5484dcc; animation: pdPulse 1.8s ease-in-out infinite; }
+.pendbar { position: sticky; top: 66px; z-index: 40; background: linear-gradient(90deg, #7a1a22, #b3262e 50%, #7a1a22); border-bottom: 1px solid #ffffff22; }
+.pendbar[hidden] { display: none; }
+.pendbar .pbtn { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 10px 16px; color: #fff; font-size: .95rem; }
+.pendbar .pbtn:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
+.pendbar .pdot { flex: none; width: 9px; height: 9px; border-radius: 50%; background: #fff; animation: pdPulse 1.6s ease-in-out infinite; }
+.pendbar .pgo { white-space: nowrap; flex: none; padding: 4px 12px; border-radius: 999px; background: #fff; color: #7a1a22; font-weight: 800; font-size: .8rem; }
+em.pc { margin-left: auto; font-style: normal; min-width: 20px; padding: 1px 7px; border-radius: 10px; background: #e5484d; color: #fff; font-weight: 800; font-size: .72rem; text-align: center; }
+@keyframes pdPulse { 50% { opacity: .55; transform: scale(.9); } }
+@media (prefers-reduced-motion: reduce) { .nbadge, .pendbar .pdot { flex: none; animation: none; } }
+@media (max-width: 820px) { .pendbar { top: 56px; } .pendbar .pbtn { font-size: .85rem; gap: 8px; padding: 9px 12px; } }

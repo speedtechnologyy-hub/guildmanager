@@ -5,6 +5,7 @@ import { esc, can, clsRgb, initial, mainChar } from './lib/util.js?v=20261113h';
 import { logoUrl } from './theme.js?v=20261113h';
 import { featureAllowed, pathFeature } from './lib/features.js?v=20261113h';
 import { safeUrl } from './lib/blocks.js?v=20261113h';
+import { startPending, stopPending, paintPending, canApprove } from './lib/pending.js?v=20261113h';
 
 /** Cenário do herói: banner enviado pelo admin ou o cenário gerado (castelo ao entardecer). */
 export function sceneHTML(kind = 'hero') {
@@ -49,7 +50,11 @@ export function updateNav() {
   document.getElementById('nav')?.classList.remove('open');
 }
 
-const syncPlayer = () => (state.profile?.status === 'active' && shellKind === 'full' ? mountPlayer() : unmountPlayer());
+const syncPlayer = () => {
+  const on = state.profile?.status === 'active' && shellKind === 'full';
+  on ? mountPlayer() : unmountPlayer();
+  if (on && canApprove()) { startPending(); paintPending(); } else stopPending();
+};
 
 /** kind: 'full' (barra + rodapé) ou 'bare' (login e cadastro). */
 export function renderShell(kind = 'full', force = false) {
@@ -88,6 +93,7 @@ export function renderShell(kind = 'full', force = false) {
         </div>
       </nav>
     </div></header>
+    <div id="pendBar" class="pendbar" hidden></div>
     <main id="view"></main>
     <footer class="foot"><div class="orn" aria-hidden="true"><i></i></div>${esc(s.texts.footer || s.guild_name)}</footer>`;
 

@@ -6,7 +6,7 @@ import { GROUPS, TABS, tabAllowed, levelOf, lockReadonly } from '../lib/admin-ta
 const norm = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const slug = (g) => 'g-' + norm(g).replace(/\W/g, '');
 const isMobile = () => matchMedia('(max-width: 860px)').matches;
-const badge = (t) => (levelOf(t.id) < 2 ? '<em class="lv">Só ver</em>' : '');
+const badge = (t) => (levelOf(t.id) < 2 ? '<em class="lv">Só ver</em>' : '') + ((t.id === 'convites' || t.id === 'contas') && state.pendingCount ? `<em class="pc">${state.pendingCount}</em>` : '');
 
 export default async function admin(root, [tab]) {
   const tabs = TABS.filter(tabAllowed);

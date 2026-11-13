@@ -1,6 +1,7 @@
 import { sb, q } from '../../supabase.js?v=20261113h';
 import { state } from '../../store.js?v=20261113h';
 import { esc, can, copyText, fmtDateTime, ROLE_LABEL, roleLabel } from '../../lib/util.js?v=20261113h';
+import { refreshPending } from '../../lib/pending.js?v=20261113h';
 import { toast, modal, closeModal, busy, formData, confirmBox, empty, errMsg } from '../../lib/ui.js?v=20261113h';
 
 const code = () => Array.from(crypto.getRandomValues(new Uint8Array(9)), (b) => 'abcdefghjkmnpqrstuvwxyz23456789'[b % 31]).join('');
@@ -40,8 +41,8 @@ export default async function convites(el) {
   el.onclick = async (e) => {
     const t = e.target.closest('button'); if (!t) return;
     try {
-      if (t.dataset.ok) { await q(sb.from('profiles').update({ status: 'active' }).eq('id', t.dataset.ok)); toast('Cadastro aprovado. A pessoa já pode entrar.', 'ok'); await load(); }
-      else if (t.dataset.no && await confirmBox('Recusar este cadastro? A pessoa não terá acesso.', 'Recusar')) { await q(sb.from('profiles').update({ status: 'inactive' }).eq('id', t.dataset.no)); toast('Cadastro recusado.', 'ok'); await load(); }
+      if (t.dataset.ok) { await q(sb.from('profiles').update({ status: 'active' }).eq('id', t.dataset.ok)); refreshPending(true); toast('Cadastro aprovado. A pessoa já pode entrar.', 'ok'); await load(); }
+      else if (t.dataset.no && await confirmBox('Recusar este cadastro? A pessoa não terá acesso.', 'Recusar')) { await q(sb.from('profiles').update({ status: 'inactive' }).eq('id', t.dataset.no)); refreshPending(true); toast('Cadastro recusado.', 'ok'); await load(); }
       else if (t.dataset.copy) { await copyText(t.dataset.copy); toast('Link copiado.', 'ok'); }
       else if (t.dataset.tg) { await q(sb.from('invites').update({ active: t.dataset.on !== 'true' }).eq('id', t.dataset.tg)); await load(); }
       else if (t.dataset.del && await confirmBox('Excluir este convite?', 'Excluir')) { await q(sb.from('invites').delete().eq('id', t.dataset.del)); await load(); }
