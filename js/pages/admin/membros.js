@@ -1,13 +1,13 @@
 import { sb, q } from '../../supabase.js';
 import { state } from '../../store.js';
-import { esc, can, clsBadge, ROLE_LABEL, rank, fmtDate, debounce, mainChar } from '../../lib/util.js';
+import { esc, can, clsBadge, ROLE_LABEL, roleLabel, rank, fmtDate, debounce, mainChar } from '../../lib/util.js';
 import { toast, modal, closeModal, busy, errMsg, confirmBox, empty, formData } from '../../lib/ui.js';
 import { charsPanel } from '../../lib/characters.js';
 
 export default async function membros(el) {
   let people = [], term = '';
   async function load() {
-    people = await q(sb.from('profiles').select('id,display_name,role,status,joined_at,characters(*)').order('display_name'));
+    people = await q(sb.from('profiles').select('id,display_name,role,sub_slot,status,joined_at,characters(*)').order('display_name'));
     draw();
   }
   function draw() {
@@ -16,7 +16,7 @@ export default async function membros(el) {
     el.querySelector('#v').innerHTML = list.length ? `<div class="tbl-wrap"><table><thead><tr><th>Membro</th><th>Papel</th><th>Status</th><th></th></tr></thead><tbody>${list.map((p) => {
       const m = mainChar(p.characters); const editable = rank(p.role) < rank(state.profile.role) || p.id === state.user.id;
       return `<tr><td>${clsBadge(m?.class_code)} ${esc(m?.nick || p.display_name)}<div class="muted small">${esc(p.display_name)} · desde ${fmtDate(p.joined_at || p.created_at)}</div></td>
-        <td>${editable && p.id !== state.user.id ? `<select data-role="${p.id}">${Object.entries(ROLE_LABEL).filter(([k]) => rank(k) < rank(state.profile.role) || k === p.role).map(([k, v]) => `<option value="${k}" ${k === p.role ? 'selected' : ''}>${v}</option>`).join('')}</select>` : ROLE_LABEL[p.role]}</td>
+        <td>${can('owner') && p.id !== state.user.id ? `<select data-role="${p.id}">${['member', 'leader'].map((k) => `<option value="${k}" ${k === (p.role === 'sub' || p.role === 'leader' ? 'leader' : p.role) ? 'selected' : ''}>${ROLE_LABEL[k]}</option>`).join('')}</select>${p.role === 'leader' || p.role === 'sub' ? ` <select data-slot="${p.id}"><option value="">Sem número</option>${[1, 2, 3].map((n) => `<option value="${n}" ${p.sub_slot === n ? 'selected' : ''}>${'I'.repeat(n)}</option>`).join('')}</select>` : ''}` : roleLabel(p.role, p.sub_slot)}</td>
         <td>${editable && p.id !== state.user.id ? `<select data-status="${p.id}">${[['active', 'Ativo'], ['inactive', 'Inativo'], ['banned', 'Bloqueado']].map(([k, v]) => `<option value="${k}" ${k === p.status ? 'selected' : ''}>${v}</option>`).join('')}</select>` : p.status}</td>
         <td><button class="btn sm" data-ch="${p.id}" type="button">Personagens</button> <button class="btn sm" data-note="${p.id}" type="button">Notas</button>${can('owner') && p.id !== state.user.id ? ` <button class="btn sm danger" data-rm="${p.id}" type="button">Remover</button>` : ''}</td></tr>`;
     }).join('')}</tbody></table></div>` : empty('Ninguém encontrado.');
@@ -24,8 +24,8 @@ export default async function membros(el) {
   el.innerHTML = '<h2>Membros</h2><label class="f" style="margin:14px 0"><input type="search" id="s" placeholder="Buscar"></label><div id="v"></div>';
   el.querySelector('#s').oninput = debounce((e) => { term = e.target.value; draw(); }, 150);
   el.onchange = async (e) => {
-    const r = e.target.dataset.role, s = e.target.dataset.status;
-    try { if (r) await q(sb.from('profiles').update({ role: e.target.value }).eq('id', r)); if (s) await q(sb.from('profiles').update({ status: e.target.value }).eq('id', s)); toast('Atualizado.', 'ok'); await load(); } catch (err) { toast(errMsg(err), 'bad'); await load(); }
+    const r = e.target.dataset.role, s = e.target.dataset.status, sl = e.target.dataset.slot;
+    try { if (r) await q(sb.from('profiles').update({ role: e.target.value, ...(e.target.value === 'member' ? { sub_slot: null } : {}) }).eq('id', r)); if (sl) await q(sb.from('profiles').update({ sub_slot: e.target.value ? +e.target.value : null }).eq('id', sl)); if (s) await q(sb.from('profiles').update({ status: e.target.value }).eq('id', s)); toast('Atualizado.', 'ok'); await load(); } catch (err) { toast(errMsg(err), 'bad'); await load(); }
   };
   el.onclick = async (e) => {
     const b = e.target.closest('button'); if (!b) return;

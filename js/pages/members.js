@@ -1,12 +1,12 @@
 import { sb, q } from '../supabase.js';
 import { state } from '../store.js';
-import { esc, clsBadge, clsRgb, clsIcon, crown, lineageName, className, mainChar, debounce, ROLE_LABEL, fmtDate } from '../lib/util.js';
+import { esc, clsBadge, clsRgb, clsIcon, crown, lineageName, className, mainChar, debounce, roleLabel, fmtDate } from '../lib/util.js';
 import { empty, modal } from '../lib/ui.js';
 import { attendanceStats } from '../lib/stats.js';
 
 export default async function members(root) {
   const [people, att] = await Promise.all([
-    q(sb.from('profiles').select('id,display_name,role,status,joined_at,characters(*)').eq('status', 'active').order('display_name')),
+    q(sb.from('profiles').select('id,display_name,role,sub_slot,status,joined_at,characters(*)').eq('status', 'active').order('display_name')),
     attendanceStats(30).catch(() => ({ total: 0, per: {}, pct: () => 0 })),
   ]);
   let cls = 'all', term = '';
@@ -35,7 +35,7 @@ export default async function members(root) {
     const c = e.target.closest('[data-c]'); if (c) { cls = c.dataset.c; draw(); return; }
     const card = e.target.closest('.mcard'); if (!card) return;
     const p = people.find((x) => x.id === card.dataset.id);
-    modal(`<h3>${crown(p.role)} ${esc(mainChar(p.characters)?.nick || p.display_name)}</h3><p class="muted small">${esc(p.display_name)} · ${ROLE_LABEL[p.role]} · na guild desde ${fmtDate(p.joined_at)}</p>
+    modal(`<h3>${crown(p.role)} ${esc(mainChar(p.characters)?.nick || p.display_name)}</h3><p class="muted small">${esc(p.display_name)} · ${roleLabel(p.role, p.sub_slot)} · na guild desde ${fmtDate(p.joined_at)}</p>
       <div class="stat" style="margin:16px 0"><div><b>${att.total ? att.pct(p.id) + '%' : '-'}</b><span>presença 30 dias</span></div><div><b>${att.per[p.id] || 0}</b><span>guerras</span></div><div><b>${p.characters.length}</b><span>personagens</span></div></div>
       <div class="rows">${p.characters.map((c) => `<div>${clsBadge(c.class_code)}<div><div class="name">${esc(c.nick)} ${c.is_main ? '<span class="tag red">Main</span>' : ''}</div><div class="sub">${esc(lineageName(c.lineage_id) || className(c.class_code))}${c.level ? ', level ' + c.level : ''}</div></div></div>`).join('') || empty('Sem personagens.')}</div>`);
   });
