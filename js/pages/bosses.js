@@ -22,7 +22,10 @@ export default async function bosses(root) {
         big = up ? '<span class="big now">Pode estar vivo</span>' : `<span class="big" data-cd="${n.next_spawn_at}" data-done="Nasceu"></span>`;
         sub = `Morreu ${fmtDateTime(n.last_killed_at)}. Respawn de ${b.respawn_minutes >= 60 ? (b.respawn_minutes / 60) + 'h' : b.respawn_minutes + 'min'}.`;
       } else if (fx) { big = `<span class="big" data-cd="${fx.starts_at}" data-done="Agora"></span>`; sub = `Horário fixo: ${relDay(fx.starts_at)}, ${fmtTime(fx.starts_at)}.`; }
-      return plate(`<div class="boss"><h3>${esc(b.name)}</h3><div class="big-w">${big.includes('class="big') ? big : `<div class="big">${big}</div>`}</div><p class="muted small">${esc(sub)}</p>${b.notes ? `<p class="small">${esc(b.notes)}</p>` : ''}${b.respawn_minutes ? `<button class="btn sm" data-kill="${b.id}" data-name="${esc(b.name)}" type="button">Registrei a morte</button>` : ''}</div>`);
+      let prog = 0, up = false;
+      if (b.respawn_minutes && n?.next_spawn_at) { const tot = b.respawn_minutes * 60000, left = new Date(n.next_spawn_at) - Date.now(); up = left <= 0; prog = up ? 1 : Math.min(1, Math.max(0, 1 - left / tot)); }
+      const orb = `<div class="orb ${up ? 'up' : ''}"><svg viewBox="0 0 120 120"><circle class="t" cx="60" cy="60" r="54"/><circle class="b" cx="60" cy="60" r="54" style="stroke-dashoffset:${339.3 * (1 - prog)}"/></svg><div class="mid"><span>${up ? 'Vivo?' : n?.next_spawn_at ? '<span data-cd="' + n.next_spawn_at + '" data-done="Nasceu"></span>' : fx ? '<span data-cd="' + fx.starts_at + '" data-done="Agora"></span>' : '?'}<small>${up ? 'pode ter nascido' : 'para nascer'}</small></span></div></div>`;
+      return plate(`<div class="boss" style="text-align:center"><h3>${esc(b.name)}</h3>${orb}<p class="muted small">${esc(sub)}</p>${b.notes ? `<p class="small">${esc(b.notes)}</p>` : ''}${b.respawn_minutes ? `<button class="btn sm" data-kill="${b.id}" data-name="${esc(b.name)}" type="button">Registrei a morte</button>` : ''}</div>`);
     }).join('')}</div>` : empty('Nenhum boss cadastrado ainda.');
   }
   v.onclick = (e) => {

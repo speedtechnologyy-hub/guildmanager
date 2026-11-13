@@ -1,6 +1,6 @@
 import { sb, q } from '../supabase.js';
 import { state } from '../store.js';
-import { esc, clsBadge, className, lineageName, clsRgb, nickOf, mainChar, fmtShort, fmtTime } from '../lib/util.js';
+import { esc, clsIcon, clsBadge, className, lineageName, clsRgb, nickOf, mainChar, fmtShort, fmtTime } from '../lib/util.js';
 import { plate, empty, loadingHTML } from '../lib/ui.js';
 import { callPlate, bindRsvp } from '../lib/rsvp.js';
 
@@ -44,6 +44,12 @@ export default async function wars(root, [slug]) {
     const att = {}; hist.forEach((h) => { if (h.attended) att[h.user_id] = (att[h.user_id] || 0) + 1; });
     const rank = people.map((p) => ({ p, n: att[p.id] || 0, ch: mainChar(p.characters) })).sort((a, b) => b.n - a.n);
     v.innerHTML = `${callPlate(next, mine, { going: going.length, not_going: no.length, none: none.length })}
+      <div class="section"><h2>Formação confirmada</h2><div class="legion">${state.classes.filter((c) => c.active).map((c) => {
+        const l = going.filter((x) => x.ch?.class_code === c.code);
+        const lins = state.lineages.filter((x) => x.class_code === c.code && x.active).map((x) => [x.name, l.filter((y) => y.ch?.lineage_id === x.id).length]).filter(([, n]) => n);
+        const share = going.length ? Math.round((l.length / going.length) * 100) : 0;
+        return `<div class="pillar" style="--c:${clsRgb(c.code)}"><span class="glyph">${clsIcon(c.code)}</span><div class="code">${esc(c.code)}</div><div class="nm">${esc(c.name)}</div><div class="n">${l.length}<small>${share}% da formação</small></div><div class="bar"><i style="width:${share}%"></i></div><ul>${lins.map(([n, v]) => `<li><span>${esc(n)}</span><b>${v}</b></li>`).join('') || '<li><span>ninguém ainda</span></li>'}</ul></div>`;
+      }).join('')}</div></div>
       <div class="roster section"><div class="go">${col('Vão', going, 'go')}</div><div class="no">${col('Não vão', no, 'no')}</div><div>${col('Sem resposta', none, '')}</div></div>
       <div class="section"><h2>Presença nas últimas ${done.length} guerras</h2>${done.length ? plate(`<div class="tbl-wrap"><table><thead><tr><th>Membro</th><th>Presenças</th><th>Taxa</th></tr></thead><tbody>${rank.map((r) => {
         const pc = Math.round((r.n / done.length) * 100);

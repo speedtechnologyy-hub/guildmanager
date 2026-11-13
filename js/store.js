@@ -27,6 +27,7 @@ export const DEFAULTS = {
     { label: 'Guerras', path: '/guerras', min_role: 'member' },
     { label: 'Bosses', path: '/bosses', min_role: 'member' },
     { label: 'Agenda', path: '/agenda', min_role: 'member' },
+    { label: 'Ranking', path: '/ranking', min_role: 'member' },
     { label: 'Membros', path: '/membros', min_role: 'member' },
   ],
   discord: {},

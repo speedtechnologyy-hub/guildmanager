@@ -16,6 +16,7 @@ const ROUTES = [
   { re: /^\/guerras(?:\/([a-z0-9-]+))?$/, page: 'wars' },
   { re: /^\/bosses$/, page: 'bosses' },
   { re: /^\/agenda$/, page: 'agenda' },
+  { re: /^\/ranking$/, page: 'ranking' },
   { re: /^\/membros$/, page: 'members' },
   { re: /^\/voz$/, page: 'voice' },
   { re: /^\/perfil$/, page: 'profile' },

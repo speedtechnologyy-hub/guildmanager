@@ -31,7 +31,14 @@ export function clsRgb(code) {
   for (const ch of String(code)) h = (h * 31 + ch.charCodeAt(0)) % 360;
   return hslToRgb(h, 0.6, 0.68).join(',');
 }
-export const clsBadge = (c) => (c ? `<span class="cls" style="--c:${clsRgb(c)}">${esc(c)}</span>` : '');
+const ICONS = {
+  TK: '<path d="M12 2.5l2.2 3.2V14H9.8V5.7z"/><path d="M7 14h10M12 14v6.5"/>',
+  FM: '<path d="M12 3c1 3 4 4.5 4 8a4 4 0 0 1-8 0c0-1.6.8-2.6 1.6-3.6.2 1 .7 1.6 1.2 1.9C10.6 7 11 5 12 3z"/><path d="M12 15v6"/>',
+  BM: '<path d="M7 4c2 5 2 11 0 16M12 3c2 6 2 12 0 18M17 4c2 5 2 11 0 16"/>',
+  HT: '<path d="M6 3c8 3 8 15 0 18M6 3v18M6 12h14M17 9l3 3-3 3"/>',
+};
+export const clsIcon = (c, cls = 'emb') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[c] || '<circle cx="12" cy="12" r="6"/>'}</svg>`;
+export const clsBadge = (c) => (c ? `<span class="cls" style="--c:${clsRgb(c)}">${clsIcon(c, 'ci')}${esc(c)}</span>` : '');
 export const className = (code) => state.classes.find((c) => c.code === code)?.name || code;
 export const lineageName = (id) => state.lineages.find((l) => l.id === id)?.name || '';
 export const mainChar = (chars = []) => chars.find((c) => c.is_main) || chars[0] || null;
