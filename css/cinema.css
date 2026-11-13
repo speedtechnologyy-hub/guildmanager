@@ -124,3 +124,6 @@
 .shots figcaption { display: flex; justify-content: space-between; align-items: center; gap: 6px; padding: 6px 8px; font-size: .78rem; color: var(--muted); }
 .shots button[data-view] { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
 @media (max-width: 640px) { .cal-c { min-height: 62px; } .cal-e em { display: none; } }
+
+/* logo enviada pelo admin costuma ser quadrada: arredonda os cantos */
+.brand img, img.crest { border-radius: 22%; }
