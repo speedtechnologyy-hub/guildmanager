@@ -29,17 +29,17 @@ export default async function agenda(el) {
   const wtypes = () => state.types.filter((t) => t.kind === 'war' && t.active);
   function warCard(rules) {
     const ws = wtypes(); if (!ws.length) return '';
-    const base = rules.find((r) => ws.some((t) => t.id === r.event_type_id)) || {};
-    const defDays = (t) => rules.find((r) => r.event_type_id === t.id)?.weekdays || (t.slug.includes('cidades') ? [7] : [1, 2, 3, 4, 5]);
     if (!can('owner')) return `<h2>Horário das guerras</h2><p class="muted small">Só o GuildMaster altera o horário.</p>`;
-    return `<h2>Horário das guerras</h2><p class="muted small">Todas as guerras usam o mesmo horário. Defina uma vez e a agenda, o contador e os avisos seguem daqui.</p>
-      <form id="wf" class="plate" style="padding:20px;margin-top:14px"><div class="form-grid">
-        <label class="f">Início das guerras<input type="time" name="start" required value="${hm(base.start_time) || '21:00'}"></label>
-        <label class="f">Chamada abre às<input type="time" name="open" value="${hm(base.rsvp_open_time) || '12:00'}"></label>
-        <label class="f">Chamada fecha quantos min antes<input type="number" name="close" min="0" value="${base.rsvp_close_offset_min ?? 30}"></label></div>
-        ${ws.map((t) => `<div class="f" style="margin-top:14px" data-t="${t.id}"><strong>${esc(t.name)}</strong><div class="row" style="gap:10px;flex-wrap:wrap">${DAYS.map((d, i) => `<label class="check"><input type="checkbox" name="wd${t.id}" value="${i + 1}" ${defDays(t).includes(i + 1) ? 'checked' : ''}> ${d}</label>`).join('')}
-          <button class="btn sm" type="button" data-pre="1,2,3,4,5" data-for="${t.id}">Seg a Sex</button><button class="btn sm" type="button" data-pre="1,2,3,4" data-for="${t.id}">Seg a Qui</button><button class="btn sm" type="button" data-pre="7" data-for="${t.id}">Domingo</button></div></div>`).join('')}
-        <div style="margin-top:16px"><button class="btn primary" type="submit">Salvar horário das guerras</button></div></form>`;
+    const ruleOf = (t) => rules.find((r) => r.event_type_id === t.id);
+    const defDays = (t) => ruleOf(t)?.weekdays || (t.slug === 'torre' ? [1, 2, 3, 4, 5] : [7]);
+    return `<h2>Horário das guerras</h2><p class="muted small">Cada guerra tem o seu horário fixo. Defina uma vez: a agenda, o contador e os avisos seguem daqui.</p>
+      <form id="wf" class="stack" style="margin-top:14px">${ws.map((t) => { const r = ruleOf(t); return `<section class="plate" style="padding:20px" data-t="${t.id}"><h3>${esc(t.name)}</h3>
+        <div class="form-grid" style="margin-top:12px"><label class="f">Início<input type="time" name="start${t.id}" required value="${hm(r?.start_time) || '21:00'}"></label>
+          <label class="f">Chamada abre às<input type="time" name="open${t.id}" value="${hm(r?.rsvp_open_time) || '12:00'}"></label>
+          <label class="f">Fecha quantos min antes<input type="number" name="close${t.id}" min="0" value="${r?.rsvp_close_offset_min ?? 30}"></label></div>
+        <div class="f" style="margin-top:12px"><strong>Dias</strong><div class="row" style="gap:10px;flex-wrap:wrap">${DAYS.map((d, i) => `<label class="check"><input type="checkbox" name="wd${t.id}" value="${i + 1}" ${defDays(t).includes(i + 1) ? 'checked' : ''}> ${d}</label>`).join('')}
+          <button class="btn sm" type="button" data-pre="1,2,3,4,5" data-for="${t.id}">Seg a Sex</button><button class="btn sm" type="button" data-pre="1,2,3,4" data-for="${t.id}">Seg a Qui</button><button class="btn sm" type="button" data-pre="7" data-for="${t.id}">Domingo</button></div></div></section>`; }).join('')}
+        <div><button class="btn primary" type="submit">Salvar horários das guerras</button></div></form>`;
   }
   el.onsubmit = (ev) => {
     const f = ev.target; if (f.id !== 'wf') return; ev.preventDefault();
@@ -50,13 +50,13 @@ export default async function agenda(el) {
           const wd = [...f.querySelectorAll(`[name=wd${t.id}]:checked`)].map((x) => +x.value);
           const old = rules.find((r) => r.event_type_id === t.id);
           if (!wd.length) { if (old) await q(sb.from('schedule_rules').update({ active: false }).eq('id', old.id)); continue; }
-          const row = { title: t.name, event_type_id: t.id, weekdays: wd, start_time: f.start.value, rsvp_open_time: f.open.value || null, rsvp_close_offset_min: +f.close.value, lead_days: old?.lead_days ?? 7, active: true };
+          const row = { title: t.name, event_type_id: t.id, weekdays: wd, start_time: f[`start${t.id}`].value, rsvp_open_time: f[`open${t.id}`].value || null, rsvp_close_offset_min: +f[`close${t.id}`].value, lead_days: old?.lead_days ?? 7, active: true };
           if (old) await q(sb.from('schedule_rules').update(row).eq('id', old.id)); else await q(sb.from('schedule_rules').insert(row));
         }
         const ids = rules.filter((r) => wtypes().some((t) => t.id === r.event_type_id)).map((r) => r.id);
         if (ids.length) await q(sb.from('events').delete().in('schedule_rule_id', ids).eq('status', 'scheduled').gt('starts_at', new Date().toISOString()));
         await q(sb.rpc('generate_events_now'));
-        toast('Horário salvo e agenda atualizada.', 'ok'); await load();
+        toast('Horários salvos e agenda atualizada.', 'ok'); await load();
       } catch (err) { toast(errMsg(err), 'bad'); }
     });
   };
