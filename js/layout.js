@@ -8,13 +8,16 @@ import { safeUrl } from './lib/blocks.js';
 /** Cenário do herói: banner enviado pelo admin ou o cenário gerado (castelo ao entardecer). */
 export function sceneHTML(kind = 'hero') {
   const banner = kind === 'login' ? (state.settings.login_bg_url || state.settings.banner_url) : state.settings.banner_url;
-  const wins = [[979, 232], [1012, 190], [1041, 166], [1075, 232], [1118, 148], [1150, 210], [1166, 232]]
+  const wins = [[979, 232], [1012, 190], [1041, 166], [1075, 232], [1118, 148], [1150, 210], [1166, 232], [840, 262], [870, 250]]
     .map(([x, y]) => `<rect class="win" x="${x}" y="${y}" width="4" height="7"/>`).join('');
   const svg = (cls, body) => `<svg class="layer ${cls}" viewBox="0 0 1440 400" preserveAspectRatio="xMidYMax slice">${body}</svg>`;
-  const generated = `<div class="moon"></div><div class="sun"></div>
-    ${svg('l1', '<path fill="#2d1317" d="M0 400V232L110 172 200 216 330 122 450 206 550 152 690 236 800 142 930 226 1040 172 1170 232 1290 152 1380 202 1440 176V400Z"/>')}
-    ${svg('l2', `<path fill="#180b0c" d="M0 400V304L120 266 230 304 360 244 480 294 600 258 720 304 840 274 940 304H958V240h14v-26l11-16 11 16v26h14v-60h12v-26l12-18 12 18v26h12v60h18v-30h10v30h22v-90h14v-30l14-20 14 20v30h14v90h26v-34h12v34h20L1190 304 1300 280 1440 304V400Z"/>${wins}`)}
-    ${svg('l3', '<path fill="#070405" d="M0 400V336L70 318 150 340 260 312 380 346 500 322 640 350 780 326 900 352 1040 330 1180 352 1320 322 1440 342V400Z"/>')}`;
+  const sword = (deg) => `<g transform="rotate(${deg} 200 200)"><path d="M200 10 L209 56 L207 252 L193 252 L191 56Z"/><path d="M200 26 V248" class="fuller"/><path d="M146 252 H254 V264 H146Z"/><path d="M194 264 H206 V322 H194Z"/><circle cx="200" cy="334" r="11"/></g>`;
+  const emblem = `<svg class="emblem" viewBox="0 0 400 400"><path class="shield" d="M112 84 Q200 52 288 84 V204 Q288 296 200 352 Q112 296 112 204Z"/>${sword(-38)}${sword(38)}</svg>`;
+  const generated = `<div class="sun"></div>
+    ${svg('l1', '<path fill="#0f1d45" d="M0 400V250L110 196 200 238 330 150 450 226 550 176 690 252 800 168 930 242 1040 196 1170 250 1290 176 1380 222 1440 198V400Z"/>')}
+    ${svg('l2', `<path fill="#08112b" d="M0 400V312L120 276 230 312 360 258 480 302 600 270 720 312 840 284 940 312H958V240h14v-26l11-16 11 16v26h14v-60h12v-26l12-18 12 18v26h12v60h18v-30h10v30h22v-90h14v-30l14-20 14 20v30h14v90h26v-34h12v34h20L1190 312 1300 288 1440 312V400Z"/>${wins}`)}
+    ${svg('l3', '<path fill="#03060f" d="M0 400V340L70 322 150 344 260 316 380 350 500 326 640 354 780 330 900 356 1040 334 1180 356 1320 326 1440 346V400Z"/><path fill="#03060f" d="M96 330V262l10-6v-34l5 8 5-8v34l10 6v68zM1230 340V270l10-6v-30l5 8 5-8v30l10 6v70z"/>')}
+    ${emblem}`;
   return `<div class="scene ${kind}" aria-hidden="true">${banner ? `<div class="banner" style="background-image:url('${esc(encodeURI(banner))}')"></div>` : generated}<div class="fog"></div><div class="fog b"></div></div>`;
 }
 

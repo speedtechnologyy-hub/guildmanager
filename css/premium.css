@@ -1,0 +1,61 @@
+/* ============================================================
+   Pele "premium": menos moldura de jogo, mais plataforma profissional.
+   Vem antes de studio.css, então tudo continua configurável pelo GuildMaster.
+   ============================================================ */
+body { font-feature-settings: 'cv11', 'ss01'; -webkit-font-smoothing: antialiased; line-height: 1.55; }
+h1, h2, h3, h4 { letter-spacing: -.01em; }
+
+/* cenário do hero: noite azul com brasão dourado (arte própria da guild) */
+.scene { background: linear-gradient(180deg, #02040b 0%, #070f27 38%, #0d1d48 70%, #17306b 100%); }
+.scene .moon { display: none; }
+.scene .sun { left: 72%; bottom: 18%; width: 90vmin; height: 90vmin; transform: translate(-50%, 50%); background: radial-gradient(circle, rgba(226,181,82,.30) 0%, rgba(226,181,82,.10) 30%, transparent 62%); }
+.scene .emblem { position: absolute; left: 50%; top: 30%; transform: translate(-50%, -50%); width: min(500px, 56vw); z-index: 1; height: auto; aspect-ratio: 1; fill: none; stroke: color-mix(in srgb, var(--accent) 70%, transparent); stroke-width: 1.4; opacity: .5; filter: drop-shadow(0 0 28px color-mix(in srgb, var(--accent) 40%, transparent)); animation: breathe 9s ease-in-out infinite; pointer-events: none; }
+.scene .emblem .shield { fill: color-mix(in srgb, var(--accent) 5%, transparent); stroke-width: 2; }
+.scene .emblem path, .scene .emblem circle { fill: color-mix(in srgb, var(--accent) 12%, transparent); }
+.scene .emblem .shield { fill: color-mix(in srgb, var(--accent) 4%, transparent); }
+.scene .emblem .fuller { fill: none; stroke-width: 1; opacity: .7; }
+.scene .win { fill: var(--accent); }
+.scene .fog { background: radial-gradient(closest-side, rgba(60,100,200,.28), transparent); }
+@media (max-width: 700px) { .scene .emblem { top: 62%; width: 110vw; opacity: .28; } }
+
+/* topo: barra fina de vidro */
+.topbar { background: color-mix(in srgb, var(--bg) 72%, transparent); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); box-shadow: 0 1px 0 color-mix(in srgb, var(--accent) 22%, transparent); }
+.topbar::after { opacity: .35; }
+.nav a { letter-spacing: .02em; font-weight: 600; text-transform: none; font-size: .95rem; }
+
+/* títulos sóbrios */
+.page-head h1, .section > h2, .h-sec { text-transform: none; letter-spacing: -.02em; font-weight: 800; background: none; -webkit-text-fill-color: var(--heading-color, var(--text)); color: var(--heading-color, var(--text)); filter: none; }
+.page-head h1 { font-size: clamp(1.8rem, 4.2vw, 2.6rem); }
+.page-head h1::after { width: 56px; height: 3px; border-radius: 3px; margin-top: 14px; background: var(--accent); }
+.section > h2 { font-size: 1.25rem; }
+.section > h2::before { width: 4px; height: 1.1em; transform: none; border-radius: 3px; background: var(--accent); box-shadow: none; }
+.section > h2::after { background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 30%, transparent), transparent); }
+.plate h2, .plate h3, .nextwar h3 { color: var(--text); text-shadow: none; text-transform: none; letter-spacing: -.01em; }
+.hero h1 { letter-spacing: .06em; }
+.hero .kicker { border-radius: 99px; background: color-mix(in srgb, var(--bg) 70%, transparent); border-color: color-mix(in srgb, var(--accent) 45%, transparent); font-family: var(--font-body); letter-spacing: .1em; font-size: .72rem; }
+.hero .tagline { font-style: normal; }
+
+/* cartões de vidro (sobrepõe as molduras de metal) */
+.plate, .pillar, .mcard, .nextwar, .dash .card, .cal-c, .podium .pl, .pulse {
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent); border-image: none; border-radius: var(--radius, 14px);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--surface) 82%, #fff 3%), color-mix(in srgb, var(--surface) 92%, #000)); box-shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 18px 40px -22px #000c; }
+.plate::before, .plate::after, .nextwar::before, .nextwar::after { display: none; }
+.nextwar { backdrop-filter: blur(14px); background: color-mix(in srgb, var(--bg) 48%, transparent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.nextwar small, .nextwar .falta { font-family: var(--font-body); letter-spacing: .14em; font-weight: 600; }
+.nextwar .big { font-family: var(--font-head); font-weight: 800; letter-spacing: -.02em; }
+.nextwar h3 { font-size: 1.1rem; }
+
+/* botões */
+.btn { text-transform: none; letter-spacing: .01em; font-family: var(--font-body); font-weight: 600; font-size: .95rem; padding: .85em 1.3em; }
+.btn.sm { font-size: .82rem; padding: .55em .95em; }
+.btn.primary { background: linear-gradient(180deg, color-mix(in srgb, var(--primary) 88%, #fff 12%), var(--primary)); box-shadow: 0 8px 22px -10px var(--primary); }
+
+/* tabelas e listas */
+th { font-family: var(--font-body); letter-spacing: .04em; text-transform: none; font-weight: 600; font-size: .82rem; }
+.tabs a, .tabs button { font-family: var(--font-body); letter-spacing: .01em; text-transform: none; font-weight: 600; font-size: .95rem; }
+
+/* campos: 16px evita o zoom automático do iPhone ao focar */
+input, select, textarea { font-size: 16px; border-radius: 10px; }
+@media (max-width: 860px) { input, select, textarea { font-size: 16px !important; } }
+@media (min-width: 861px) { input, select, textarea { font-size: .95rem; } }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }

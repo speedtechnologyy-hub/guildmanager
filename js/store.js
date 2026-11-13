@@ -12,11 +12,11 @@ export const DEFAULTS = {
   theme: {
     bg: '#060a14', surface: '#0e1526', text: '#efe8d8', muted: '#9aa3b5',
     primary: '#a3162b', accent: '#e2b552',
-    heading_font: 'Cinzel', body_font: 'Alegreya Sans', display_font: 'Cinzel Decorative',
+    heading_font: 'Montserrat', body_font: 'Inter', display_font: 'Cinzel',
     // opcionais: vazio = usa o padrão da pele
     frame: '', heading_color: '', hero_title: '', link: '', topbar_bg: '', footer_bg: '',
-    btn_style: 'metal', btn_radius: 0, btn_bg: '', btn_text: '', btn_primary_text: '', btn_upper: true,
-    radius: 0, wrap_w: 1120, font_scale: 100, hero_h: 70, hero_overlay: 40, topbar_style: 'glass',
+    btn_style: 'flat', btn_radius: 10, btn_bg: '', btn_text: '', btn_primary_text: '', btn_upper: false,
+    radius: 14, wrap_w: 1120, font_scale: 100, hero_h: 70, hero_overlay: 40, topbar_style: 'glass',
     app_bg_dim: 70, login_dim: 55, nav_align: 'right',
   },
   features: {}, effects: {}, layouts: {}, custom_fonts: [], admin_access: {},
