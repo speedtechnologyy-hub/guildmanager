@@ -71,10 +71,10 @@ export function callPlate(ev, mine, tally) {
   const st = rsvpState(ev);
   const close = ev.rsvp_closes_at || ev.starts_at;
   const open = ev.rsvp_opens_at || new Date(Date.parse(close) - 6 * 3600e3).toISOString();
-  let center, label;
-  if (st === 'open') { center = `<span data-cd="${close}" data-mode="clock" data-done="00:00">--:--</span>`; label = 'para fechar a chamada'; }
-  else if (st === 'soon') { center = `<span data-cd="${open}" data-mode="clock">--:--</span>`; label = 'para abrir a chamada'; }
-  else { center = `<span>${fmtTime(ev.starts_at)}</span>`; label = st === 'cancelled' ? 'guerra cancelada' : 'chamada encerrada'; }
+  const startMs = Date.parse(ev.starts_at), cancelled = st === 'cancelled';
+  const center = cancelled ? '<span>--</span>' : `<span data-cd="${ev.starts_at}" data-done="É AGORA">--</span>`;
+  const label = cancelled ? 'guerra cancelada' : startMs > Date.now() ? 'para a guerra' : 'em andamento';
+  const callLine = st === 'open' ? `Chamada aberta, fecha às ${fmtTime(close)}.` : st === 'soon' ? `Chamada abre às ${fmtTime(open)}.` : 'Chamada encerrada.';
 
   const answered = mine === 'going' ? '<p class="answered go">Você confirmou presença.</p>'
     : mine === 'not_going' ? '<p class="answered no">Você avisou que não vai.</p>'
@@ -85,14 +85,14 @@ export function callPlate(ev, mine, tally) {
       <span><b>${tally.none}</b>sem resposta</span></div>` : '';
 
   return `<section class="plate lit call ${st === 'open' ? 'open' : st === 'closed' ? 'closed' : ''}"><span class="sheen"></span>
-    <div class="ring" data-ring="${open}|${close}">
+    <div class="ring" data-ring="${open}|${ev.starts_at}">
       <svg viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="ringg" x1="0" x2="1"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--ember)"/></linearGradient></defs>
         <circle class="track" cx="60" cy="60" r="54"/><circle class="bar" cx="60" cy="60" r="54"/></svg>
       <div class="mid"><b>${center}</b><small>${label}</small></div>
     </div>
     <div>
       <h2>${esc(ev.title)}</h2>
-      <p class="when">${relDay(ev.starts_at)}, às ${fmtTime(ev.starts_at)}. A chamada fecha às ${fmtTime(close)}.</p>
+      <p class="when">${relDay(ev.starts_at)}, às ${fmtTime(ev.starts_at)}. ${callLine}</p>
       <div class="actions">${rsvpButtons(ev, mine, { go: 'Eu vou', no: 'Não vou hoje' })}</div>
       ${answered}${t}
     </div>

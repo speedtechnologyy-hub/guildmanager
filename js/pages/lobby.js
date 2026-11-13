@@ -1,6 +1,6 @@
 import { sb, q } from '../supabase.js';
 import { state } from '../store.js';
-import { can, esc, md, mainChar, fmtDate, fmtTime, relDay, clsRgb, clsIcon, className, every } from '../lib/util.js';
+import { can, warVisible, esc, md, mainChar, fmtDate, fmtTime, relDay, clsRgb, clsIcon, className, every } from '../lib/util.js';
 import { plate, empty } from '../lib/ui.js';
 import { sceneHTML } from '../layout.js';
 import { lobbyLayout } from '../lib/features.js';
@@ -26,7 +26,8 @@ export default async function lobby(root) {
       attendanceStats(30).catch(() => ({ total: 0, per: {}, pct: () => 0 })),
     ]);
     const mine = Object.fromEntries(rs.filter((r) => r.user_id === state.user.id).map((r) => [r.event_id, r.status]));
-    const war = evs.find((e) => e.event_types?.kind === 'war' && new Date(e.rsvp_closes_at || e.starts_at) > Date.now() - 3600e3);
+    const war = evs.find((e) => e.event_types?.kind === 'war' && warVisible(e) && new Date(e.rsvp_closes_at || e.starts_at) > Date.now() - 3600e3);
+    const cities = war?.event_types?.has_cities ? await q(sb.from('event_cities').select('city').eq('event_id', war.id).order('sort')).catch(() => []) : [];
     let tally = null, going = 0;
     if (war) {
       const wr = rs.filter((r) => r.event_id === war.id);
@@ -40,8 +41,8 @@ export default async function lobby(root) {
         <h1 class="rise">${esc(state.settings.guild_name)}</h1>
         <p class="tagline rise d1">Salve, ${esc(main?.nick || state.profile.display_name)}. ${esc(t.hero_tagline)}</p></div>
       ${war ? `<aside class="nextwar rise d2"><small>${esc(war.event_types?.name || 'Guerra')}</small><h3>${esc(war.title)}</h3>
-        <div class="big" data-cd="${war.starts_at}" data-done="É AGORA">--</div>
-        <p class="sub">${relDay(war.starts_at)}, às ${fmtTime(war.starts_at)} · ${going} confirmados</p>${war.bet_closes_at && new Date(war.bet_closes_at) > Date.now() ? `<p class="sub">Aposta fecha em <b data-cd="${war.bet_closes_at}" data-done="encerrada"></b></p>` : ''}
+        <p class="falta">Faltam</p><div class="big" data-cd="${war.starts_at}" data-done="É AGORA">--</div>
+        <p class="sub">${relDay(war.starts_at)}, às ${fmtTime(war.starts_at)} · ${going} confirmados</p>${cities.length ? `<p class="cities"><b>Cidades:</b> ${cities.map((c) => esc(c.city)).join(', ')}</p>` : ''}${war.bet_closes_at && new Date(war.bet_closes_at) > Date.now() ? `<p class="sub">Aposta fecha em <b data-cd="${war.bet_closes_at}" data-done="encerrada"></b></p>` : ''}
         <div class="acts">${rsvpButtons(war, mine[war.id], { go: 'Eu vou', no: 'Não vou' })}</div></aside>` : ''}`;
 
     const mains = people.map((p) => mainChar(p.characters)).filter(Boolean);

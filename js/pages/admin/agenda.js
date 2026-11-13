@@ -1,5 +1,6 @@
 import { sb, q } from '../../supabase.js';
-import { state } from '../../store.js';
+import { state, loadGame } from '../../store.js';
+import { canEdit } from '../../lib/admin-tabs.js';
 import { esc, fmtDateTime, zonedToISO, can } from '../../lib/util.js';
 import { toast, modal, closeModal, busy, errMsg, confirmBox, empty, formData } from '../../lib/ui.js';
 
@@ -30,7 +31,7 @@ export default async function agenda(el) {
   const wtypes = () => state.types.filter((t) => t.kind === 'war' && t.active);
   function warCard(rules) {
     const ws = wtypes(); if (!ws.length) return '';
-    if (!can('owner')) return `<h2>Horário das guerras</h2><p class="muted small">Só o GuildMaster altera o horário.</p>`;
+    if (!canEdit('agenda')) return `<h2>Horário das guerras</h2><p class="muted small">Você não tem permissão para alterar o horário.</p>`;
     const ruleOf = (t) => rules.find((r) => r.event_type_id === t.id);
     const defDays = (t) => ruleOf(t)?.weekdays || (t.slug === 'torre' ? [1, 2, 3, 4, 5] : [7]);
     return `<h2>Horário das guerras</h2><p class="muted small">Cada guerra tem o seu horário fixo. Defina uma vez: a agenda, o contador e os avisos seguem daqui.</p>
@@ -38,6 +39,7 @@ export default async function agenda(el) {
         <div class="form-grid" style="margin-top:12px"><label class="f">Início<input type="time" name="start${t.id}" required value="${hm(r?.start_time) || '21:00'}"></label>
           <label class="f">Chamada abre às<input type="time" name="open${t.id}" value="${hm(r?.rsvp_open_time) || '12:00'}"></label>
           <label class="f">Fecha quantos min antes<input type="number" name="close${t.id}" min="0" value="${r?.rsvp_close_offset_min ?? 30}"></label></div>
+        <label class="f" style="margin-top:12px">Banner no site<select name="show${t.id}">${[[0, 'Só no dia da guerra (a partir da meia-noite)'], [1, 'Desde 1 dia antes'], [2, 'Desde 2 dias antes']].map(([v, n]) => `<option value="${v}" ${(t.show_days_before ?? 0) === v ? 'selected' : ''}>${n}</option>`).join('')}</select><small class="muted">Quando o contador desta guerra começa a aparecer para os membros.</small></label>
         <div class="f" style="margin-top:12px"><strong>Dias</strong><div class="row" style="gap:10px;flex-wrap:wrap">${DAYS.map((d, i) => `<label class="check"><input type="checkbox" name="wd${t.id}" value="${i + 1}" ${defDays(t).includes(i + 1) ? 'checked' : ''}> ${d}</label>`).join('')}
           <button class="btn sm" type="button" data-pre="1,2,3,4,5" data-for="${t.id}">Seg a Sex</button><button class="btn sm" type="button" data-pre="1,2,3,4" data-for="${t.id}">Seg a Qui</button><button class="btn sm" type="button" data-pre="7" data-for="${t.id}">Domingo</button></div></div></section>`; }).join('')}
         <div><button class="btn primary" type="submit">Salvar horários das guerras</button></div></form>`;
@@ -58,6 +60,7 @@ export default async function agenda(el) {
         for (const t of wtypes()) {
           const wd = [...f.querySelectorAll(`[name=wd${t.id}]:checked`)].map((x) => +x.value);
           const old = rules.find((r) => r.event_type_id === t.id);
+          await q(sb.from('event_types').update({ show_days_before: +f[`show${t.id}`].value }).eq('id', t.id));
           if (!wd.length) { if (old) await q(sb.from('schedule_rules').update({ active: false }).eq('id', old.id)); continue; }
           const row = { title: t.name, event_type_id: t.id, weekdays: wd, start_time: f[`start${t.id}`].value, rsvp_open_time: f[`open${t.id}`].value || null, rsvp_close_offset_min: +f[`close${t.id}`].value, lead_days: old?.lead_days ?? 7, active: true };
           if (old) await q(sb.from('schedule_rules').update(row).eq('id', old.id)); else await q(sb.from('schedule_rules').insert(row));
@@ -67,7 +70,7 @@ export default async function agenda(el) {
         if (ids.length) await q(sb.from('events').delete().in('schedule_rule_id', ids).eq('status', 'scheduled').gt('starts_at', new Date().toISOString()));
         if (optIds.length) await q(sb.from('events').delete().in('schedule_rule_id', optIds).eq('status', 'cancelled').gt('starts_at', new Date().toISOString()));
         await q(sb.rpc('generate_events_now'));
-        toast('Horários salvos e agenda atualizada.', 'ok'); await load();
+        await loadGame(); toast('Horários salvos e agenda atualizada.', 'ok'); await load();
       } catch (err) { toast(errMsg(err), 'bad'); }
     });
   };

@@ -60,6 +60,14 @@ export const fmtDayLong = (d) => fmt('dl', { weekday: 'long', day: '2-digit', mo
 export const fmtShort = (d) => fmt('ds', { weekday: 'short', day: '2-digit', month: '2-digit' }).format(new Date(d));
 export const fmtDate = (d) => fmt('d', { day: '2-digit', month: '2-digit', year: '2-digit' }).format(new Date(d));
 export const fmtDateTime = (d) => fmt('dt', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }).format(new Date(d));
+/** O banner da guerra só aparece a partir de 00:00 do dia dela, ou de N dias antes se o master configurou. */
+export function warVisible(ev) {
+  const n = ev.event_types?.show_days_before ?? 0;
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone: tzName(), year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date(ev.starts_at));
+  const g = (t) => parts.find((x) => x.type === t).value;
+  const start = Date.parse(zonedToISO(`${g('year')}-${g('month')}-${g('day')}T00:00`));
+  return Date.now() >= start - n * 864e5;
+}
 export function relDay(d) {
   const k = dayKey(d), now = Date.now();
   if (k === dayKey(now)) return 'Hoje';

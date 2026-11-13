@@ -127,3 +127,5 @@
 
 /* logo enviada pelo admin costuma ser quadrada: arredonda os cantos */
 .brand img, img.crest { border-radius: 22%; }
+.nextwar .falta { margin: 0 0 4px; font: 700 .72rem var(--font-head); letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+.nextwar .cities { margin: 8px 0 0; font-size: .9rem; color: var(--text); }
