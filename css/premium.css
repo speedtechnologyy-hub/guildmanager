@@ -19,9 +19,14 @@ h1, h2, h3, h4 { letter-spacing: -.01em; }
 @media (max-width: 700px) { .scene .emblem { top: 62%; width: 110vw; opacity: .28; } }
 
 /* topo: barra fina de vidro */
-.topbar { background: color-mix(in srgb, var(--bg) 72%, transparent); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); box-shadow: 0 1px 0 color-mix(in srgb, var(--accent) 22%, transparent); }
+.topbar { background: none; backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: 0 1px 0 color-mix(in srgb, var(--accent) 22%, transparent); }
 .topbar::after { opacity: .35; }
 .nav a { letter-spacing: .02em; font-weight: 600; text-transform: none; font-size: .95rem; }
+
+/* o desfoque fica num pseudo-elemento: backdrop-filter no próprio .topbar prendia o menu do celular dentro da barra */
+.topbar::before { content: ''; position: absolute; inset: 0; z-index: -1; background: color-mix(in srgb, var(--bg) 72%, transparent); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); pointer-events: none; }
+html[data-topbar="solid"] .topbar::before { background: var(--topbar-bg, color-mix(in srgb, var(--surface) 96%, #000)); backdrop-filter: none; -webkit-backdrop-filter: none; }
+html[data-topbar="clear"] .topbar::before { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
 
 /* títulos sóbrios */
 .page-head h1, .section > h2, .h-sec { text-transform: none; letter-spacing: -.02em; font-weight: 800; background: none; -webkit-text-fill-color: var(--heading-color, var(--text)); color: var(--heading-color, var(--text)); filter: none; }
