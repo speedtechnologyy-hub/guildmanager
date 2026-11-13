@@ -1,7 +1,7 @@
-import { sb, q } from '../../supabase.js';
-import { state } from '../../store.js';
-import { esc, can, fmtDayLong, fmtTime, dayKey, zonedToISO } from '../../lib/util.js';
-import { toast, busy, errMsg, empty } from '../../lib/ui.js';
+import { sb, q } from '../../supabase.js?v=20261113h';
+import { state } from '../../store.js?v=20261113h';
+import { esc, can, fmtDayLong, fmtTime, dayKey, zonedToISO } from '../../lib/util.js?v=20261113h';
+import { toast, busy, errMsg, empty } from '../../lib/ui.js?v=20261113h';
 
 const num = (n) => Number(n || 0).toLocaleString('pt-BR');
 const pad = (n) => String(n).padStart(2, '0');

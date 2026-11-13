@@ -1,9 +1,9 @@
-import { sb } from '../supabase.js';
-import { esc, $ } from '../lib/util.js';
-import { busy } from '../lib/ui.js';
-import { sceneHTML } from '../layout.js';
-import { mountTurnstile } from '../lib/turnstile.js';
-import { logoUrl } from '../theme.js';
+import { sb } from '../supabase.js?v=20261113h';
+import { esc, $ } from '../lib/util.js?v=20261113h';
+import { busy } from '../lib/ui.js?v=20261113h';
+import { sceneHTML } from '../layout.js?v=20261113h';
+import { mountTurnstile } from '../lib/turnstile.js?v=20261113h';
+import { logoUrl } from '../theme.js?v=20261113h';
 
 /** Acesso reservado do GuildMaster: e-mail e senha (rota oculta, fora do menu). */
 export default async function master(root) {

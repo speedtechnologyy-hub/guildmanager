@@ -1,13 +1,13 @@
-import { sb } from './supabase.js';
-import { state, loadSettings, loadProfile, loadGame, loadPages } from './store.js';
-import { applyTheme, applyBrand } from './theme.js';
-import { initEmbers, initPointer, runIntro } from './fx.js';
-import { renderShell, updateNav, shellMode } from './layout.js';
-import { routeFeature, featureAllowed, screenBlocks } from './lib/features.js';
-import { renderBlocks } from './lib/blocks.js';
-import { startLive, listenPreview, IS_PREVIEW } from './lib/live.js';
-import { startTicker, tick, esc, $, can } from './lib/util.js';
-import { loadingHTML, closeModal } from './lib/ui.js';
+import { sb } from './supabase.js?v=20261113h';
+import { state, loadSettings, loadProfile, loadGame, loadPages } from './store.js?v=20261113h';
+import { applyTheme, applyBrand } from './theme.js?v=20261113h';
+import { initEmbers, initPointer, runIntro } from './fx.js?v=20261113h';
+import { renderShell, updateNav, shellMode } from './layout.js?v=20261113h';
+import { routeFeature, featureAllowed, screenBlocks } from './lib/features.js?v=20261113h';
+import { renderBlocks } from './lib/blocks.js?v=20261113h';
+import { startLive, listenPreview, IS_PREVIEW } from './lib/live.js?v=20261113h';
+import { startTicker, tick, esc, $, can } from './lib/util.js?v=20261113h';
+import { loadingHTML, closeModal } from './lib/ui.js?v=20261113h';
 
 // Cada rota carrega o seu módulo só quando é visitada.
 const ROUTES = [
@@ -72,7 +72,7 @@ async function go() {
   }
 
   try {
-    const mod = await import(`./pages/${route.page}.js`);
+    const mod = await import(`./pages/${route.page}.js?v=20261113h`);
     if (my !== token) return;
     const out = await mod.default(host, params);
     if (offNote && my === token) view.insertAdjacentHTML('afterbegin', '<div class="wrap"><div class="flag-off">Esta função está desativada ou restrita para os membros. Só você enxerga esta tela.</div></div>');

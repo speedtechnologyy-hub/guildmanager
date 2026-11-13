@@ -1,5 +1,5 @@
-import { state } from '../store.js';
-import { can } from './util.js';
+import { state } from '../store.js?v=20261113h';
+import { can } from './util.js?v=20261113h';
 
 /** Funções que o GuildMaster liga e desliga no Estúdio. `route` é a página do roteador. */
 export const FEATURES = [

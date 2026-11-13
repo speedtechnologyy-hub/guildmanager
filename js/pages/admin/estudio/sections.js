@@ -1,8 +1,8 @@
-import { esc } from '../../../lib/util.js';
-import { PRESET_FONTS } from '../../../theme.js';
-import { FEATURES, EFFECTS, LOBBY_BLOCKS, SCREENS } from '../../../lib/features.js';
-import { fText, fArea, fSelect, fCheck, fRange, fColor, fImage, grip } from './kit.js';
-import { blockList } from './blocks-ui.js';
+import { esc } from '../../../lib/util.js?v=20261113h';
+import { PRESET_FONTS } from '../../../theme.js?v=20261113h';
+import { FEATURES, EFFECTS, LOBBY_BLOCKS, SCREENS } from '../../../lib/features.js?v=20261113h';
+import { fText, fArea, fSelect, fCheck, fRange, fColor, fImage, grip } from './kit.js?v=20261113h';
+import { blockList } from './blocks-ui.js?v=20261113h';
 
 const TZ = ['America/Sao_Paulo', 'America/Manaus', 'America/Bahia', 'America/Fortaleza', 'America/Cuiaba', 'America/Rio_Branco', 'Europe/Lisbon'];
 const ROLE3 = [['member', 'Todos'], ['leader', 'Sub Líderes'], ['owner', 'Só GuildMaster']];

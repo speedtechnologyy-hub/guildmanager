@@ -17,6 +17,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Carimbar versão nos arquivos (evita cache antigo)
+        run: |
+          V=$(date +%Y%m%d%H%M)-${GITHUB_SHA::7}
+          grep -rlE '\?v=2026[0-9a-z]+' js index.html | xargs sed -i -E "s/\?v=2026[0-9a-z]+/?v=$V/g"
+
       - name: Enviar por FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:

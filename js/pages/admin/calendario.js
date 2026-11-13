@@ -1,7 +1,7 @@
-import { sb, q } from '../../supabase.js';
-import { state } from '../../store.js';
-import { esc, can, dayKey, fmtDayLong, fmtTime, fmtDateTime, zonedToISO } from '../../lib/util.js';
-import { toast, modal, closeModal, busy, errMsg, confirmBox, empty } from '../../lib/ui.js';
+import { sb, q } from '../../supabase.js?v=20261113h';
+import { state } from '../../store.js?v=20261113h';
+import { esc, can, dayKey, fmtDayLong, fmtTime, fmtDateTime, zonedToISO } from '../../lib/util.js?v=20261113h';
+import { toast, modal, closeModal, busy, errMsg, confirmBox, empty } from '../../lib/ui.js?v=20261113h';
 
 const MONTHS = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 const WD = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];

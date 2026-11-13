@@ -1,7 +1,7 @@
-import { esc, $ } from '../lib/util.js';
-import { loadingHTML } from '../lib/ui.js';
-import { state } from '../store.js';
-import { GROUPS, TABS, tabAllowed, levelOf, lockReadonly } from '../lib/admin-tabs.js';
+import { esc, $ } from '../lib/util.js?v=20261113h';
+import { loadingHTML } from '../lib/ui.js?v=20261113h';
+import { state } from '../store.js?v=20261113h';
+import { GROUPS, TABS, tabAllowed, levelOf, lockReadonly } from '../lib/admin-tabs.js?v=20261113h';
 
 const norm = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const slug = (g) => 'g-' + norm(g).replace(/\W/g, '');
@@ -46,7 +46,7 @@ export default async function admin(root, [tab]) {
   if (cur?.id === 'estudio' && !blocked) {
     root.innerHTML = `<div id="ap"></div>${mobile ? bottom(slug(cur.group)) : ''}`;
     const ap = $('#ap', root);
-    await (await import('./admin/estudio.js')).default(ap);
+    await (await import('./admin/estudio.js?v=20261113h')).default(ap);
     if (ro) lockReadonly(ap, '.st-nav, .st-tools, .st-top a');
     return;
   }
@@ -75,6 +75,6 @@ export default async function admin(root, [tab]) {
   if (blocked) return;
   const ap = $('#ap', root);
   if (ro) lockReadonly(ap);
-  const mod = await import(`./admin/${cur.id}.js`);
+  const mod = await import(`./admin/${cur.id}.js?v=20261113h`);
   return mod.default(ap);
 }

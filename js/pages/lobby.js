@@ -1,13 +1,13 @@
-import { sb, q } from '../supabase.js';
-import { state } from '../store.js';
-import { can, warVisible, esc, md, mainChar, fmtDate, fmtTime, relDay, clsRgb, clsIcon, className, every } from '../lib/util.js';
-import { plate, empty } from '../lib/ui.js';
-import { sceneHTML } from '../layout.js';
-import { lobbyLayout } from '../lib/features.js';
-import { renderBlock } from '../lib/blocks.js';
-import { callPlate, bindRsvp, rsvpButtons, rsvpState } from '../lib/rsvp.js';
-import { charsPanel } from '../lib/characters.js';
-import { attendanceStats } from '../lib/stats.js';
+import { sb, q } from '../supabase.js?v=20261113h';
+import { state } from '../store.js?v=20261113h';
+import { can, warVisible, esc, md, mainChar, fmtDate, fmtTime, relDay, clsRgb, clsIcon, className, every } from '../lib/util.js?v=20261113h';
+import { plate, empty } from '../lib/ui.js?v=20261113h';
+import { sceneHTML } from '../layout.js?v=20261113h';
+import { lobbyLayout } from '../lib/features.js?v=20261113h';
+import { renderBlock } from '../lib/blocks.js?v=20261113h';
+import { callPlate, bindRsvp, rsvpButtons, rsvpState } from '../lib/rsvp.js?v=20261113h';
+import { charsPanel } from '../lib/characters.js?v=20261113h';
+import { attendanceStats } from '../lib/stats.js?v=20261113h';
 
 export default async function lobby(root) {
   const main = mainChar(state.chars);

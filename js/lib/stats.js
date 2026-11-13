@@ -1,4 +1,4 @@
-import { sb, q } from '../supabase.js';
+import { sb, q } from '../supabase.js?v=20261113h';
 
 /** Presença nas guerras já realizadas dentro do período. days = 0 significa todo o histórico. */
 export async function attendanceStats(days = 30) {

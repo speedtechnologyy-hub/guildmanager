@@ -1,6 +1,6 @@
-import { esc } from '../../../lib/util.js';
-import { BLOCK_TYPES } from '../../../lib/blocks.js';
-import { fText, fArea, fSelect, fImage, fRange, grip, uid } from './kit.js';
+import { esc } from '../../../lib/util.js?v=20261113h';
+import { BLOCK_TYPES } from '../../../lib/blocks.js?v=20261113h';
+import { fText, fArea, fSelect, fImage, fRange, grip, uid } from './kit.js?v=20261113h';
 
 const ROLE_OPTS = [['member', 'Todos'], ['leader', 'Sub Líderes'], ['owner', 'Só GuildMaster']];
 

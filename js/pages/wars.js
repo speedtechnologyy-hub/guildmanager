@@ -1,8 +1,8 @@
-import { sb, q } from '../supabase.js';
-import { state } from '../store.js';
-import { esc, clsIcon, clsBadge, className, lineageName, clsRgb, nickOf, mainChar, fmtShort, fmtTime } from '../lib/util.js';
-import { plate, empty, loadingHTML } from '../lib/ui.js';
-import { callPlate, bindRsvp } from '../lib/rsvp.js';
+import { sb, q } from '../supabase.js?v=20261113h';
+import { state } from '../store.js?v=20261113h';
+import { esc, clsIcon, clsBadge, className, lineageName, clsRgb, nickOf, mainChar, fmtShort, fmtTime } from '../lib/util.js?v=20261113h';
+import { plate, empty, loadingHTML } from '../lib/ui.js?v=20261113h';
+import { callPlate, bindRsvp } from '../lib/rsvp.js?v=20261113h';
 
 export default async function wars(root, [slug]) {
   const types = state.types.filter((t) => t.kind === 'war' && t.active);

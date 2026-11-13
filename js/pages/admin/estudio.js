@@ -1,13 +1,13 @@
-import { sb, q } from '../../supabase.js';
-import { state, DEFAULTS, normalize, setSetting } from '../../store.js';
-import { esc, $ } from '../../lib/util.js';
-import { loadAllPresetFonts } from '../../theme.js';
-import { normalizeLobby } from '../../lib/features.js';
-import { toast, errMsg, confirmBox } from '../../lib/ui.js';
-import { clone, getPath, setPath, sortable, move } from './estudio/kit.js';
-import { SECTIONS, PRESETS, render } from './estudio/sections.js';
-import { newBlock, newItem } from './estudio/blocks-ui.js';
-import { pagesList, renderPages, renderWhats, renderBackup, renderTeam, setSubLeader, savePerm } from './estudio/extra.js';
+import { sb, q } from '../../supabase.js?v=20261113h';
+import { state, DEFAULTS, normalize, setSetting } from '../../store.js?v=20261113h';
+import { esc, $ } from '../../lib/util.js?v=20261113h';
+import { loadAllPresetFonts } from '../../theme.js?v=20261113h';
+import { normalizeLobby } from '../../lib/features.js?v=20261113h';
+import { toast, errMsg, confirmBox } from '../../lib/ui.js?v=20261113h';
+import { clone, getPath, setPath, sortable, move } from './estudio/kit.js?v=20261113h';
+import { SECTIONS, PRESETS, render } from './estudio/sections.js?v=20261113h';
+import { newBlock, newItem } from './estudio/blocks-ui.js?v=20261113h';
+import { pagesList, renderPages, renderWhats, renderBackup, renderTeam, setSubLeader, savePerm } from './estudio/extra.js?v=20261113h';
 
 /** Chaves de site_settings que o Estúdio controla (rascunho + publicação). */
 const KEYS = ['admin_access', 'theme', 'texts', 'menu', 'features', 'effects', 'layouts', 'custom_fonts', 'guild_name', 'logo_url', 'favicon_url', 'banner_url', 'login_bg_url', 'app_bg_url', 'discord', 'timezone', 'site_url'];
@@ -125,7 +125,7 @@ export default async function estudio(root) {
       sortable(box, (f, t) => { move(c.get(path), f, t); commit(); draw(); });
     });
     panel.scrollTop = top;
-    if (ui.section === 'whatsapp') (await import('./avisos.js')).default($('#wa', panel));
+    if (ui.section === 'whatsapp') (await import('./avisos.js?v=20261113h')).default($('#wa', panel));
   }
 
   /* ---------- eventos do painel ---------- */

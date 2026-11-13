@@ -1,4 +1,4 @@
-import { esc } from '../../../lib/util.js';
+import { esc } from '../../../lib/util.js?v=20261113h';
 
 export const clone = (v) => (v === undefined ? undefined : JSON.parse(JSON.stringify(v)));
 export function getPath(o, path) {

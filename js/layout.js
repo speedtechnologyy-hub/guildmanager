@@ -1,9 +1,9 @@
-import { sb } from './supabase.js';
-import { state } from './store.js';
-import { esc, can, clsRgb, initial, mainChar } from './lib/util.js';
-import { logoUrl } from './theme.js';
-import { featureAllowed, pathFeature } from './lib/features.js';
-import { safeUrl } from './lib/blocks.js';
+import { sb } from './supabase.js?v=20261113h';
+import { state } from './store.js?v=20261113h';
+import { esc, can, clsRgb, initial, mainChar } from './lib/util.js?v=20261113h';
+import { logoUrl } from './theme.js?v=20261113h';
+import { featureAllowed, pathFeature } from './lib/features.js?v=20261113h';
+import { safeUrl } from './lib/blocks.js?v=20261113h';
 
 /** Cenário do herói: banner enviado pelo admin ou o cenário gerado (castelo ao entardecer). */
 export function sceneHTML(kind = 'hero') {

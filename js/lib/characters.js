@@ -1,7 +1,7 @@
-import { sb, q } from '../supabase.js';
-import { state } from '../store.js';
-import { esc, clsBadge, lineageName } from './util.js';
-import { modal, closeModal, busy, toast, confirmBox, formData, empty } from './ui.js';
+import { sb, q } from '../supabase.js?v=20261113h';
+import { state } from '../store.js?v=20261113h';
+import { esc, clsBadge, lineageName } from './util.js?v=20261113h';
+import { modal, closeModal, busy, toast, confirmBox, formData, empty } from './ui.js?v=20261113h';
 
 const NIL = '00000000-0000-0000-0000-000000000000';
 

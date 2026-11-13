@@ -1,7 +1,7 @@
-import { sb, q } from '../../supabase.js';
-import { state, loadGame } from '../../store.js';
-import { esc, clsBadge } from '../../lib/util.js';
-import { toast, modal, closeModal, busy, errMsg, confirmBox, empty } from '../../lib/ui.js';
+import { sb, q } from '../../supabase.js?v=20261113h';
+import { state, loadGame } from '../../store.js?v=20261113h';
+import { esc, clsBadge } from '../../lib/util.js?v=20261113h';
+import { toast, modal, closeModal, busy, errMsg, confirmBox, empty } from '../../lib/ui.js?v=20261113h';
 
 export default async function jogo(el) {
   async function load() {

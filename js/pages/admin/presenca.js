@@ -1,7 +1,7 @@
-import { sb, q } from '../../supabase.js';
-import { state } from '../../store.js';
-import { esc, can, clsBadge, fmtDateTime, mainChar } from '../../lib/util.js';
-import { toast, busy, errMsg, empty } from '../../lib/ui.js';
+import { sb, q } from '../../supabase.js?v=20261113h';
+import { state } from '../../store.js?v=20261113h';
+import { esc, can, clsBadge, fmtDateTime, mainChar } from '../../lib/util.js?v=20261113h';
+import { toast, busy, errMsg, empty } from '../../lib/ui.js?v=20261113h';
 
 export default async function presenca(el) {
   const evs = await q(sb.from('events').select('id,title,starts_at,status,event_types!inner(name,rsvp_enabled,kind)').eq('event_types.kind', 'war').neq('status', 'cancelled').lte('starts_at', new Date(Date.now() + 6 * 3600e3).toISOString()).order('starts_at', { ascending: false }).limit(25));

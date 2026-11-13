@@ -1,7 +1,7 @@
-import { sb, q } from '../../supabase.js';
-import { state } from '../../store.js';
-import { esc, can, copyText, fmtDateTime, ROLE_LABEL, roleLabel } from '../../lib/util.js';
-import { toast, modal, closeModal, busy, formData, confirmBox, empty, errMsg } from '../../lib/ui.js';
+import { sb, q } from '../../supabase.js?v=20261113h';
+import { state } from '../../store.js?v=20261113h';
+import { esc, can, copyText, fmtDateTime, ROLE_LABEL, roleLabel } from '../../lib/util.js?v=20261113h';
+import { toast, modal, closeModal, busy, formData, confirmBox, empty, errMsg } from '../../lib/ui.js?v=20261113h';
 
 const code = () => Array.from(crypto.getRandomValues(new Uint8Array(9)), (b) => 'abcdefghjkmnpqrstuvwxyz23456789'[b % 31]).join('');
 const base = () => (state.settings.site_url || location.origin + location.pathname).replace(/\/$/, '').replace(/index\.html$/, '');
