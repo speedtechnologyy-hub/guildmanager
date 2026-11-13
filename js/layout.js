@@ -91,6 +91,7 @@ export function renderShell(kind = 'full', force = false) {
             <button type="button" id="logout">Sair</button>
           </div>
         </div>
+        <button type="button" class="outbtn" id="logout2" aria-label="Sair da conta">Sair</button>
       </nav>
     </div></header>
     <div id="pendBar" class="pendbar" hidden></div>
@@ -107,6 +108,7 @@ export function renderShell(kind = 'full', force = false) {
   menu.addEventListener('click', () => { menu.hidden = true; });
   document.addEventListener('click', () => { menu.hidden = true; });
   document.getElementById('logout').onclick = () => sb.auth.signOut();
+  document.getElementById('logout2').onclick = () => sb.auth.signOut();
   syncPlayer();
   updateNav();
 }
