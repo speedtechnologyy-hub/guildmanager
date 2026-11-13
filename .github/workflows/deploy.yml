@@ -1,0 +1,35 @@
+name: Deploy para Hostinger
+
+on:
+  # Por enquanto só manual: GitHub > Actions > "Deploy para Hostinger" > Run workflow.
+  workflow_dispatch:
+  # Quando estiver tudo certo, descomente as 3 linhas abaixo para publicar a cada push na main:
+  # push:
+  #   branches: [main]
+
+concurrency:
+  group: deploy-hostinger
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enviar por FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          server-dir: ${{ secrets.FTP_DIR || 'public_html/' }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            supabase/**
+            **/*.md
+            node_modules/**
