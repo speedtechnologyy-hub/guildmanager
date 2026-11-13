@@ -5,6 +5,12 @@ DirectoryIndex index.html
 RedirectMatch 404 ^/(supabase|\.git|node_modules)(/|$)
 RedirectMatch 404 ^/(README\.md|package\.json)$
 
+# atalho: /master abre a rota oculta do GuildMaster
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^master/?$ /#/master [R=302,NE,L]
+</IfModule>
+
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-Frame-Options "SAMEORIGIN"
