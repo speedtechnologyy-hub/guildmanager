@@ -2,6 +2,7 @@ import { sb } from '../supabase.js';
 import { esc, $ } from '../lib/util.js';
 import { busy } from '../lib/ui.js';
 import { sceneHTML } from '../layout.js';
+import { mountTurnstile } from '../lib/turnstile.js';
 import { logoUrl } from '../theme.js';
 
 /** Acesso reservado do GuildMaster: e-mail e senha (rota oculta, fora do menu). */
@@ -16,6 +17,7 @@ export default async function master(root) {
         <form class="stack" id="f" autocomplete="on">
           <label class="f">E-mail<input type="email" name="email" required autocomplete="username"></label>
           <label class="f">Senha<input type="password" name="password" required autocomplete="current-password"></label>
+          <div id="cf" style="min-height:0"></div>
           <div id="msg"></div>
           <button class="btn primary block" type="submit">Entrar</button>
         </form>
@@ -23,11 +25,14 @@ export default async function master(root) {
       </section>
     </div>`;
   const f = $('#f', root);
+  const cf = await mountTurnstile($('#cf', root)).catch((e) => { $('#msg', root).innerHTML = `<div class="notice bad">${esc(e.message)}</div>`; return null; });
   f.onsubmit = (e) => {
     e.preventDefault();
     busy(f.querySelector('[type=submit]'), async () => {
-      const { error } = await sb.auth.signInWithPassword({ email: f.email.value.trim(), password: f.password.value });
-      $('#msg', root).innerHTML = error ? `<div class="notice bad">E-mail ou senha incorretos.</div>` : '';
+      if (cf?.enabled && !cf.token()) { $('#msg', root).innerHTML = '<div class="notice bad">Conclua a verificação de segurança.</div>'; return; }
+      const { error } = await sb.auth.signInWithPassword({ email: f.email.value.trim(), password: f.password.value, options: cf?.enabled ? { captchaToken: cf.token() } : undefined });
+      if (error) cf?.reset();
+      $('#msg', root).innerHTML = error ? `<div class="notice bad">${/captcha/i.test(error.message) ? 'Verificação de segurança falhou. Tente de novo.' : 'E-mail ou senha incorretos.'}</div>` : '';
     });
   };
 }

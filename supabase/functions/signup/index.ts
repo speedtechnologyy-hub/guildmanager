@@ -30,6 +30,7 @@ const MESSAGES: Record<string, string> = {
   name_invalid: 'Informe um nome entre 2 e 40 caracteres.',
   unauthorized: 'Faça login para continuar.',
   no_profile: 'Cadastro não encontrado.',
+  captcha: 'Verificação de segurança falhou. Recarregue a página e tente de novo.',
 };
 
 function normalize(raw: unknown): string | null {
@@ -71,6 +72,18 @@ async function checkWhatsapp(number: string) {
   return { checked: true, exists: true, number: canonical.length >= 12 ? canonical : number };
 }
 
+async function verifyTurnstile(token: unknown, ip: string | null) {
+  const secret = Deno.env.get('TURNSTILE_SECRET_KEY');
+  if (!secret) return; // sem chave configurada, não exige
+  const t = String(token ?? '');
+  if (!t) throw new Fail('captcha');
+  const form = new URLSearchParams({ secret, response: t });
+  if (ip) form.set('remoteip', ip);
+  const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: form }).catch(() => null);
+  const data = await res?.json().catch(() => null);
+  if (!data?.success) throw new Fail('captcha');
+}
+
 async function authUser(req: Request) {
   const token = (req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '');
   const { data, error } = await admin.auth.getUser(token);
@@ -107,6 +120,7 @@ Deno.serve(async (req) => {
 
     if (body.action === 'complete') {
       const user = await authUser(req);
+      await verifyTurnstile(body.turnstile_token, req.headers.get('cf-connecting-ip'));
       const name = String(body.display_name ?? '').trim();
       if (name.length < 2 || name.length > 40) throw new Fail('name_invalid');
       const number = normalize(body.whatsapp);
