@@ -44,6 +44,9 @@ export const DEFAULTS = {
     funk: 'https://ice1.somafm.com/7soul-128-mp3',
     trap: 'https://ice1.somafm.com/fluid-128-mp3',
     rock: 'https://ice1.somafm.com/metal-128-mp3',
+    sertanejo: 'https://sc4s.cdn.upx.com:8067/stream',        // Sertaneja 106.7
+    jovempan: 'https://stream.zeno.fm/c45wbq2us3buv',          // Rádio Jovem Pan 100.9 FM
+    gospel: 'https://stream3.svrdedicado.org/8070/stream',     // Gospel FM
   },
 };;
 
