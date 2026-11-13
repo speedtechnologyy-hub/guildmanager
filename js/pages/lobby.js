@@ -57,7 +57,7 @@ export default async function lobby(root) {
         <div><b>${mains.length}</b><span>Mains na guild</span></div>
         <div><b>${att.total ? pct + '%' : '-'}</b><span>Presença em 30 dias</span></div></div></div>
       ${war ? `<div class="section"><h2>Chamada de guerra</h2>${callPlate(war, mine[war.id], tally)}</div>` : ''}
-      <div class="section"><h2>A legião</h2><div class="legion">${classes.map((c) => {
+      <div class="section"><h2>Classes</h2><div class="legion">${classes.map((c) => {
         const list = mains.filter((m) => m.class_code === c.code);
         const lin = state.lineages.filter((l) => l.class_code === c.code && l.active).map((l) => [l.name, list.filter((m) => m.lineage_id === l.id).length]);
         const share = mains.length ? Math.round((list.length / mains.length) * 100) : 0;
