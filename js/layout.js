@@ -9,7 +9,7 @@ export function sceneHTML() {
   const wins = [[979, 232], [1012, 190], [1041, 166], [1075, 232], [1118, 148], [1150, 210], [1166, 232]]
     .map(([x, y]) => `<rect class="win" x="${x}" y="${y}" width="4" height="7"/>`).join('');
   const svg = (cls, body) => `<svg class="layer ${cls}" viewBox="0 0 1440 400" preserveAspectRatio="xMidYMax slice">${body}</svg>`;
-  const generated = `<div class="sun"></div>
+  const generated = `<div class="moon"></div><div class="sun"></div>
     ${svg('l1', '<path fill="#2d1317" d="M0 400V232L110 172 200 216 330 122 450 206 550 152 690 236 800 142 930 226 1040 172 1170 232 1290 152 1380 202 1440 176V400Z"/>')}
     ${svg('l2', `<path fill="#180b0c" d="M0 400V304L120 266 230 304 360 244 480 294 600 258 720 304 840 274 940 304H958V240h14v-26l11-16 11 16v26h14v-60h12v-26l12-18 12 18v26h12v60h18v-30h10v30h22v-90h14v-30l14-20 14 20v30h14v90h26v-34h12v34h20L1190 304 1300 280 1440 304V400Z"/>${wins}`)}
     ${svg('l3', '<path fill="#070405" d="M0 400V336L70 318 150 340 260 312 380 346 500 322 640 350 780 326 900 352 1040 330 1180 352 1320 322 1440 342V400Z"/>')}`;

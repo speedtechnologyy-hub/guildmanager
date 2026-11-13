@@ -1,0 +1,95 @@
+/* ============================================================
+   Pele "Destino": noite azul, ouro envelhecido e rubi.
+   Molduras de metal, gemas nos cantos, portões na abertura.
+   ============================================================ */
+:root {
+  --gold-hi: #fbe9ad; --gold: #e2b552; --gold-lo: #8a5f1c; --bronze: #3d2b0e;
+  --metal: linear-gradient(135deg, #fbe9ad 0%, #e2b552 22%, #8a5f1c 48%, #4a3410 58%, #c99a3d 80%, #f3d98c 100%);
+  --metal-soft: linear-gradient(135deg, rgba(251,233,173,.7), rgba(138,95,28,.55) 45%, rgba(226,181,82,.6));
+  --stone: linear-gradient(165deg, color-mix(in srgb, var(--surface) 78%, #4a6cc0), var(--surface) 55%, color-mix(in srgb, var(--surface) 80%, #000));
+  --metal-text: linear-gradient(180deg, #fff6cf 0%, #f3cf72 48%, #c8963a 100%);
+  --ruby: linear-gradient(180deg, #d4384c 0%, #a3162b 45%, #5e0a18 100%);
+}
+body { background: radial-gradient(1200px 600px at 50% -10%, color-mix(in srgb, #2a4a9a 22%, transparent), transparent 70%), var(--bg); }
+
+/* ---------- topo ---------- */
+.topbar { background: linear-gradient(180deg, color-mix(in srgb, var(--surface) 92%, #000), color-mix(in srgb, var(--bg) 85%, transparent)); border-bottom: 0; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+.topbar::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--metal); opacity: .9; box-shadow: 0 0 14px color-mix(in srgb, var(--gold) 45%, transparent); }
+.brand img { border: 2px solid var(--gold); box-shadow: 0 0 0 2px var(--bronze), 0 0 18px color-mix(in srgb, var(--gold) 40%, transparent); }
+.brand b { background: var(--metal-text); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; letter-spacing: .14em; text-transform: uppercase; filter: drop-shadow(0 1px 0 #000); }
+.nav a { letter-spacing: .12em; }
+.nav a.on, .nav a:hover { color: var(--gold-hi); }
+
+/* ---------- molduras ---------- */
+.plate, .pillar, .mcard, .nextwar, .dash .card, .cal-c, .podium .pl {
+  border: 2px solid transparent;
+  border-image: var(--metal) 1;
+}
+.plate { background: var(--stone); box-shadow: inset 0 0 0 1px rgba(0,0,0,.6), inset 0 0 0 4px color-mix(in srgb, var(--surface) 80%, #000), inset 0 0 0 5px color-mix(in srgb, var(--gold) 22%, transparent), 0 24px 60px rgba(0,0,0,.55); }
+.plate::before, .plate::after { width: 11px; height: 11px; border: 0; background: var(--metal); opacity: 1; transform: rotate(45deg); box-shadow: 0 0 10px color-mix(in srgb, var(--gold) 70%, transparent), 0 0 0 1px #000; z-index: 2; }
+.plate::before { top: -7px; left: -7px; } .plate::after { right: -7px; bottom: -7px; top: auto; left: auto; }
+.plate.lit { overflow: visible; } .plate.lit > .sheen { overflow: hidden; }
+.nextwar { background: var(--stone); }
+.nextwar::before, .nextwar::after { width: 11px; height: 11px; border: 0; background: var(--metal); transform: rotate(45deg); box-shadow: 0 0 10px var(--gold), 0 0 0 1px #000; }
+.nextwar::before { top: -7px; left: -7px; } .nextwar::after { right: -7px; bottom: -7px; }
+.pillar, .mcard { background: linear-gradient(180deg, rgba(var(--c), .2), rgba(var(--c), .03) 55%, transparent), var(--stone); }
+.pillar::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgb(var(--c)); box-shadow: 0 0 20px rgb(var(--c)); }
+.pillar { position: relative; }
+.pillar .code { background: linear-gradient(180deg, #fff, rgb(var(--c)) 70%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 14px rgba(var(--c), .55)); }
+.pulse { border: 2px solid transparent; border-image: var(--metal) 1; background: transparent; gap: 0; }
+.pulse > div { background: var(--stone); border-right: 1px solid color-mix(in srgb, var(--gold) 22%, transparent); }
+.pulse > div:last-child { border-right: 0; }
+.pulse b { background: var(--metal-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none; filter: drop-shadow(0 0 16px color-mix(in srgb, var(--gold) 35%, transparent)); }
+.podium .pl { background: var(--stone); }
+.podium .pl.p1 { box-shadow: 0 0 80px color-mix(in srgb, var(--gold) 28%, transparent); }
+.dash .card { background: var(--stone); }
+.cal-c { border-width: 1px; border-image: none; border-color: color-mix(in srgb, var(--gold) 18%, transparent); background: var(--stone); }
+.cal-c.sel { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold), 0 0 20px color-mix(in srgb, var(--gold) 30%, transparent); }
+
+/* ---------- títulos ---------- */
+.page-head h1, .section > h2, .h-sec { background: var(--metal-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; filter: drop-shadow(0 2px 0 rgba(0,0,0,.7)); }
+.page-head h1 { text-transform: uppercase; letter-spacing: .1em; }
+.page-head h1::after { content: ''; display: block; width: 140px; height: 3px; margin-top: 16px; background: linear-gradient(90deg, var(--gold), transparent); -webkit-text-fill-color: initial; }
+.section > h2::before { content: ''; width: 10px; height: 10px; transform: rotate(45deg); background: var(--metal); box-shadow: 0 0 10px var(--gold); flex-shrink: 0; -webkit-text-fill-color: initial; }
+.section > h2::after { background: linear-gradient(90deg, color-mix(in srgb, var(--gold) 50%, transparent), transparent); -webkit-text-fill-color: initial; }
+.plate h2, .plate h3, .nextwar h3 { color: var(--gold-hi); text-shadow: 0 2px 0 #000; }
+
+/* ---------- botões de metal ---------- */
+.btn { border: 2px solid transparent; border-image: var(--metal-soft) 1; background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(0,0,0,.35)), color-mix(in srgb, var(--surface) 90%, #000); color: var(--gold-hi); text-shadow: 0 1px 0 #000; box-shadow: 0 2px 0 rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.12); }
+.btn:hover { border-image: var(--metal) 1; background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(0,0,0,.25)), color-mix(in srgb, var(--surface) 90%, #000); box-shadow: 0 0 22px color-mix(in srgb, var(--gold) 30%, transparent), 0 2px 0 rgba(0,0,0,.6); }
+.btn.primary { border-image: var(--metal) 1; background: var(--ruby); color: #fff6e0; box-shadow: inset 0 1px 0 rgba(255,255,255,.35), inset 0 -10px 18px rgba(0,0,0,.35), 0 0 26px color-mix(in srgb, #d4384c 40%, transparent); }
+.btn.primary:hover { filter: brightness(1.15); }
+.btn.is-on { border-image: none; border-color: var(--ok); } .btn.is-off { border-image: none; border-color: var(--bad); }
+.btn.danger { border-image: none; border-color: color-mix(in srgb, var(--bad) 60%, transparent); }
+.chip { border-color: color-mix(in srgb, var(--gold) 25%, transparent); } .chip.on { border-color: var(--gold); color: var(--gold-hi); background: color-mix(in srgb, var(--gold) 14%, transparent); }
+
+/* ---------- campos ---------- */
+input[type=text], input[type=url], input[type=number], input[type=time], input[type=datetime-local], input[type=tel], input[type=search], input[type=email], select, textarea { background: color-mix(in srgb, var(--bg) 85%, #000); border: 1px solid color-mix(in srgb, var(--gold) 30%, #000); box-shadow: inset 0 3px 8px rgba(0,0,0,.65); }
+th { color: var(--gold); border-bottom: 2px solid color-mix(in srgb, var(--gold) 40%, transparent); }
+.tag.red { background: var(--ruby); border-color: #000; }
+
+/* ---------- cenário ---------- */
+.scene { background: radial-gradient(ellipse at 20% 12%, rgba(190,210,255,.22), transparent 26%), linear-gradient(180deg, #04060f 0%, #0b1330 26%, #2a1a40 54%, #7a2a3a 76%, #d8742a 100%); }
+.scene::before { content: ''; position: absolute; inset: 0; opacity: .8; background-image: radial-gradient(1.2px 1.2px at 8% 14%, #fff, transparent), radial-gradient(1px 1px at 22% 32%, #dfe8ff, transparent), radial-gradient(1.4px 1.4px at 35% 9%, #fff, transparent), radial-gradient(1px 1px at 48% 24%, #fff, transparent), radial-gradient(1.2px 1.2px at 61% 12%, #cfdcff, transparent), radial-gradient(1px 1px at 74% 30%, #fff, transparent), radial-gradient(1.3px 1.3px at 86% 10%, #fff, transparent), radial-gradient(1px 1px at 93% 26%, #dfe8ff, transparent), radial-gradient(1px 1px at 14% 44%, #fff, transparent), radial-gradient(1px 1px at 55% 40%, #fff, transparent); animation: twinkle 6s ease-in-out infinite alternate; }
+@keyframes twinkle { 50% { opacity: .45; } }
+.scene .moon { position: absolute; left: 18%; top: 14%; width: clamp(54px, 8vw, 110px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 36% 34%, #fff 0%, #e9efff 45%, #aebbe0 100%); box-shadow: 0 0 60px 20px rgba(170,190,255,.35), 0 0 160px 60px rgba(120,150,255,.18); }
+.scene .sun { background: radial-gradient(circle, rgba(255,170,70,.65) 0%, rgba(255,100,40,.38) 14%, rgba(165,37,60,.2) 34%, transparent 62%); }
+.hero h1 { background: var(--metal-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 3px 0 #000) drop-shadow(0 0 40px color-mix(in srgb, var(--gold) 30%, transparent)); text-transform: uppercase; letter-spacing: .08em; }
+.hero .kicker { border: 1px solid var(--gold); color: var(--gold-hi); background: linear-gradient(180deg, #1a1208cc, #000c); }
+.nextwar .big { background: var(--metal-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none; filter: drop-shadow(0 0 26px color-mix(in srgb, var(--ember) 80%, transparent)); }
+.ring .bar { stroke-width: 6; }
+
+/* ---------- abertura: os portões se abrem ---------- */
+#intro { background: transparent; animation: introOut .6s 3.5s forwards; }
+#intro .bar { display: none; }
+#intro .door { position: absolute; top: 0; bottom: 0; width: 50.2%; z-index: 2; background: repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 2px, transparent 2px 46px), linear-gradient(180deg, #0f1730, #05070f); box-shadow: inset 0 0 0 3px #000, inset 0 0 0 5px rgba(226,181,82,.55), inset 0 0 120px rgba(0,0,0,.8); }
+#intro .door.l { left: 0; animation: doorL 1.5s 2.1s cubic-bezier(.7, 0, .2, 1) forwards; border-right: 3px solid var(--gold); }
+#intro .door.r { right: 0; animation: doorR 1.5s 2.1s cubic-bezier(.7, 0, .2, 1) forwards; border-left: 3px solid var(--gold); }
+#intro .door::after { content: ''; position: absolute; top: 50%; width: 22px; height: 22px; margin-top: -11px; transform: rotate(45deg); background: var(--metal); box-shadow: 0 0 20px var(--gold), 0 0 0 2px #000; }
+#intro .door.l::after { right: 14px; } #intro .door.r::after { left: 14px; }
+#intro .mark { z-index: 4; animation: markOut .7s 1.9s forwards; }
+#intro .mark img { border-radius: 22%; border: 3px solid var(--gold); box-shadow: 0 0 40px color-mix(in srgb, var(--gold) 50%, transparent); filter: none; }
+#intro h1 { background: var(--metal-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
+@keyframes doorL { to { transform: translateX(-102%); } } @keyframes doorR { to { transform: translateX(102%); } }
+@keyframes markOut { to { opacity: 0; transform: scale(1.12); } }
+@media (prefers-reduced-motion: reduce) { .scene::before { animation: none; } }

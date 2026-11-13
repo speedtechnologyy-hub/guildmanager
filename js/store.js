@@ -10,8 +10,8 @@ export const DEFAULTS = {
   timezone: 'America/Sao_Paulo',
   logo_url: null, favicon_url: null, banner_url: null,
   theme: {
-    bg: '#0a0807', surface: '#14100d', text: '#efe6d8', muted: '#a39787',
-    primary: '#a52525', accent: '#d4a017',
+    bg: '#060a14', surface: '#0e1526', text: '#efe8d8', muted: '#9aa3b5',
+    primary: '#a3162b', accent: '#e2b552',
     heading_font: 'Cinzel', body_font: 'Alegreya Sans', display_font: 'Cinzel Decorative',
   },
   texts: {

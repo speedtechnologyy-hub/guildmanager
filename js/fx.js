@@ -73,9 +73,9 @@ export function runIntro() {
     if (sessionStorage.getItem('gm_intro')) return;
     sessionStorage.setItem('gm_intro', '1');
   } catch { /* storage bloqueado: mostra mesmo assim */ }
-  el.innerHTML = `<div class="bar t"></div><div class="bar b"></div><div class="glow"></div>
+  el.innerHTML = `<div class="door l"></div><div class="door r"></div><div class="glow"></div>
     <div class="mark"><img src="${esc(logoUrl())}" alt=""><h1>${esc(state.settings.guild_name)}</h1><p>${esc(state.settings.texts.intro_tagline || '')}</p></div>`;
   const end = () => { el.innerHTML = ''; };
   el.onclick = end;
-  setTimeout(end, 4100);
+  setTimeout(end, 4200);
 }
