@@ -38,13 +38,14 @@ export const DEFAULTS = {
   ],
   discord: {},
   login_bg_url: null, app_bg_url: null, vitrine_url: null,
-  // Player de música: links de playlist do Spotify (playlist, álbum ou música). Vazio = a aba não aparece.
+  // Player de rádio: endereço do stream (https) de cada estação. Vazio = a aba não aparece.
   music: {
-    eletronica: 'https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n',
-    funk: '', trap: '',
-    rock: 'https://open.spotify.com/playlist/37i9dQZF1DWXRqgorJj26U',
+    eletronica: 'https://ice1.somafm.com/beatblender-128-mp3',
+    funk: 'https://ice1.somafm.com/7soul-128-mp3',
+    trap: 'https://ice1.somafm.com/fluid-128-mp3',
+    rock: 'https://ice1.somafm.com/metal-128-mp3',
   },
-};
+};;
 
 const isObj = (v) => v && typeof v === 'object' && !Array.isArray(v);
 /** Junta o que veio do banco com os padrões, sem deixar nada indefinido. */
