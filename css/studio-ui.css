@@ -188,3 +188,11 @@ em.pc { margin-left: auto; font-style: normal; min-width: 20px; padding: 1px 7px
 @media (max-width: 920px) { .outbtn { margin: 10px 0 0; padding: 14px; width: 100%; font-size: .9rem; color: #ff8a8a; border-color: #e5484d66; } }
 @media (min-width: 921px) { .nav a.instlink { display: none; } }
 .nav a.instlink { color: var(--accent); }
+
+/* celular: arte vertical da guild no login/cadastro */
+@media (max-width: 760px) {
+  .gate-scene .scene { background: #020611 url(/assets/mobile-bg.jpg) center / cover no-repeat; }
+  .gate-scene .scene > :not(.fog) { display: none; }
+  .gate-scene .scene::after { background: linear-gradient(180deg, rgba(2,6,17,.35), rgba(2,6,17,.55) 55%, rgba(2,6,17,.8)); }
+  .vitrine img { object-fit: cover; object-position: center; }
+}

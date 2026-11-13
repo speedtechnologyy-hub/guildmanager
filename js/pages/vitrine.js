@@ -5,7 +5,9 @@ import { sceneHTML } from '../layout.js?v=20261113h';
 /** Domínio puro, sem conta: só o banner em tela cheia. Sem botões nem menu. */
 export default function vitrine(root) {
   const s = state.settings;
-  const img = s.vitrine_url || s.banner_url || s.login_bg_url;
+  // celular: arte vertical da guild; computador: o banner escolhido no painel
+  const phone = matchMedia('(max-width: 760px)').matches;
+  const img = phone ? 'assets/mobile-bg.jpg' : (s.vitrine_url || s.banner_url || s.login_bg_url);
   // No app instalado (tela inicial do celular) aparece o botão Entrar. No navegador comum, só o banner.
   const app = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
   const btn = app ? '<a class="btn primary vitrine-go" href="#/entrar">Entrar</a>' : '';
