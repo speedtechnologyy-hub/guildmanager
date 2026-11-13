@@ -20,7 +20,7 @@ RedirectMatch 404 ^/(README\.md|package\.json)$
     Header set Cache-Control "no-cache"
   </FilesMatch>
   <FilesMatch "\.(js|css)$">
-    Header set Cache-Control "public, max-age=120, stale-while-revalidate=604800"
+    Header set Cache-Control "no-cache"
   </FilesMatch>
   <FilesMatch "\.(jpg|jpeg|png|svg|webp|woff2)$">
     Header set Cache-Control "public, max-age=604800"
