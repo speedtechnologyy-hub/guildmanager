@@ -24,6 +24,7 @@ jobs:
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
           protocol: ftp
+          state-name: .ftp-deploy-sync-state-v2.json
           port: 21
           server-dir: ${{ secrets.FTP_DIR || './' }}
           exclude: |
