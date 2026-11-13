@@ -5,14 +5,14 @@ import { sceneHTML } from '../layout.js?v=20261113h';
 import { mountTurnstile } from '../lib/turnstile.js?v=20261113h';
 import { logoUrl } from '../theme.js?v=20261113h';
 
-/** Acesso reservado do GuildMaster: e-mail e senha (rota oculta, fora do menu). */
+/** Acesso reservado do Admin: e-mail e senha (rota oculta, fora do menu). */
 export default async function master(root) {
   root.innerHTML = `
     <div class="gate-scene">${sceneHTML()}</div>
     <div class="gate wrap" style="position:relative;z-index:1">
       <section class="plate rise">
         <img class="crest" src="${esc(logoUrl())}" alt="">
-        <h1>Acesso do GuildMaster</h1>
+        <h1>Acesso do Admin</h1>
         <p>Entrada reservada com e-mail e senha.</p>
         <form class="stack" id="f" autocomplete="on">
           <label class="f">E-mail<input type="email" name="email" required autocomplete="username"></label>

@@ -54,6 +54,10 @@ export async function renderBackup(c) {
 }
 
 /** Troca quem ocupa uma das 3 vagas de sub líder (userId vazio = deixa a vaga livre). */
+export async function setMaster(userId, on) {
+  await q(sb.from('profiles').update(on ? { role: 'master', sub_slot: null } : { role: 'member' }).eq('id', userId));
+}
+
 export async function setSubLeader(slot, userId) {
   await q(sb.from('profiles').update({ role: 'member', sub_slot: null }).eq('role', 'leader').eq('sub_slot', slot));
   if (userId) await q(sb.from('profiles').update({ role: 'leader', sub_slot: slot }).eq('id', userId));
@@ -70,22 +74,26 @@ export async function savePerm(userId, tab, val) {
 }
 
 export async function renderTeam(c) {
-  if (!can('owner')) return head('Sub líderes e acessos', 'Só o GuildMaster define quem acessa o quê.');
+  if (!can('master')) return head('Sub líderes e acessos', 'Só o Master define quem acessa o quê.');
   const [people, perms] = await Promise.all([
     q(sb.from('profiles').select('id,display_name,role,sub_slot,characters(nick,is_main)').eq('status', 'active').order('display_name')),
     q(sb.from('admin_perms').select('user_id,perms')),
   ]);
   const pm = Object.fromEntries((perms || []).map((r) => [r.user_id, r.perms || {}]));
   const nick = (p) => p.characters?.find((x) => x.is_main)?.nick || p.display_name;
-  const eligible = people.filter((p) => p.role !== 'owner');
-  const staff = people.filter((p) => p.role !== 'owner' && p.role !== 'member');
+  const eligible = people.filter((p) => p.role !== 'owner' && p.role !== 'master');
+  const staff = people.filter((p) => !['owner', 'master', 'member'].includes(p.role));
+  const masters = people.filter((p) => p.role === 'master');
   const slot = (n) => {
     const cur = people.find((p) => p.role === 'leader' && p.sub_slot === n);
     return `<label class="sf">Sub líder ${n}<select data-subslot="${n}"><option value="">— vaga livre —</option>${eligible.map((p) => `<option value="${p.id}" ${cur?.id === p.id ? 'selected' : ''}>${esc(nick(p))}${p.display_name !== nick(p) ? ` (${esc(p.display_name)})` : ''}</option>`).join('')}</select></label>`;
   };
   const gl = (id) => { const v = c.get(`admin_access.${id}`); return v === true ? 'edit' : v === false ? 'none' : v || (id === 'estudio' ? 'none' : 'edit'); };
   const lvName = Object.fromEntries(LEVELS);
-  return head('Sub líderes e acessos', 'Cada função tem três níveis: sem acesso, só ver ou ver e editar. Vale para todas as áreas do painel, inclusive o Estúdio. O GuildMaster sempre tem acesso total.') + `<div class="stack">
+  return head('Sub líderes e acessos', 'Hierarquia: Admin, Master, 3 Sub líderes e Membros. Para os sub líderes cada função tem três níveis: sem acesso, só ver ou ver e editar, inclusive o Estúdio. Admin e Master sempre têm acesso total.') + `<div class="stack">
+    ${can('owner') ? `<div class="card-s"><strong>Masters</strong><p class="muted small">O Master tem acesso total ao painel e ao Estúdio, e tudo que ele muda aparece na hora para quem está no site. Só o Admin cria ou remove Masters.</p>
+      ${masters.map((p) => `<div class="lvrow"><span>${esc(nick(p))}</span><button class="sbtn mini danger" type="button" data-rmmaster="${p.id}">Remover</button></div>`).join('') || '<p class="muted small">Nenhum Master ainda.</p>'}
+      <label class="sf">Adicionar Master<select data-addmaster><option value="">Escolha um membro...</option>${people.filter((p) => !['owner', 'master'].includes(p.role)).map((p) => `<option value="${p.id}">${esc(nick(p))}</option>`).join('')}</select></label></div>` : ''}
     <div class="card-s"><strong>Vagas de sub líder</strong><p class="muted small">Quem for escolhido passa a ver o painel, dentro dos limites abaixo. O membro precisa já estar cadastrado no site.</p>${[1, 2, 3].map(slot).join('')}</div>
     <div class="card-s"><strong>Regra geral</strong><p class="muted small">Vale para todos os sub líderes que não tiverem uma regra própria. Salva quando você clicar em Publicar.</p>
       ${GRANTABLE.map((t) => `<label class="sf lvrow"><span>${esc(t.name)}<small>${esc(t.group)}</small></span><select data-acc="${t.id}">${LEVELS.map(([v, n]) => opt(v, gl(t.id), n)).join('')}</select></label>`).join('')}</div>

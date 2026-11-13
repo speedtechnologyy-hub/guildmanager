@@ -28,7 +28,7 @@ export const levelName = (n) => ['none', 'view', 'edit'][n];
 
 /** Nível do usuário atual numa função: dono = sempre 2; senão pessoa > regra geral > padrão. */
 export function levelOf(id) {
-  if (can('owner')) return 2;
+  if (can('master')) return 2;
   return norm(state.perms?.[id]) ?? globalLevel(id);
 }
 export const canEdit = (id) => levelOf(id) >= 2;

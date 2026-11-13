@@ -63,10 +63,10 @@ export default async function admin(root, [tab]) {
 
   root.innerHTML = mobile
     ? `<div class="mtop"><a href="#/admin/${slug(cur.group)}" aria-label="Voltar">←</a><span><strong>${esc(cur.name)}</strong><small>${esc(cur.group)}</small></span></div>
-       <div class="wrap mfn">${roBanner}<div class="panel" id="ap">${blocked ? '<p class="muted">O GuildMaster restringiu esta área.</p>' : loadingHTML}</div></div>${bottom(slug(cur.group))}`
+       <div class="wrap mfn">${roBanner}<div class="panel" id="ap">${blocked ? '<p class="muted">O Master restringiu esta área.</p>' : loadingHTML}</div></div>${bottom(slug(cur.group))}`
     : `<div class="wrap"><div class="page-head"><h1>${esc(state.settings.guild_name)} · Painel</h1></div>
     <div class="admin"><nav class="side"><input type="search" id="as" class="side-s" placeholder="Buscar função..." autocomplete="off" aria-label="Buscar função do painel"><div id="al">${list()}</div></nav>
-    <div class="panel-wrap">${roBanner}<div class="panel" id="ap">${blocked ? '<p class="muted">O GuildMaster restringiu esta área.</p>' : loadingHTML}</div></div></div></div>`;
+    <div class="panel-wrap">${roBanner}<div class="panel" id="ap">${blocked ? '<p class="muted">O Master restringiu esta área.</p>' : loadingHTML}</div></div></div></div>`;
   const s = $('#as', root);
   if (s) {
     s.oninput = () => { $('#al', root).innerHTML = list(s.value); };

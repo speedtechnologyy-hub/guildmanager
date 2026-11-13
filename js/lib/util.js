@@ -7,15 +7,15 @@ export const debounce = (fn, ms = 250) => { let t; return (...a) => { clearTimeo
 export const initial = (s) => (String(s || '?').trim()[0] || '?').toUpperCase();
 
 /* ---------- cargos ---------- */
-export const ROLES = ['member', 'leader', 'owner'];
-export const ROLE_LABEL = { member: 'Membro', leader: 'Sub Líder', owner: 'GuildMaster' };
+export const ROLES = ['member', 'leader', 'master', 'owner'];
+export const ROLE_LABEL = { member: 'Membro', leader: 'Sub Líder', master: 'Master', owner: 'Admin' };
 const ROMAN = ['', 'I', 'II', 'III'];
 const norm = (r) => (r === 'mod' ? 'member' : r === 'sub' ? 'leader' : r);
-/** Cargo para exibição: "Sub Líder II", "GuildMaster" ou "Membro". */
+/** Cargo para exibição: "Sub Líder II", "Master" ou "Membro". */
 export const roleLabel = (role, slot) => (norm(role) === 'leader' && slot ? `Sub Líder ${ROMAN[slot]}` : ROLE_LABEL[norm(role)] || 'Membro');
 export const rank = (r) => ROLES.indexOf(norm(r));
 // 'mod' e 'sub' eram degraus que a guild não tem: tudo que pedia esses níveis agora pede Sub Líder.
-const need = (m) => (m === 'member' ? 'member' : m === 'owner' ? 'owner' : 'leader');
+const need = (m) => (m === 'member' ? 'member' : m === 'owner' ? 'owner' : m === 'master' ? 'master' : 'leader');
 export const can = (min) => !!state.profile && state.profile.status === 'active' && rank(state.profile.role) >= rank(need(min));
 export function crown(role) {
   if (norm(role) === 'member') return '';

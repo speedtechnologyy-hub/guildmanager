@@ -48,7 +48,8 @@ async function go() {
   view.innerHTML = loadingHTML;
 
   if (state.profile && state.profile.status !== 'active') {
-    view.innerHTML = `<div class="wrap"><div class="page-head"><h1>Acesso desativado</h1><p>Sua conta está ${state.profile.status === 'banned' ? 'bloqueada' : 'inativa'}. Fale com a liderança da guild.</p><p style="margin-top:18px"><button class="btn" id="out">Sair</button></p></div></div>`;
+    const pend = state.profile.status === 'pending';
+    view.innerHTML = `<div class="wrap"><div class="page-head"><h1>${pend ? 'Cadastro em análise' : 'Acesso desativado'}</h1><p>${pend ? 'Recebemos o seu cadastro. Assim que a liderança aprovar, o acesso à guild é liberado. Volte mais tarde ou aguarde o aviso no WhatsApp.' : `Sua conta está ${state.profile.status === 'banned' ? 'bloqueada' : 'inativa'}. Fale com a liderança da guild.`}</p><p style="margin-top:18px"><button class="btn" id="out">Sair</button></p></div></div>`;
     $('#out').onclick = () => sb.auth.signOut();
     return;
   }
@@ -59,7 +60,7 @@ async function go() {
   const fid = routeFeature(route.page);
   let offNote = false;
   if (fid && !featureAllowed(fid)) {
-    if (!can('owner')) { view.innerHTML = '<div class="wrap"><div class="page-head"><h1>Função indisponível</h1><p>Esta área está desativada no momento.</p><p style="margin-top:14px"><a href="#/">Voltar ao lobby</a></p></div></div>'; updateNav(); return; }
+    if (!can('master')) { view.innerHTML = '<div class="wrap"><div class="page-head"><h1>Função indisponível</h1><p>Esta área está desativada no momento.</p><p style="margin-top:14px"><a href="#/">Voltar ao lobby</a></p></div></div>'; updateNav(); return; }
     offNote = true;
   }
 

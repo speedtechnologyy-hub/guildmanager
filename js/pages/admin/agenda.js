@@ -46,9 +46,9 @@ export default async function agenda(el) {
   }
   function optCard(list) {
     if (!list.length) return '';
-    const owner = can('owner');
+    const owner = can('master');
     return `<h2 style="margin-top:30px">Guerras que nem sempre acontecem</h2>
-      <p class="muted small">A Noatun só rola dependendo da guerra de cidades. Ela fica oculta para os membros até o GuildMaster marcar que vai ter. Marcando, ela aparece na agenda e entra nos avisos de WhatsApp (liga ou desliga em <a href="#/admin/avisos">Avisos</a>).</p>
+      <p class="muted small">A Noatun só rola dependendo da guerra de cidades. Ela fica oculta para os membros até o Master marcar que vai ter. Marcando, ela aparece na agenda e entra nos avisos de WhatsApp (liga ou desliga em <a href="#/admin/avisos">Avisos</a>).</p>
       <div class="rows" style="margin-top:12px">${list.map((e) => { const on = e.status === 'scheduled'; return `<div><div><div class="name">${esc(e.title)} <span class="tag ${on ? 'red' : ''}">${on ? 'vai ter' : 'não confirmada'}</span></div><div class="sub">${fmtDateTime(e.starts_at)}</div></div>
         ${owner ? `<span class="right row"><button class="btn sm ${on ? '' : 'primary'}" data-act="opt" data-id="${e.id}" data-on="${on ? 0 : 1}" type="button">${on ? 'Não vai ter' : 'Vai ter'}</button></span>` : ''}</div>`; }).join('')}</div>`;
   }

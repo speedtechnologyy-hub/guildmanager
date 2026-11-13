@@ -7,7 +7,7 @@ import { toast, errMsg, confirmBox } from '../../lib/ui.js?v=20261113h';
 import { clone, getPath, setPath, sortable, move } from './estudio/kit.js?v=20261113h';
 import { SECTIONS, PRESETS, render } from './estudio/sections.js?v=20261113h';
 import { newBlock, newItem } from './estudio/blocks-ui.js?v=20261113h';
-import { pagesList, renderPages, renderWhats, renderBackup, renderTeam, setSubLeader, savePerm } from './estudio/extra.js?v=20261113h';
+import { pagesList, renderPages, renderWhats, renderBackup, renderTeam, setSubLeader, savePerm, setMaster } from './estudio/extra.js?v=20261113h';
 
 /** Chaves de site_settings que o Estúdio controla (rascunho + publicação). */
 const KEYS = ['admin_access', 'theme', 'texts', 'menu', 'features', 'effects', 'layouts', 'custom_fonts', 'guild_name', 'logo_url', 'favicon_url', 'banner_url', 'login_bg_url', 'app_bg_url', 'discord', 'timezone', 'site_url'];
@@ -148,6 +148,7 @@ export default async function estudio(root) {
     if (t.dataset.featrole) { c.set(`features.${t.dataset.featrole}.min_role`, t.value); commit(); }
     if (t.dataset.acc) { c.set(`admin_access.${t.dataset.acc}`, t.value); commit(); draw(); }
     if (t.dataset.pp) { try { await savePerm(t.dataset.pp, t.dataset.tab, t.value); toast('Acesso atualizado.', 'ok'); } catch (err) { toast(errMsg(err), 'bad'); } }
+    if (t.dataset.addmaster != null && t.value) { try { await setMaster(t.value, true); toast('Master adicionado.', 'ok'); } catch (err) { toast(errMsg(err), 'bad'); } draw(); }
     if (t.dataset.subslot) { try { await setSubLeader(+t.dataset.subslot, t.value); toast('Sub líder atualizado.', 'ok'); } catch (err) { toast(errMsg(err), 'bad'); } draw(); }
     if (t.dataset.fx) { c.set(`effects.${t.dataset.fx}`, t.checked); commit(); }
     if (t.dataset.dest != null) {
@@ -178,6 +179,7 @@ export default async function estudio(root) {
     const b = e.target.closest('button'); if (!b) return;
     const d = b.dataset;
     const list = (p) => c.get(p);
+    if (d.rmmaster) { try { await setMaster(d.rmmaster, false); toast('Master removido.', 'ok'); } catch (err) { toast(errMsg(err), 'bad'); } return draw(); }
     if (d.clear) { c.set(d.clear, d.clear.endsWith('_url') ? null : ''); if (!d.clear.startsWith('__page.')) commit(); return draw(); }
     if (d.mv) { const a = list(d.mv), i = +d.i, j = i + +d.d; if (j >= 0 && j < a.length) { move(a, i, j); commit(); draw(); } return; }
     if (d.addBlock) { const type = panel.querySelector(`[data-newtype="${d.addBlock}"]`).value; const p = d.addBlock; if (!c.get(p)) c.set(p, []); c.get(p).push(newBlock(type)); if (!p.startsWith('__page.')) commit(); return draw(); }

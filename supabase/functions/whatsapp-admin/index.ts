@@ -28,7 +28,7 @@ const MESSAGES: Record<string, string> = {
 };
 
 const LV: Record<string, number> = { none: 0, view: 1, edit: 2, false: 0, true: 2 };
-const RANK: Record<string, number> = { member: 0, mod: 1, sub: 2, leader: 3, owner: 4 };
+const RANK: Record<string, number> = { member: 0, mod: 1, sub: 2, leader: 3, master: 4, owner: 5 };
 
 // Dono sempre pode. Sub líder precisa da função "avisos": só ver para consultar o status, editar para conectar.
 async function requireAccess(req: Request, need: number) {
@@ -37,7 +37,7 @@ async function requireAccess(req: Request, need: number) {
   if (error || !data.user) throw new Fail('unauthorized', 401);
   const { data: prof } = await admin.from('profiles').select('role,status').eq('id', data.user.id).maybeSingle();
   if (!prof || prof.status !== 'active') throw new Fail('forbidden', 403);
-  if (prof.role === 'owner') return data.user;
+  if (prof.role === 'owner' || prof.role === 'master') return data.user;
   if ((RANK[prof.role] ?? 0) < RANK.leader) throw new Fail('forbidden', 403);
   const [{ data: mine }, { data: gen }] = await Promise.all([
     admin.from('admin_perms').select('perms').eq('user_id', data.user.id).maybeSingle(),

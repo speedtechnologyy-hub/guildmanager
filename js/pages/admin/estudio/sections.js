@@ -5,7 +5,7 @@ import { fText, fArea, fSelect, fCheck, fRange, fColor, fImage, grip } from './k
 import { blockList } from './blocks-ui.js?v=20261113h';
 
 const TZ = ['America/Sao_Paulo', 'America/Manaus', 'America/Bahia', 'America/Fortaleza', 'America/Cuiaba', 'America/Rio_Branco', 'Europe/Lisbon'];
-const ROLE3 = [['member', 'Todos'], ['leader', 'Sub Líderes'], ['owner', 'Só GuildMaster']];
+const ROLE3 = [['member', 'Todos'], ['leader', 'Sub Líderes'], ['master', 'Master'], ['owner', 'Só Admin']];
 
 export const PRESETS = [
   { name: 'Destino', theme: { bg: '#060a14', surface: '#0e1526', text: '#efe8d8', muted: '#9aa3b5', primary: '#a3162b', accent: '#e2b552', frame: '' } },

@@ -8,7 +8,7 @@ const STATE = { open: ['ok', 'Conectado'], connecting: ['', 'Aguardando leitura 
 const AUD = { all: 'Todos', going: 'Quem confirmou', no_response: 'Quem não respondeu', not_going: 'Quem disse que não vai' };
 
 export default async function avisos(el) {
-  const owner = can('owner');
+  const owner = can('master');
   let cfg, rules = [], queue = [], poll;
   async function load() {
     [cfg, rules, queue] = await Promise.all([

@@ -1,7 +1,7 @@
 import { state } from '../store.js?v=20261113h';
 import { can } from './util.js?v=20261113h';
 
-/** Funções que o GuildMaster liga e desliga no Estúdio. `route` é a página do roteador. */
+/** Funções que o Master liga e desliga no Estúdio. `route` é a página do roteador. */
 export const FEATURES = [
   { id: 'wars', label: 'Guerras', desc: 'Chamada de guerra, presença e histórico.', path: '/guerras', route: 'wars' },
   { id: 'ranking', label: 'Ranking', desc: 'Presença e fama por membro.', path: '/ranking', route: 'ranking' },
