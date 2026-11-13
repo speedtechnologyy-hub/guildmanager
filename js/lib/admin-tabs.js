@@ -6,6 +6,7 @@ export const GROUPS = ['Guild', 'Guerra', 'Comunicação', 'Site'];
 export const TABS = [
   { id: 'resumo', name: 'Visão geral', min: 'mod', group: 'Guild', icon: '◈', desc: 'Números, gráficos e o que falta configurar.', kw: 'resumo painel inicio gráficos checklist configurar' },
   { id: 'membros', name: 'Membros', min: 'leader', group: 'Guild', icon: '♜', desc: 'Jogadores, personagens, notas e cargos.', kw: 'membros jogadores personagens notas banir remover cargo sub líder' },
+  { id: 'contas', name: 'Contas cadastradas', min: 'leader', group: 'Guild', icon: '☷', desc: 'Todas as contas: aprovar, bloquear, cargo, acessos e remover.', kw: 'contas cadastradas aprovar bloquear remover acesso cargo usuários pessoas' },
   { id: 'convites', name: 'Convites e cadastro', min: 'mod', group: 'Guild', icon: '✉', desc: 'Links de convite e novos cadastros.', kw: 'convite link cadastro novo membro aprovar' },
   { id: 'presenca', name: 'Presença', min: 'mod', group: 'Guerra', icon: '✓', desc: 'Marcar quem foi em cada guerra.', kw: 'presença chamada marcar quem foi guerra' },
   { id: 'agenda', name: 'Horários das guerras', min: 'sub', group: 'Guerra', icon: '◷', desc: 'Dias, horários e cidades das guerras.', kw: 'horário agenda torres cidades noatun dias abre fecha' },
@@ -16,7 +17,9 @@ export const TABS = [
   { id: 'log', name: 'Registro de ações', min: 'leader', group: 'Comunicação', icon: '≡', desc: 'Quem fez o quê no painel.', kw: 'log histórico auditoria quem fez' },
   { id: 'estudio', name: 'Estúdio do site', min: 'leader', group: 'Site', icon: '✦', desc: 'Cores, imagens, menu, funções e páginas.', kw: 'estúdio cores fontes imagens menu funções páginas tema sub líderes acessos equipe' },
 ];
-export const GRANTABLE = TABS;
+/** 'contas' segue as mesmas permissões (e a mesma trava do banco) de 'membros'. */
+const ALIAS = { contas: 'membros' };
+export const GRANTABLE = TABS.filter((t) => !ALIAS[t.id]);
 
 export const LEVELS = [['none', 'Sem acesso'], ['view', 'Só ver'], ['edit', 'Ver e editar']];
 const NUM = { none: 0, view: 1, edit: 2, false: 0, true: 2 };
@@ -28,6 +31,7 @@ export const levelName = (n) => ['none', 'view', 'edit'][n];
 
 /** Nível do usuário atual numa função: dono = sempre 2; senão pessoa > regra geral > padrão. */
 export function levelOf(id) {
+  id = ALIAS[id] || id;
   if (can('master')) return 2;
   return norm(state.perms?.[id]) ?? globalLevel(id);
 }
