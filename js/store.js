@@ -40,13 +40,14 @@ export const DEFAULTS = {
   login_bg_url: null, app_bg_url: null, vitrine_url: null,
   // Player de rádio: endereço do stream (https) de cada estação. Vazio = a aba não aparece.
   music: {
-    eletronica: 'https://ice1.somafm.com/beatblender-128-mp3',
+    eletronica: 'https://stream.zeno.fm/dypkmcyizhktv',        // Só Track Boa 1.0 - JubsTones (house)
     funk: 'https://ice1.somafm.com/7soul-128-mp3',
     trap: 'https://ice1.somafm.com/fluid-128-mp3',
     rock: 'https://ice1.somafm.com/metal-128-mp3',
     sertanejo: 'https://sc4s.cdn.upx.com:8067/stream',        // Sertaneja 106.7
     jovempan: 'https://stream.zeno.fm/c45wbq2us3buv',          // Rádio Jovem Pan 100.9 FM
     gospel: 'https://stream3.svrdedicado.org/8070/stream',     // Gospel FM
+    pordeus: 'https://stream.zenolive.com/92ptm8uua2zuv.aac',  // PorDeus.fm
   },
 };;
 
