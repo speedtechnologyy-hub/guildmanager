@@ -59,3 +59,4 @@ input, select, textarea { font-size: 16px; border-radius: 10px; }
 @media (max-width: 860px) { input, select, textarea { font-size: 16px !important; } }
 @media (min-width: 861px) { input, select, textarea { font-size: .95rem; } }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+.scene .banner { background-position: center 62%; }
