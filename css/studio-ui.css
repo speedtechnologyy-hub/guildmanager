@@ -137,3 +137,4 @@
 .inst .steps li::before { content: counter(st); grid-row: span 2; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font: 700 1rem var(--font-head); color: var(--accent, #e2b552); border: 1px solid color-mix(in srgb, var(--accent, #e2b552) 50%, transparent); }
 .inst .steps b { font-size: 1rem; }
 .inst .steps span { color: var(--muted); font-size: .92rem; }
+.vitrine-go { position: absolute; left: 50%; bottom: calc(40px + env(safe-area-inset-bottom)); transform: translateX(-50%); min-width: 220px; justify-content: center; z-index: 2; }

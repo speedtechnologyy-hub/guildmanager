@@ -6,7 +6,10 @@ import { sceneHTML } from '../layout.js?v=20261113h';
 export default function vitrine(root) {
   const s = state.settings;
   const img = s.vitrine_url || s.banner_url || s.login_bg_url;
+  // No app instalado (tela inicial do celular) aparece o botão Entrar. No navegador comum, só o banner.
+  const app = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const btn = app ? '<a class="btn primary vitrine-go" href="#/entrar">Entrar</a>' : '';
   root.innerHTML = img
-    ? `<div class="vitrine"><img src="${esc(img)}" alt="${esc(s.guild_name)}"></div>`
-    : `<div class="vitrine">${sceneHTML('login')}</div>`;
+    ? `<div class="vitrine"><img src="${esc(img)}" alt="${esc(s.guild_name)}">${btn}</div>`
+    : `<div class="vitrine">${sceneHTML('login')}${btn}</div>`;
 }
