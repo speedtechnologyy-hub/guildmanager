@@ -9,6 +9,7 @@ export const FEATURES = [
   { id: 'voice', label: 'Voz (Discord)', desc: 'Botão e página da sala de voz.', path: '/voz', route: 'voice' },
   { id: 'draws', label: 'Sorteios', desc: 'Sorteios ao vivo com modos de jogo.', path: '/sorteios', route: 'sorteios' },
   { id: 'videos', label: 'Youtuber (YouTube)', desc: 'Canal do YouTube da guild, com player dentro do site.', path: '/videos', route: 'videos' },
+  { id: 'streamer', label: 'Streamer (Twitch)', desc: 'Live da Twitch com chat, dentro do site.', path: '/streamer', route: 'streamer' },
   { id: 'login_google', label: 'Login com Google', desc: 'Botão Google na tela de entrada.' },
   { id: 'login_discord', label: 'Login com Discord', desc: 'Botão Discord na tela de entrada.' },
 ];

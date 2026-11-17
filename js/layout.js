@@ -5,6 +5,7 @@ import { esc, can, clsRgb, initial, mainChar } from './lib/util.js?v=20261113h';
 import { logoUrl } from './theme.js?v=20261113h';
 import { featureAllowed, pathFeature } from './lib/features.js?v=20261113h';
 import { safeUrl } from './lib/blocks.js?v=20261113h';
+import { startStream, stopStream } from './lib/stream-live.js?v=20261113h';
 import { startDraws, stopDraws } from './lib/draws-live.js?v=20261113h';
 import { startPending, stopPending, paintPending, canApprove } from './lib/pending.js?v=20261113h';
 
@@ -40,6 +41,7 @@ function menuItems() {
   if (s.discord?.voice_url && featureAllowed('voice') && !items.some((i) => i.path === '/voz')) items.push({ label: 'Voz', path: '/voz' });
   if (featureAllowed('draws') && !items.some((i) => i.path === '/sorteios')) items.push({ label: 'Sorteios', path: '/sorteios' });
   if (state.raw?.youtube?.channel_id && featureAllowed('videos') && !items.some((i) => i.path === '/videos')) items.push({ label: 'Youtuber', path: '/videos' });
+  if (state.raw?.twitch?.channel && featureAllowed('streamer') && !items.some((i) => i.path === '/streamer')) items.push({ label: 'Streamer', path: '/streamer' });
   if (can('mod')) items.push({ label: 'Painel', path: '/admin' });
   return items;
 }
@@ -58,6 +60,7 @@ const syncPlayer = () => {
   on ? mountPlayer() : unmountPlayer();
   if (on && canApprove()) { startPending(); paintPending(); } else stopPending();
   if (on && featureAllowed('draws')) startDraws(); else stopDraws();
+  if (on && featureAllowed('streamer')) startStream(); else stopStream();
 };
 
 /** kind: 'full' (barra + rodapé) ou 'bare' (login e cadastro). */
