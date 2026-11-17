@@ -39,6 +39,7 @@ function menuItems() {
   }
   if (s.discord?.voice_url && featureAllowed('voice') && !items.some((i) => i.path === '/voz')) items.push({ label: 'Voz', path: '/voz' });
   if (featureAllowed('draws') && !items.some((i) => i.path === '/sorteios')) items.push({ label: 'Sorteios', path: '/sorteios' });
+  if (state.raw?.youtube?.channel_id && featureAllowed('videos') && !items.some((i) => i.path === '/videos')) items.push({ label: 'Vídeos', path: '/videos' });
   if (can('mod')) items.push({ label: 'Painel', path: '/admin' });
   return items;
 }

@@ -8,6 +8,7 @@ export const FEATURES = [
   { id: 'members', label: 'Membros', desc: 'Lista de guerreiros e personagens.', path: '/membros', route: 'members' },
   { id: 'voice', label: 'Voz (Discord)', desc: 'Botão e página da sala de voz.', path: '/voz', route: 'voice' },
   { id: 'draws', label: 'Sorteios', desc: 'Sorteios ao vivo com modos de jogo.', path: '/sorteios', route: 'sorteios' },
+  { id: 'videos', label: 'Vídeos (YouTube)', desc: 'Canal do YouTube da guild, com player dentro do site.', path: '/videos', route: 'videos' },
   { id: 'login_google', label: 'Login com Google', desc: 'Botão Google na tela de entrada.' },
   { id: 'login_discord', label: 'Login com Discord', desc: 'Botão Discord na tela de entrada.' },
 ];

@@ -66,4 +66,6 @@ export function mountPlayer() {
   if (wasOpen) setOpen(true);
 }
 
+/** Pausa o rádio (ex.: quando o membro vai assistir um vídeo). */
+export const pauseRadio = () => { try { audio?.pause(); } catch { /* sem áudio */ } };
 export function unmountPlayer() { if (audio) { audio.pause(); audio = null; } root?.remove(); root = null; sig = ''; }

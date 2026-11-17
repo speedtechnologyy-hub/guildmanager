@@ -284,3 +284,16 @@ body.stage-open { overflow: hidden; }
 .drawbar.live .pgo { background: #fff; color: #7a1a22; }
 .drawbar .dx { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; border: 0; background: none; color: var(--muted); font-size: 1.3rem; cursor: pointer; }
 .drawbar:not(.live) .pbtn { padding-right: 46px; }
+
+/* ---------- vídeos ---------- */
+.vid-frame { position: relative; aspect-ratio: 16 / 9; width: 100%; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #000; }
+.vid-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.vid-title { margin: 16px 0 4px; font-size: clamp(1.15rem, 3.4vw, 1.6rem); }
+.vid-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+.vid-card { all: unset; box-sizing: border-box; cursor: pointer; display: grid; gap: 6px; align-content: start; padding: 8px; border: 1px solid var(--line-soft); border-radius: 10px; transition: border-color .2s, background .2s; }
+.vid-card:hover, .vid-card.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.vid-card:focus-visible { outline: 2px solid var(--accent); }
+.vid-card .th { display: block; aspect-ratio: 16 / 9; border-radius: 6px; overflow: hidden; background: #000; }
+.vid-card img { width: 100%; height: 100%; object-fit: cover; }
+.vid-card b { font: 700 .9rem/1.3 var(--font-head); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.vid-card small { color: var(--muted); }
