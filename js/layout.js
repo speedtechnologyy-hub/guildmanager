@@ -37,6 +37,7 @@ function menuItems() {
     items.push({ label: p.title, path: '/p/' + p.slug });
   }
   if (s.discord?.voice_url && featureAllowed('voice') && !items.some((i) => i.path === '/voz')) items.push({ label: 'Voz', path: '/voz' });
+  if (featureAllowed('draws') && !items.some((i) => i.path === '/sorteios')) items.push({ label: 'Sorteios', path: '/sorteios' });
   if (can('mod')) items.push({ label: 'Painel', path: '/admin' });
   return items;
 }
