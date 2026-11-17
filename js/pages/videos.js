@@ -10,7 +10,7 @@ export default async function videos(root) {
   const yt = state.raw?.youtube || {};
   const name = yt.title || 'Canal da guild';
   const link = /^https:\/\/(www\.)?youtube\.com\//.test(yt.url || '') ? yt.url : '';
-  root.innerHTML = `<div class="wrap"><div class="page-head"><h1>Vídeos</h1><p>${esc(name)}${yt.handle ? ' · ' + esc(yt.handle) : ''}. Assista aqui mesmo, sem sair do site.</p></div>
+  root.innerHTML = `<div class="wrap"><div class="page-head"><h1>Youtuber</h1><p>${esc(name)}${yt.handle ? ' · ' + esc(yt.handle) : ''}. Assista aqui mesmo, sem sair do site.</p></div>
     ${link ? `<p style="margin-bottom:18px"><a class="btn sm" href="${esc(link)}" target="_blank" rel="noopener noreferrer">Abrir o canal no YouTube</a></p>` : ''}
     <div id="v">${loadingHTML}</div></div>`;
   const v = root.querySelector('#v');
