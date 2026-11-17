@@ -338,9 +338,8 @@ html[data-skin="nival"] .nv-bg.pre { filter: hue-rotate(var(--hero-hue, 0deg)) s
 html[data-skin="nival"] .nv-bgwrap.pre .nv-tint { display: none; }
 html[data-skin="nival"] .nv-bglit { filter: none; }
 html[data-skin="nival"] .nv-bgwrap::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; background: radial-gradient(60% 70% at 50% 58%, rgba(90, 140, 255, .2), transparent 72%); }
-html[data-skin="nival"] .nv-head.awake .nv-bgwrap::after { animation: nvBreath 3.6s ease-in-out infinite; will-change: opacity; }
-@keyframes nvBreath { 50% { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { html[data-skin="nival"] .nv-head.awake .nv-bgwrap::after { animation: none; } }
+html[data-skin="nival"] .nv-head.awake .nv-bgwrap::after { opacity: .55; }
+
 @media (max-width: 900px) {
   html[data-skin="nival"] .nv-bgwrap { bottom: auto; height: min(100%, calc(150vw + 160px)); -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent); mask-image: linear-gradient(180deg, #000 70%, transparent); }
   html[data-skin="nival"] .nv-bg, html[data-skin="nival"] .nv-bglit { background-position: 52% 40%; }
@@ -355,3 +354,14 @@ html[data-skin="nival"] .nv-head .spot-glow {
     radial-gradient(circle calc(var(--sr, 200px) * 1.2) at var(--sx, -9999px) var(--sy, -9999px), rgba(80, 130, 255, .14), transparent 70%);
 }
 html[data-skin="nival"] .nv-ghost { color: rgba(143, 177, 255, .08); }
+
+
+/* ---------- desempenho ----------
+   Desfoque do fundo (backdrop-filter) refaz o cálculo a cada quadro quando algo se mexe por baixo
+   (o círculo do spotlight, a foto). Só ficam desfocados os cartões do conteúdo, que ficam parados. */
+html[data-skin="nival"] body::after { display: none; }
+html[data-skin="nival"] .topbar::before { background: rgba(10, 22, 54, .84); backdrop-filter: none; -webkit-backdrop-filter: none; }
+html[data-skin="nival"] .pendbar, html[data-skin="nival"] .tabbar, html[data-skin="nival"] .who > button,
+html[data-skin="nival"] .nv-soc, html[data-skin="nival"] .nv-mat, html[data-skin="nival"] .nv-av, html[data-skin="nival"] .nv-count,
+html[data-skin="nival"] .nv-pill, html[data-skin="nival"] .nv-o { backdrop-filter: none; -webkit-backdrop-filter: none; }
+html[data-skin="nival"] .nv-head .nv-bglit, html[data-skin="nival"] .nv-head .nv-bg { will-change: auto; }
