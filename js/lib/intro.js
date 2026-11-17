@@ -45,24 +45,15 @@ export function pageReveal(host) {
   T.done();
 }
 
-/** Lobby no estilo Nival: título em máscara linha a linha, arte sobe, cartão e círculos entram em sequência. */
+/** Lobby: a foto aparece, depois saudação, frase, cartão e o bloco da direita entram em sequência curta. */
 export function nivalIntro(root, fast = false) {
   if (!can()) return;
   const k = fast ? 0.55 : 1, T = timeline(k), $ = (q) => root.querySelectorAll(q);
-  const lines = $('.nv-hl');
-  lines.forEach((el, i) => {
-    T.run([el], [{ clipPath: 'inset(0 -.12em 100% -.12em)' }, { clipPath: 'inset(-.34em -.12em -.34em -.12em)' }], 0.95, 0.22 + i * 0.11, 0, TYPE);
-    T.run(el.children.length ? el.children : [], [{ transform: 'translateY(.9em)' }, { transform: 'none' }], 0.95, 0.22 + i * 0.11, 0, TYPE);
-  });
-  T.run($('.nv-hero'), [{ opacity: 0, transform: 'translateY(22px) scale(.99)' }, { opacity: 1, transform: 'none' }], 1.05, 0.48, 0, TYPE);
-  T.run($('.nv-feat'), T.fade('translateX(12px)'), 0.55, 0.52, 0.07);
-  T.run($('.nv-ghost'), [{ opacity: 0 }, { opacity: 1 }], 0.9, 0.62, 0.09);
-  T.run($('.nv-o'), T.fade('scale(.88)'), 0.62, 0.8, 0, TYPE);
-  T.run($('.nv-card'), T.fade('translateY(18px)'), 0.78, 0.7, 0, TYPE);
-  T.run($('.nv-creator'), T.fade('translateY(10px)'), 0.6, 0.82);
-  T.run($('.nv-mat'), [{ opacity: 0 }, { opacity: 1 }], 0.72, 0.86);
-  T.run($('.nv-av:not(.nv-void)'), T.fade('scale(.9)'), 0.55, 0.94, 0.06, TYPE);
-  T.run($('.nv-soc'), T.fade('translateY(9px)'), 0.5, 1.08, 0.05);
-  T.run([...$('#body > .section')].filter(inView).slice(0, 3), T.fade('translateY(20px)'), 0.7, 1.1, 0.08, TYPE);
+  T.run($('.nv-bgwrap'), [{ opacity: 0, transform: 'scale(1.03)' }, { opacity: 1, transform: 'none' }], 1.2, 0, 0, SOFT);
+  T.run($('.hx-hi'), T.fade('translateY(10px)'), 0.55, 0.3, 0, TYPE);
+  T.run($('.hx-h'), [{ clipPath: 'inset(0 0 100% 0)', transform: 'translateY(.4em)' }, { clipPath: 'inset(-.3em -.1em -.3em -.1em)', transform: 'none' }], 0.9, 0.4, 0, TYPE);
+  T.run($('.hx-card'), T.fade('translateY(18px)'), 0.7, 0.75, 0, TYPE);
+  T.run($('.hx-chips, .hx-status, .hx-socs'), T.fade('translateY(12px)'), 0.6, 0.85, 0.1, TYPE);
+  T.run([...$('#body > .section')].filter(inView).slice(0, 3), T.fade('translateY(20px)'), 0.7, 1.0, 0.08, TYPE);
   T.done();
 }
