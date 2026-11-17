@@ -99,8 +99,13 @@ export function bindNival(head) {
         m.x = w * (.5 + .3 * Math.sin(now / 2400)); m.y = h * (.42 + .2 * Math.sin(now / 1700 + 1));
       }
       if (s.x < -5000 && m.x > -5000) { s.x = m.x; s.y = m.y; }   // chegou agora: aparece sob o cursor, sem voar de fora
-      s.x += (m.x - s.x) * .1; s.y += (m.y - s.y) * .1;
-      st.style.setProperty('--sx', s.x.toFixed(1) + 'px'); st.style.setProperty('--sy', s.y.toFixed(1) + 'px');
+      const dx = m.x - s.x, dy = m.y - s.y;
+      if (Math.abs(dx) > .4 || Math.abs(dy) > .4) {   // parado: não mexe em nada
+        s.x += dx * .1; s.y += dy * .1;
+        // as variáveis ficam só na camada de fundo (não na seção inteira), para o navegador recalcular pouca coisa por quadro
+        const bw = st.querySelector('.nv-bgwrap') || st;
+        bw.style.setProperty('--sx', s.x.toFixed(1) + 'px'); bw.style.setProperty('--sy', s.y.toFixed(1) + 'px');
+      }
     }
     raf = requestAnimationFrame(loop);
   }

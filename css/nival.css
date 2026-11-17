@@ -318,7 +318,8 @@ html[data-skin="nival"] .nv-mc { margin-left: calc(var(--u) * 84); }
 @media (max-width: 900px) { html[data-skin="nival"] .nv-mat { position: relative; } }
 
 /* ---------- a foto de hero do site ocupa o fundo; o holofote mostra ela em cores ---------- */
-html[data-skin="nival"] .nv-head { position: relative; overflow: hidden; isolation: isolate; --sr: clamp(150px, 15vw, 250px); }
+html[data-skin="nival"] .nv-head { position: relative; overflow: hidden; isolation: isolate; }
+html[data-skin="nival"] .nv-bgwrap { --sr: clamp(150px, 15vw, 250px); contain: strict; }
 html[data-skin="nival"] .nv-bgwrap { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
 html[data-skin="nival"] .nv-bg, html[data-skin="nival"] .nv-bglit { position: absolute; inset: 0; background-size: cover; background-position: 48% 38%; }
 html[data-skin="nival"] .nv-bg { filter: grayscale(.9) contrast(1.08) brightness(.74) hue-rotate(var(--hero-hue, 0deg)) saturate(var(--hero-sat, 1)); transition: filter .5s ease; }
