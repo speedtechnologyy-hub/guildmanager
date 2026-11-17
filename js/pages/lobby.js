@@ -68,7 +68,7 @@ export default async function lobby(root) {
       ${war ? `<aside class="nextwar${mine[war.id] === 'going' ? ' awake' : ''}"><small>${esc(war.event_types?.name || 'Guerra')}</small><h3>${esc(war.title)}</h3>
         <p class="falta">Faltam</p><div class="big" data-cd="${war.starts_at}" data-done="É AGORA">--</div>
         <p class="sub">${relDay(war.starts_at)}, às ${fmtTime(war.starts_at)} · ${going} confirmados</p>${cities.length ? `<p class="cities"><b>Cidades:</b> ${cities.map((c) => esc(c.city)).join(', ')}</p>` : ''}${war.bet_closes_at && new Date(war.bet_closes_at) > Date.now() ? `<p class="sub">Aposta fecha em <b data-cd="${war.bet_closes_at}" data-done="encerrada"></b></p>` : ''}
-        <div class="acts">${rsvpButtons(war, mine[war.id], { go: 'Eu vou', no: 'Não vou' })}</div></aside>` : ''}`;
+        ${mine[war.id] === 'going' ? '' : `<div class="acts">${rsvpButtons(war, mine[war.id], { go: 'Eu vou', no: 'Não vou' })}</div>`}</aside>` : ''}`;
 
     const mains = people.map((p) => mainChar(p.characters)).filter(Boolean);
     const classes = state.classes.filter((c) => c.active);

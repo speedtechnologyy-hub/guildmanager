@@ -93,7 +93,7 @@ export function callPlate(ev, mine, tally) {
     <div>
       <h2>${esc(ev.title)}</h2>
       <p class="when">${relDay(ev.starts_at)}, às ${fmtTime(ev.starts_at)}. ${callLine}</p>
-      <div class="actions">${rsvpButtons(ev, mine, { go: 'Eu vou', no: 'Não vou hoje' })}</div>
+      ${mine === 'going' ? '' : `<div class="actions">${rsvpButtons(ev, mine, { go: 'Eu vou', no: 'Não vou hoje' })}</div>`}
       ${answered}${t}
     </div>
   </section>`;

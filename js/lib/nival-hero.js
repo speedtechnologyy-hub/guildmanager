@@ -53,13 +53,13 @@ export function nivalHero({ war, mine, going, people, open, cities, main, chars,
       <div class="nv-ghost g2" aria-hidden="true">GUERRA</div>
       <div class="nv-o" aria-hidden="true"><img src="${esc(logoUrl())}" alt=""></div>
     </div>
-    <aside class="nv-card" aria-label="Próxima guerra">
+    ${war && mine === 'going' ? '' : `    <aside class="nv-card" aria-label="Próxima guerra">
       <div class="nv-top"><div class="nv-count"><strong>${people}</strong><small>guerreiros</small></div></div>
       <p class="nv-copy">${esc(tagline)}</p>
       ${war ? `<div class="nv-bottom"><div class="nv-start">${esc(war.event_types?.name || 'Guerra')} · ${relDay(war.starts_at)}, ${fmtTime(war.starts_at)}<br><strong data-cd="${war.starts_at}" data-done="É AGORA">--</strong>${cities.length ? `<small>Cidades: ${cities.map((c) => esc(c.city)).join(', ')}</small>` : ''}${war.bet_closes_at && new Date(war.bet_closes_at) > Date.now() ? `<small>Aposta fecha em <b data-cd="${war.bet_closes_at}" data-done="encerrada"></b></small>` : ''}</div>
         <div class="nv-acts">${rsvpButtons(war, mine, { go: 'Eu vou', no: 'Não vou' })}</div></div>` : '<div class="nv-bottom"><div class="nv-start">Sem guerra marcada<br><strong>Descanse</strong></div></div>'}
-    </aside>
-    <a class="nv-mat" href="#/guerras"><span class="nv-thumb"><img src="${esc(logoUrl())}" alt=""></span><span class="nv-pill"><span class="nv-mc">${war ? (open ? 'Chamada<br>aberta' : 'Próxima<br>guerra') : 'Ver<br>guerras'}</span><span class="nv-next"><svg viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="#06192f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 8 24 25M12 25h12V13"/></svg></span></span></a>
+    </aside>`}
+    <a class="nv-mat" href="#/guerras"><span class="nv-thumb"><img src="${esc(logoUrl())}" alt=""></span><span class="nv-pill"><span class="nv-mc">${war ? (mine === 'going' ? 'Presença<br>confirmada' : open ? 'Chamada<br>aberta' : 'Próxima<br>guerra') : 'Ver<br>guerras'}</span><span class="nv-next"><svg viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="#06192f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 8 24 25M12 25h12V13"/></svg></span></span></a>
     <div class="nv-gal" role="group" aria-label="Seus personagens">${gal}</div>
     <div class="nv-socs">${soc}</div>
   </div>`;
