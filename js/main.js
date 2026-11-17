@@ -8,6 +8,7 @@ import { renderBlocks } from './lib/blocks.js?v=20261113h';
 import { startLive, listenPreview, IS_PREVIEW } from './lib/live.js?v=20261113h';
 import { startTicker, tick, esc, $, can } from './lib/util.js?v=20261113h';
 import { loadingHTML, closeModal } from './lib/ui.js?v=20261113h';
+import { pageReveal } from './lib/intro.js?v=20261113h';
 
 // Cada rota carrega o seu módulo só quando é visitada.
 const ROUTES = [
@@ -98,6 +99,7 @@ async function go() {
     if (offNote && my === token) view.insertAdjacentHTML('afterbegin', '<div class="wrap"><div class="flag-off">Esta função está desativada ou restrita para os membros. Só você enxerga esta tela.</div></div>');
     if (my !== token) { out?.(); return; }
     cleanup = out || null;
+    if (route.page !== 'lobby') pageReveal(host);
   } catch (e) {
     console.error(e);
     if (my === token) view.innerHTML = `<div class="wrap"><div class="page-head"><h1>Algo deu errado</h1><p>${esc(e.message || 'Não foi possível carregar esta página.')}</p><p style="margin-top:14px"><button class="btn" onclick="location.reload()">Tentar de novo</button></p></div></div>`;

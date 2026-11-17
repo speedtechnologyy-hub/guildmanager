@@ -8,14 +8,36 @@ import { renderBlock } from '../lib/blocks.js?v=20261113h';
 import { callPlate, bindRsvp, rsvpButtons, rsvpState } from '../lib/rsvp.js?v=20261113h';
 import { charsPanel } from '../lib/characters.js?v=20261113h';
 import { attendanceStats } from '../lib/stats.js?v=20261113h';
+import { spotlight } from '../lib/spotlight.js?v=20261113h';
+import { lobbyIntro, nivalIntro } from '../lib/intro.js?v=20261113h';
+import { nivalHero, bindNival, paintNival } from '../lib/nival-hero.js?v=20261113h';
+
+/** A abertura completa roda uma vez por sessão; nas próximas visitas, uma versão mais curta. */
+let introSeen = false;
+
+/** Números da faixa sobem de zero na primeira vez que a tela abre. */
+let counted = false;
+function countUp(scope) {
+  if (counted || matchMedia('(prefers-reduced-motion: reduce)').matches) { counted = true; return; }
+  counted = true;
+  scope.querySelectorAll('.pulse b').forEach((b) => {
+    const m = b.textContent.match(/^(\d+)(%?)$/); if (!m) return;
+    const to = +m[1], t0 = performance.now(), dur = 1100;
+    const step = (t) => { const u = Math.min(1, (t - t0) / dur); b.textContent = Math.round(to * (1 - Math.pow(1 - u, 3))) + m[2]; if (u < 1) requestAnimationFrame(step); };
+    b.textContent = '0' + m[2]; requestAnimationFrame(step);
+  });
+}
 
 export default async function lobby(root) {
   const main = mainChar(state.chars);
   const t = state.settings.texts;
-  root.innerHTML = `<header class="hero"><div class="scene-wrap">${sceneHTML()}</div><div class="wrap hero-in" id="hero"></div></header><div class="wrap" id="body"></div>`;
+  const NV = document.documentElement.dataset.skin === 'nival';
+  root.innerHTML = NV ? `<header class="nv-head" id="hero"></header><div class="wrap" id="body"></div>`
+    : `<header class="hero"><div class="scene-wrap">${sceneHTML()}</div><div class="wrap hero-in" id="hero"></div></header><div class="wrap" id="body"></div>`;
   const hero = root.querySelector('#hero'), body = root.querySelector('#body');
+  const stopNival = NV ? bindNival(hero) : null;
   bindRsvp(root, load);
-  let charsLoaded = false;
+  let charsLoaded = false, played = false;
 
   async function load() {
     const [evs, rs, ann, people, att] = await Promise.all([
@@ -36,11 +58,14 @@ export default async function lobby(root) {
       tally = { going, not_going: no, none: Math.max(0, people.length - going - no) };
     }
     const open = war && rsvpState(war) === 'open';
-    hero.innerHTML = `<div>
-        ${war ? `<span class="kicker rise"><i></i>${open ? 'Chamada aberta' : 'Próxima guerra'}</span>` : ''}
-        <h1 class="rise">${esc(state.settings.guild_name)}</h1>
-        <p class="tagline rise d1">Salve, ${esc(main?.nick || state.profile.display_name)}. ${esc(t.hero_tagline)}</p></div>
-      ${war ? `<aside class="nextwar rise d2"><small>${esc(war.event_types?.name || 'Guerra')}</small><h3>${esc(war.title)}</h3>
+    if (NV) {
+      hero.innerHTML = nivalHero({ war, mine: mine[war?.id], going, people: people.length, open, cities, main, chars: state.chars, nick: main?.nick || state.profile.display_name });
+      paintNival(hero, war && mine[war.id] === 'going');
+    } else hero.innerHTML = `<div>
+        ${war ? `<span class="kicker"><i></i>${open ? 'Chamada aberta' : 'Próxima guerra'}</span>` : ''}
+        <h1>${esc(state.settings.guild_name)}</h1>
+        <p class="tagline">Salve, ${esc(main?.nick || state.profile.display_name)}. ${esc(t.hero_tagline)}</p></div>
+      ${war ? `<aside class="nextwar${mine[war.id] === 'going' ? ' awake' : ''}"><small>${esc(war.event_types?.name || 'Guerra')}</small><h3>${esc(war.title)}</h3>
         <p class="falta">Faltam</p><div class="big" data-cd="${war.starts_at}" data-done="É AGORA">--</div>
         <p class="sub">${relDay(war.starts_at)}, às ${fmtTime(war.starts_at)} · ${going} confirmados</p>${cities.length ? `<p class="cities"><b>Cidades:</b> ${cities.map((c) => esc(c.city)).join(', ')}</p>` : ''}${war.bet_closes_at && new Date(war.bet_closes_at) > Date.now() ? `<p class="sub">Aposta fecha em <b data-cd="${war.bet_closes_at}" data-done="encerrada"></b></p>` : ''}
         <div class="acts">${rsvpButtons(war, mine[war.id], { go: 'Eu vou', no: 'Não vou' })}</div></aside>` : ''}`;
@@ -70,14 +95,18 @@ export default async function lobby(root) {
         return `<div class="pl p${pos}" style="--c:${x.ch ? clsRgb(x.ch.class_code) : '163,151,135'}"><span class="medal">${pos}</span>${x.ch ? `<div style="width:30px;height:30px;margin:0 auto;color:rgb(${clsRgb(x.ch.class_code)})">${clsIcon(x.ch.class_code)}</div>` : ''}<div class="nm">${esc(x.ch?.nick || x.p.display_name)}</div><div class="pc">${att.pct(x.p.id)}%<small>${x.n} de ${att.total} guerras</small></div></div>`; }).join('')}</div>
         <p class="muted small"><a href="#/ranking">Ver ranking completo</a></p></div>` : ''}`,
       announcements: () => `${ann.length ? `<div class="section"><h2>Avisos</h2><div class="stack">${ann.map((a) => plate(`<h3>${a.pinned ? '<span class="tag red">Fixado</span> ' : ''}${esc(a.title)}</h3><div class="md">${md(a.body || '')}</div><p class="muted small">${fmtDate(a.created_at)}</p>`)).join('')}</div></div>` : ''}`,
-      chars: () => `<div class="section"><h2>Seus personagens</h2>${plate('<div id="chars"></div>')}</div>`,
+      chars: () => `<div class="section"><h2>Seus personagens</h2><div id="chars"></div></div>`,
       discord: () => `${state.settings.discord?.invite_url ? `<div class="section">${plate(`<h3>Chamada de voz</h3><p class="muted">A guerra acontece no Discord.</p><p style="margin-top:12px"><a class="btn" href="${esc(state.settings.discord.invite_url)}" target="_blank" rel="noopener">Entrar no Discord</a></p>`)}</div>` : ''}`,
     };
     body.innerHTML = `${state.chars.length ? '' : '<div class="notice bad section">Você ainda não cadastrou um personagem. Cadastre o seu nick abaixo para aparecer nas chamadas.</div>'}
       ${lobbyLayout().filter((b) => b.on !== false && can(b.min_role || 'member')).map((b) => (b.custom ? `<div class="section">${renderBlock(b)}</div>` : S[b.id]?.() || '')).join('')}`;
     const el = body.querySelector('#chars');
     if (el) charsPanel(el, state.user.id);
+    countUp(body);
+    if (!played) { played = true; (NV ? nivalIntro : lobbyIntro)(root, introSeen); introSeen = true; }
   }
   await load();
-  return every(60000, load);
+  const stopSpot = NV ? () => stopNival?.() : spotlight(root.querySelector('header.hero'));
+  const stopLoad = every(60000, load);
+  return () => { stopSpot(); stopLoad(); };
 }

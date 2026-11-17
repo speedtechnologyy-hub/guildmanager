@@ -28,7 +28,7 @@ jobs:
           mkdir -p "v/$V"
           find js -name '*.js' -print0 | xargs -0 sed -i -E "s/\?v=2026[0-9a-z-]+//g"
           /tmp/node_modules/.bin/esbuild js/main.js --bundle --format=esm --minify --target=es2020,safari14 --outfile="v/$V/app.js"
-          cat css/app.css css/cinema.css css/wyd.css css/premium.css css/studio.css css/studio-ui.css > "v/$V/app.css"
+          cat css/app.css css/cinema.css css/wyd.css css/premium.css css/studio.css css/studio-ui.css css/lux.css css/nival.css > "v/$V/app.css"
           V="$V" python3 - <<'PY'
           import os, re
           v = os.environ['V']; s = open('index.html').read()

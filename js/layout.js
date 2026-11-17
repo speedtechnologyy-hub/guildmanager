@@ -25,6 +25,20 @@ export function sceneHTML(kind = 'hero') {
   return `<div class="scene ${kind}" aria-hidden="true">${banner ? `<div class="banner" style="background-image:url('${esc(encodeURI(banner))}')"></div>` : generated}<div class="fog"></div><div class="fog b"></div></div>`;
 }
 
+
+/** Ícones da barra de baixo (celular). */
+const TAB_ICON = {
+  '/': '<path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/>',
+  '/guerras': '<path d="m14.5 4.5 5 5-9 9-3.5.5.5-3.5z"/><path d="m4 20 3-3M9 6l-4 4 3 3"/>',
+  '/ranking': '<path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5M12 14v4M8.5 20h7"/>',
+  '/membros': '<circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.6-3.3 3-5 6-5s5.4 1.7 6 5"/><path d="M16 5.5a3 3 0 0 1 0 6M18 14.8c1.6.6 2.7 2.2 3 4.7"/>',
+  '/sorteios': '<rect x="4" y="4" width="16" height="16" rx="3.5"/><circle cx="9" cy="9" r="1.1" fill="currentColor"/><circle cx="15" cy="15" r="1.1" fill="currentColor"/><circle cx="15" cy="9" r="1.1" fill="currentColor"/><circle cx="9" cy="15" r="1.1" fill="currentColor"/>',
+  '/videos': '<rect x="3" y="5.5" width="18" height="13" rx="3.5"/><path d="m10.5 9.5 4.5 2.5-4.5 2.5z" fill="currentColor"/>',
+  '/streamer': '<rect x="3" y="4.5" width="18" height="12" rx="2.5"/><path d="M8 20h8M12 16.5V20"/><circle cx="12" cy="10.5" r="1.7" fill="currentColor"/>',
+  '/admin': '<path d="M12 3.5 5 6v5.5c0 4.2 2.9 7.2 7 9 4.1-1.8 7-4.8 7-9V6z"/>',
+};
+const tabIcon = (path) => `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${TAB_ICON[path] || '<circle cx="12" cy="12" r="6"/>'}</svg>`;
+
 const hashPath = () => (location.hash.slice(1) || '/').split('?')[0];
 let shellKind = '';
 export const shellMode = () => shellKind;
@@ -48,7 +62,7 @@ function menuItems() {
 
 export function updateNav() {
   const p = hashPath();
-  document.querySelectorAll('.nav a[data-path]').forEach((a) => {
+  document.querySelectorAll('.nav a[data-path], .tabbar a[data-path]').forEach((a) => {
     const t = a.dataset.path;
     a.classList.toggle('on', !!t && (p === t || (t !== '/' && p.startsWith(t))));
   });
@@ -82,6 +96,9 @@ export function renderShell(kind = 'full', force = false) {
     return `<a href="${esc(href)}" class="${cls}" data-path="${esc(i.path || '')}" ${ext ? 'target="_blank" rel="noopener noreferrer"' : ''}>${esc(i.label)}</a>`;
   }).join('');
 
+  const tabs = menuItems().filter((i) => i.path && !i.url && i.path !== '/admin').slice(0, 4);
+  const tabbar = `<nav class="tabbar" id="tabbar" aria-label="Navegação principal">${tabs.map((i) => `<a href="#${esc(i.path)}" data-path="${esc(i.path)}">${tabIcon(i.path)}<span>${esc(i.label)}</span></a>`).join('')}<button type="button" id="tabMore" aria-label="Abrir o menu completo">${tabIcon('')}<span>Mais</span></button></nav>`;
+
   app.innerHTML = `
     <header class="topbar"><div class="wrap">
       <a class="brand" href="#/"><img src="${esc(logoUrl())}" alt=""><b>${esc(s.guild_name)}</b></a>
@@ -104,12 +121,14 @@ export function renderShell(kind = 'full', force = false) {
     <div id="pendBar" class="pendbar" hidden></div>
     <div id="drawBar" class="pendbar drawbar" hidden></div>
     <main id="view"></main>
-    <footer class="foot"><div class="orn" aria-hidden="true"><i></i></div>${esc(s.texts.footer || s.guild_name)}</footer>`;
+    <footer class="foot"><div class="orn" aria-hidden="true"><i></i></div>${esc(s.texts.footer || s.guild_name)}</footer>
+    ${tabbar}`;
 
   const nav = document.getElementById('nav');
   const burger = app.querySelector('.burger');
   burger.onclick = () => { const open = nav.classList.toggle('open'); burger.setAttribute('aria-expanded', open); };
   nav.addEventListener('click', (e) => { if (e.target.closest('a')) nav.classList.remove('open'); });
+  document.getElementById('tabMore').onclick = () => { const open = nav.classList.toggle('open'); burger.setAttribute('aria-expanded', open); };
   const whoBtn = document.getElementById('whoBtn');
   const menu = document.getElementById('whoMenu');
   whoBtn.onclick = (e) => { e.stopPropagation(); menu.hidden = !menu.hidden; whoBtn.setAttribute('aria-expanded', !menu.hidden); };

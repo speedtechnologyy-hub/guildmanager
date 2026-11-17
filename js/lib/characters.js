@@ -1,6 +1,6 @@
 import { sb, q } from '../supabase.js?v=20261113h';
 import { state } from '../store.js?v=20261113h';
-import { esc, clsBadge, lineageName } from './util.js?v=20261113h';
+import { esc, clsBadge, clsRgb, clsIcon, className, lineageName } from './util.js?v=20261113h';
 import { modal, closeModal, busy, toast, confirmBox, formData, empty } from './ui.js?v=20261113h';
 
 const NIL = '00000000-0000-0000-0000-000000000000';
@@ -60,14 +60,15 @@ export async function charsPanel(el, userId, onChange) {
     onChange?.(chars);
   }
   function render() {
-    el.innerHTML = `${chars.length ? `<div class="rows">${chars.map((c) => `
-      <div>${clsBadge(c.class_code)}
-        <div><div class="name">${esc(c.nick)} ${c.is_main ? '<span class="tag red">Main</span>' : '<span class="tag">Secundária</span>'}</div>
-          <div class="sub">${esc(lineageName(c.lineage_id) || 'sem linhagem')}, ${c.level ? 'level ' + c.level : 'sem level'}</div></div>
-        <span class="right row"><button class="btn sm" data-edit="${c.id}" type="button">Editar</button>
-          <button class="btn sm danger" data-del="${c.id}" type="button">Excluir</button></span>
-      </div>`).join('')}</div>` : empty('Nenhum personagem cadastrado ainda.')}
-      <div style="margin-top:14px"><button class="btn" data-add type="button">Adicionar personagem</button></div>`;
+    el.innerHTML = `<div class="cc-grid">${chars.map((c) => `
+      <article class="cc ${c.is_main ? 'main' : ''}" style="--c:${clsRgb(c.class_code)}">
+        <span class="glyph">${clsIcon(c.class_code)}</span>
+        <div class="top">${clsBadge(c.class_code)}${c.is_main ? '<span class="tag red">Main</span>' : '<span class="tag">Secundária</span>'}</div>
+        <h4>${esc(c.nick)}</h4>
+        <p>${esc(lineageName(c.lineage_id) || className(c.class_code))}${c.level ? ' <i>·</i> <b>level ' + c.level + '</b>' : ''}</p>
+        <div class="acts"><button class="btn sm" data-edit="${c.id}" type="button">Editar</button><button class="btn sm danger" data-del="${c.id}" type="button">Excluir</button></div>
+      </article>`).join('')}
+      <button class="cc add" data-add type="button"><span>+</span>${chars.length ? 'Adicionar personagem' : 'Cadastrar o seu primeiro personagem'}</button></div>`;
   }
   el.onclick = async (e) => {
     const add = e.target.closest('[data-add]'), ed = e.target.closest('[data-edit]'), del = e.target.closest('[data-del]');
