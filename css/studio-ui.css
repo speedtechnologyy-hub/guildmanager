@@ -269,3 +269,11 @@ body.stage-open { overflow: hidden; }
 
 @media (max-width: 600px) { .rg { grid-template-columns: repeat(3, 1fr); } .rg .it { aspect-ratio: 1 / .9; } .st-art { min-height: 280px; } }
 @media (prefers-reduced-motion: reduce) { .rg .in { transition-duration: .01s; } .st-mode em { animation: none; } }
+
+.race { position: relative; width: min(820px, 94vw); display: grid; gap: 6px; padding: 10px 0; }
+.lane { position: relative; height: 34px; border-radius: 6px; background: repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 40px, transparent 40px 80px); border-bottom: 1px dashed var(--line-soft); }
+.rn { position: absolute; top: 2px; left: 0; display: flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px 0 6px; border-radius: 30px; background: rgba(var(--c), .35); border: 1px solid rgba(var(--c), .8); font: 700 .8rem var(--font-head); color: #fff; white-space: nowrap; transform: translateX(calc(var(--p, 0) * (min(820px, 94vw) - 16px - 100%))); }
+.rn i { font-style: normal; font-size: 1.1rem; }
+.rn em { font-style: normal; color: var(--accent); }
+.rn.done { background: rgba(var(--c), .6); border-color: var(--accent); box-shadow: 0 0 20px rgba(212,160,23,.7); }
+.fin-line { position: absolute; top: 0; bottom: 0; right: 0; width: 12px; background: repeating-conic-gradient(#fff 0 25%, #111 0 50%) 0 0 / 12px 12px; opacity: .85; border-radius: 2px; }

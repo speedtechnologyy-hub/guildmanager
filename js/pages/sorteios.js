@@ -8,6 +8,7 @@ const MODES = {
   slot: { name: 'Caça-níquel', icon: '🎰', desc: 'Os nomes passam voando e travam no sorteado.' },
   baus: { name: 'Baús', icon: '🎁', desc: 'Baús fechados. A liderança abre um por um até aparecerem os premiados.' },
   cartas: { name: 'Cartas', icon: '🃏', desc: 'Cartas viradas para baixo. Os perdedores viram juntos e os premiados no final.' },
+  corrida: { name: 'Corrida', icon: '🏁', desc: 'Todo mundo corre até a linha de chegada. Os primeiros a cruzar levam.' },
   eliminacao: { name: 'Battle royale', icon: '⚔️', desc: 'Todo mundo entra na arena e vai caindo até sobrarem só os vencedores.' },
 };
 const POOLS = { all: 'Todos os membros ativos', join: 'Só quem clicar em Participar', manual: 'Escolher quem entra' };
@@ -38,7 +39,7 @@ function build(d) {
   const wins = d.winners.map((id) => by[id]).filter(Boolean), W = wins.length;
   const rnd = prng(d.seed || 1);
   const losers = shuffle(ent.filter((e) => !d.winners.includes(e.id)), rnd);
-  const f = { slot, roleta, eliminacao, baus, cartas }[d.mode] || slot;
+  const f = { slot, roleta, eliminacao, baus, cartas, corrida }[d.mode] || slot;
   return { wins, ...f() };
 
   function slot() {
@@ -116,6 +117,41 @@ function build(d) {
         });
         lbl.textContent = t < T0 ? 'Todos na arena…' : t >= end ? 'Sobreviventes!' : `Restam ${alive}`;
         return t >= end ? W : 0;
+      },
+    };
+  }
+
+
+  function corrida() {
+    const F0 = 9000, GAP = 1600, lanes = clamp(Math.min(ent.length, Math.max(W + 3, 8)), W, 24);
+    const field = shuffle([...wins.map((e, k) => ({ e, k })), ...losers.slice(0, lanes - W).map((e) => ({ e, k: -1 }))], rnd);
+    const lastWin = F0 + (W - 1) * GAP;
+    const rs = field.map((r) => ({
+      ...r, ph: rnd() * 6.28, w: 0.0016 + rnd() * 0.0016, amp: 0.05 + rnd() * 0.05,
+      F: r.k >= 0 ? F0 + r.k * GAP : lastWin / (0.74 + rnd() * 0.2),
+    }));
+    let items = [], lbl;
+    const pos = (r, t) => {
+      if (r.k >= 0 && t >= r.F) return 1;
+      const b = clamp(t / r.F, 0, 1), p = b + r.amp * Math.sin(r.w * t + r.ph) * Math.sin(Math.PI * b) * (1 - b * 0.5);
+      return r.k >= 0 ? clamp(p, 0, 0.995) : clamp(p, 0, 0.965);
+    };
+    return {
+      dur: lastWin + 3200,
+      mount(el) {
+        el.innerHTML = `<div class="race">${rs.map((r) => `<div class="lane"><span class="rn" style="--c:${rgb(r.e)}"><i>🏇</i><b>${esc(r.e.nick)}</b><em></em></span></div>`).join('')}<span class="fin-line"></span></div><div class="slot-lbl"></div>`;
+        items = [...el.querySelectorAll('.rn')]; lbl = el.querySelector('.slot-lbl');
+      },
+      frame(t) {
+        let n = 0;
+        rs.forEach((r, i) => {
+          const done = r.k >= 0 && t >= r.F; if (done) n++;
+          items[i].style.setProperty('--p', pos(r, t).toFixed(4));
+          items[i].classList.toggle('done', done);
+          items[i].querySelector('em').textContent = done ? `${r.k + 1}º` : '';
+        });
+        lbl.textContent = t < 1500 ? 'Preparar…' : n >= W ? 'Corrida encerrada' : n ? 'Chegando os premiados…' : 'Valendo!';
+        return n;
       },
     };
   }
