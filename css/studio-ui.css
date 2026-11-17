@@ -277,3 +277,10 @@ body.stage-open { overflow: hidden; }
 .rn em { font-style: normal; color: var(--accent); }
 .rn.done { background: rgba(var(--c), .6); border-color: var(--accent); box-shadow: 0 0 20px rgba(212,160,23,.7); }
 .fin-line { position: absolute; top: 0; bottom: 0; right: 0; width: 12px; background: repeating-conic-gradient(#fff 0 25%, #111 0 50%) 0 0 / 12px 12px; opacity: .85; border-radius: 2px; }
+
+.drawbar { position: relative; top: auto; z-index: 39; background: linear-gradient(90deg, #1c1408, #3a2a0c 50%, #1c1408); border-bottom: 1px solid var(--line); }
+.drawbar .pgo { background: var(--accent); color: #1a1208; }
+.drawbar.live { background: linear-gradient(90deg, #7a1a22, #b3262e 50%, #7a1a22); }
+.drawbar.live .pgo { background: #fff; color: #7a1a22; }
+.drawbar .dx { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; border: 0; background: none; color: var(--muted); font-size: 1.3rem; cursor: pointer; }
+.drawbar:not(.live) .pbtn { padding-right: 46px; }

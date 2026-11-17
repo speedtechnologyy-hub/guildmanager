@@ -182,6 +182,9 @@ function build(d) {
   function cartas() { return grid('cartas'); }
 }
 
+/** Duração total da animação (ms) de um sorteio já realizado. */
+export const drawDur = (d) => build(d).dur;
+
 /** Abre o palco da animação. getT() devolve ms desde a largada. */
 function openStage(d, getT, { live } = {}) {
   document.getElementById('stage')?.remove();
@@ -333,7 +336,7 @@ export default async function sorteios(root) {
 
   const ds = await load();
   // se abriu a tela no meio de um sorteio, entra nele
-  ds.filter((d) => d.status === 'drawn').slice(0, 1).forEach(maybePlay);
+  maybePlay(ds.filter((d) => d.status === 'drawn' && d.started_at).sort((a, b) => new Date(b.started_at) - new Date(a.started_at))[0]);
 
   const ch = sb.channel('sorteios')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'draws' }, async (p) => {

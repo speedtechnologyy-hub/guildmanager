@@ -5,6 +5,7 @@ import { esc, can, clsRgb, initial, mainChar } from './lib/util.js?v=20261113h';
 import { logoUrl } from './theme.js?v=20261113h';
 import { featureAllowed, pathFeature } from './lib/features.js?v=20261113h';
 import { safeUrl } from './lib/blocks.js?v=20261113h';
+import { startDraws, stopDraws } from './lib/draws-live.js?v=20261113h';
 import { startPending, stopPending, paintPending, canApprove } from './lib/pending.js?v=20261113h';
 
 /** Cenário do herói: banner enviado pelo admin ou o cenário gerado (castelo ao entardecer). */
@@ -55,6 +56,7 @@ const syncPlayer = () => {
   const on = state.profile?.status === 'active' && shellKind === 'full';
   on ? mountPlayer() : unmountPlayer();
   if (on && canApprove()) { startPending(); paintPending(); } else stopPending();
+  if (on && featureAllowed('draws')) startDraws(); else stopDraws();
 };
 
 /** kind: 'full' (barra + rodapé) ou 'bare' (login e cadastro). */
@@ -96,6 +98,7 @@ export function renderShell(kind = 'full', force = false) {
       </nav>
     </div></header>
     <div id="pendBar" class="pendbar" hidden></div>
+    <div id="drawBar" class="pendbar drawbar" hidden></div>
     <main id="view"></main>
     <footer class="foot"><div class="orn" aria-hidden="true"><i></i></div>${esc(s.texts.footer || s.guild_name)}</footer>`;
 
