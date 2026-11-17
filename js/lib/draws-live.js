@@ -1,5 +1,5 @@
-import { sb, q } from '../supabase.js?v=20261113h';
-import { esc } from './util.js?v=20261113h';
+import { sb, q } from '../supabase.js?v=20261117a';
+import { esc } from './util.js?v=20261117a';
 
 /**
  * Faixa no topo de qualquer tela: "Sorteio ao vivo, assistir" (rolando agora ou começou há pouco)
@@ -13,7 +13,7 @@ const now = () => Date.now() + offset;
 const onSorteios = () => /^#?\/sorteios/.test(location.hash.replace(/^#/, '#'));
 
 async function drawDur(d) {
-  dur ||= (await import('../pages/sorteios.js?v=20261113h')).drawDur;
+  dur ||= (await import('../pages/sorteios.js?v=20261117a')).drawDur;
   try { return dur(d); } catch { return 30000; }
 }
 

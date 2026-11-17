@@ -1,7 +1,7 @@
-import { sb } from '../supabase.js?v=20261113h';
-import { state } from '../store.js?v=20261113h';
-import { esc, fmtTime, relDay, mainChar } from './util.js?v=20261113h';
-import { toast, errMsg } from './ui.js?v=20261113h';
+import { sb } from '../supabase.js?v=20261117a';
+import { state } from '../store.js?v=20261117a';
+import { esc, fmtTime, relDay, mainChar } from './util.js?v=20261117a';
+import { toast, errMsg } from './ui.js?v=20261117a';
 
 /** open | soon | closed | cancelled */
 export function rsvpState(ev) {

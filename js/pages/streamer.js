@@ -1,8 +1,8 @@
-import { state } from '../store.js?v=20261113h';
-import { esc } from '../lib/util.js?v=20261113h';
-import { empty } from '../lib/ui.js?v=20261113h';
-import { pauseRadio } from '../lib/player.js?v=20261113h';
-import { refreshStream } from '../lib/stream-live.js?v=20261113h';
+import { state } from '../store.js?v=20261117a';
+import { esc } from '../lib/util.js?v=20261117a';
+import { empty } from '../lib/ui.js?v=20261117a';
+import { pauseRadio } from '../lib/player.js?v=20261117a';
+import { refreshStream } from '../lib/stream-live.js?v=20261117a';
 
 export default async function streamer(root) {
   const t = state.raw?.twitch || {};

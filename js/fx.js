@@ -1,6 +1,6 @@
-import { state } from './store.js?v=20261113h';
-import { esc } from './lib/util.js?v=20261113h';
-import { logoUrl } from './theme.js?v=20261113h';
+import { state } from './store.js?v=20261117a';
+import { esc } from './lib/util.js?v=20261117a';
+import { logoUrl } from './theme.js?v=20261117a';
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 

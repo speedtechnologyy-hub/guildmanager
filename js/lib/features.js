@@ -1,5 +1,5 @@
-import { state } from '../store.js?v=20261113h';
-import { can } from './util.js?v=20261113h';
+import { state } from '../store.js?v=20261117a';
+import { can } from './util.js?v=20261117a';
 
 /** Funções que o Master liga e desliga no Estúdio. `route` é a página do roteador. */
 export const FEATURES = [

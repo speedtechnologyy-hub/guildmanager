@@ -1,5 +1,5 @@
-import { state } from '../store.js?v=20261113h';
-import { esc } from '../lib/util.js?v=20261113h';
+import { state } from '../store.js?v=20261117a';
+import { esc } from '../lib/util.js?v=20261117a';
 
 let deferred = null;
 addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferred = e; document.dispatchEvent(new Event('gm-installable')); });

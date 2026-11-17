@@ -1,4 +1,4 @@
-import { state } from '../store.js?v=20261113h';
+import { state } from '../store.js?v=20261117a';
 
 export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 export const $ = (sel, el = document) => el.querySelector(sel);

@@ -1,4 +1,4 @@
-import { state } from './store.js?v=20261113h';
+import { state } from './store.js?v=20261117a';
 
 export const CREST = 'assets/crest.svg';
 export const logoUrl = () => state.settings.logo_url || CREST;

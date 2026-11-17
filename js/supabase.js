@@ -1,5 +1,5 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.47.10/+esm';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=20261113h';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=20261117a';
 
 // Nenhuma ida ao servidor pode ficar pendurada para sempre: sem resposta em 15 s, a chamada falha e a tela avisa.
 // (Envio de imagens e funções do servidor ficam de fora, porque podem demorar mais.)

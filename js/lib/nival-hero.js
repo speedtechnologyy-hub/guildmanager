@@ -1,10 +1,10 @@
-import { state } from '../store.js?v=20261113h';
-import { esc, clsRgb, clsIcon, className, relDay, fmtTime } from './util.js?v=20261113h';
-import { rsvpButtons } from './rsvp.js?v=20261113h';
-import { toast } from './ui.js?v=20261113h';
-import { featureAllowed } from './features.js?v=20261113h';
-import { sceneHTML } from '../layout.js?v=20261113h';
-import { logoUrl } from '../theme.js?v=20261113h';
+import { state } from '../store.js?v=20261117a';
+import { esc, clsRgb, clsIcon, className, relDay, fmtTime } from './util.js?v=20261117a';
+import { rsvpButtons } from './rsvp.js?v=20261117a';
+import { toast } from './ui.js?v=20261117a';
+import { featureAllowed } from './features.js?v=20261117a';
+import { sceneHTML } from '../layout.js?v=20261117a';
+import { logoUrl } from '../theme.js?v=20261117a';
 
 /** cada personagem inclina o tom do herói: [matiz, saturação] */
 const TINT = [['2deg', 1.2], ['0deg', .42], ['6deg', 1.3], ['0deg', .2], ['0deg', .68]];

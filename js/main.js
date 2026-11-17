@@ -1,14 +1,14 @@
-import { sb } from './supabase.js?v=20261113h';
-import { state, loadSettings, loadProfile, loadGame, loadPages } from './store.js?v=20261113h';
-import { applyTheme, applyBrand } from './theme.js?v=20261113h';
-import { initEmbers, initPointer, runIntro } from './fx.js?v=20261113h';
-import { renderShell, updateNav, shellMode } from './layout.js?v=20261113h';
-import { routeFeature, featureAllowed, screenBlocks } from './lib/features.js?v=20261113h';
-import { renderBlocks } from './lib/blocks.js?v=20261113h';
-import { startLive, listenPreview, IS_PREVIEW } from './lib/live.js?v=20261113h';
-import { startTicker, tick, esc, $, can } from './lib/util.js?v=20261113h';
-import { loadingHTML, closeModal } from './lib/ui.js?v=20261113h';
-import { pageReveal } from './lib/intro.js?v=20261113h';
+import { sb } from './supabase.js?v=20261117a';
+import { state, loadSettings, loadProfile, loadGame, loadPages } from './store.js?v=20261117a';
+import { applyTheme, applyBrand } from './theme.js?v=20261117a';
+import { initEmbers, initPointer, runIntro } from './fx.js?v=20261117a';
+import { renderShell, updateNav, shellMode } from './layout.js?v=20261117a';
+import { routeFeature, featureAllowed, screenBlocks } from './lib/features.js?v=20261117a';
+import { renderBlocks } from './lib/blocks.js?v=20261117a';
+import { startLive, listenPreview, IS_PREVIEW } from './lib/live.js?v=20261117a';
+import { startTicker, tick, esc, $, can } from './lib/util.js?v=20261117a';
+import { loadingHTML, closeModal } from './lib/ui.js?v=20261117a';
+import { pageReveal } from './lib/intro.js?v=20261117a';
 
 // Cada rota carrega o seu módulo só quando é visitada.
 const ROUTES = [
@@ -47,7 +47,7 @@ async function go() {
   if (!state.session && !route?.pub) {
     if (path !== '/') return nav('#/');
     renderShell('bare');
-    const mod = await import('./pages/vitrine.js?v=20261113h');
+    const mod = await import('./pages/vitrine.js?v=20261117a');
     if (my === token) mod.default($('#view'));
     return;
   }
@@ -93,7 +93,7 @@ async function go() {
   }
 
   try {
-    const mod = await import(`./pages/${route.page}.js?v=20261113h`);
+    const mod = await import(`./pages/${route.page}.js?v=20261117a`);
     if (my !== token) return;
     const out = await mod.default(host, params);
     if (offNote && my === token) view.insertAdjacentHTML('afterbegin', '<div class="wrap"><div class="flag-off">Esta função está desativada ou restrita para os membros. Só você enxerga esta tela.</div></div>');

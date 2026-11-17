@@ -1,10 +1,10 @@
-import { sb, fn } from '../supabase.js?v=20261113h';
-import { state, loadProfile, loadGame } from '../store.js?v=20261113h';
-import { esc, $, maskPhone } from '../lib/util.js?v=20261113h';
-import { busy } from '../lib/ui.js?v=20261113h';
-import { sceneHTML } from '../layout.js?v=20261113h';
-import { logoUrl } from '../theme.js?v=20261113h';
-import { mountTurnstile } from '../lib/turnstile.js?v=20261113h';
+import { sb, fn } from '../supabase.js?v=20261117a';
+import { state, loadProfile, loadGame } from '../store.js?v=20261117a';
+import { esc, $, maskPhone } from '../lib/util.js?v=20261117a';
+import { busy } from '../lib/ui.js?v=20261117a';
+import { sceneHTML } from '../layout.js?v=20261117a';
+import { logoUrl } from '../theme.js?v=20261117a';
+import { mountTurnstile } from '../lib/turnstile.js?v=20261117a';
 
 export default async function signup(root) {
   const u = state.user;
