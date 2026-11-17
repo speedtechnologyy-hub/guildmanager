@@ -21,6 +21,9 @@ const socIcon = (k) => `<svg viewBox="0 0 24 24" width="24" height="24" fill="cu
 let sel = 0;
 
 /** Monta o herói do lobby no estilo Nival: título grande, palavras fantasma, cartão de vidro, galeria e holofote. */
+/** versões da foto já tingidas de azul (evita filtro + mistura de cor em tempo real, que travava) */
+const PRE = { '/assets/hero-fatality.jpg': '/assets/hero-fatality-blue.jpg' };
+
 export function nivalHero({ war, mine, going, people, open, cities, main, chars, nick }) {
   const g = state.settings.guild_name || 'Guild';
   const t = state.settings.texts || {};
@@ -42,9 +45,9 @@ export function nivalHero({ war, mine, going, people, open, cities, main, chars,
   // a mesma foto de hero que já está no site (banner do painel); sem foto, usa o cenário gerado
   const ph = state.settings.banner_url;
   const bg = ph
-    ? [`<div class="nv-bg" style="background-image:url('${esc(encodeURI(ph))}')"></div>`, `<div class="nv-bglit" style="background-image:url('${esc(encodeURI(ph))}')"></div>`]
+    ? [`<div class="nv-bg${PRE[ph] ? ' pre' : ''}" style="background-image:url('${esc(encodeURI(PRE[ph] || ph))}')"></div>`, `<div class="nv-bglit" style="background-image:url('${esc(encodeURI(ph))}')"></div>`]
     : [`<div class="nv-bg nv-bgscene">${sceneHTML('nv')}</div>`, `<div class="nv-bglit nv-bgscene">${sceneHTML('nv lit')}</div>`];
-  return `<div class="nv-bgwrap" aria-hidden="true">${bg[0]}<div class="nv-tint"></div><div class="nv-shade"></div>${bg[1]}<div class="spot-glow"></div></div><div class="nv-stage">
+  return `<div class="nv-bgwrap${PRE[ph] ? ' pre' : ''}" aria-hidden="true">${bg[0]}<div class="nv-tint"></div><div class="nv-shade"></div>${bg[1]}<div class="spot-glow"></div></div><div class="nv-stage">
     <h1 class="nv-h" id="home"><span class="nv-hl">${esc(g)} — a guerra</span><span class="nv-hl nv-hl2">${CHAIN}<span>começa na chamada</span></span></h1>
     <div class="nv-feats">${links.map(([p, l], i) => `<a class="nv-feat" href="#${p}"><span>${l}</span><b>/0${i + 1}</b></a>`).join('')}</div>
     ${main ? `<div class="nv-creator"><i class="nv-ver">${CHECK}</i><div><div>Por ${esc(main.nick)}</div><div class="nv-series">${esc(className(main.class_code))} · lv ${esc(String(main.level ?? ''))}</div></div></div>` : ''}
