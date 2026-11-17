@@ -368,3 +368,6 @@ html[data-skin="nival"] .nv-ghost { display: none; }
 html[data-skin="nival"] .nv-head .nv-bgwrap::after { display: none; }
 html[data-skin="nival"] .nv-creator, html[data-skin="nival"] .nv-creator div, html[data-skin="nival"] .nv-series { color: #fff; }
 html[data-skin="nival"] .nv-series { opacity: .85; }
+
+/* páginas internas: sem desfoque de fundo nos cartões (dezenas de cartões desfocados derrubavam a rolagem) */
+html[data-skin="nival"] #view *, html[data-skin="nival"] .pendbar, html[data-skin="nival"] .drawbar { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
