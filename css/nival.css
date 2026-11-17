@@ -323,9 +323,9 @@ html[data-skin="nival"] .nv-bgwrap { --sr: clamp(150px, 15vw, 250px); contain: s
 html[data-skin="nival"] .nv-bgwrap { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
 html[data-skin="nival"] .nv-bg, html[data-skin="nival"] .nv-bglit { position: absolute; inset: 0; background-size: cover; background-position: 48% 38%; }
 html[data-skin="nival"] .nv-bg { filter: grayscale(.9) contrast(1.08) brightness(.74) hue-rotate(var(--hero-hue, 0deg)) saturate(var(--hero-sat, 1)); transition: filter .5s ease; }
-html[data-skin="nival"] .nv-bglit { filter: saturate(1.1) brightness(.92); z-index: 1;
-  -webkit-mask-image: radial-gradient(circle var(--sr) at var(--sx, -9999px) var(--sy, -9999px), #000 0, #000 62%, rgba(0, 0, 0, .5) 80%, transparent 100%);
-  mask-image: radial-gradient(circle var(--sr) at var(--sx, -9999px) var(--sy, -9999px), #000 0, #000 62%, rgba(0, 0, 0, .5) 80%, transparent 100%); }
+html[data-skin="nival"] .nv-lens { position: absolute; left: 0; top: 0; z-index: 1; width: calc(var(--sr) * 2); height: calc(var(--sr) * 2); border-radius: 50%; overflow: hidden; transform: translate3d(-9999px, -9999px, 0); will-change: transform;
+  box-shadow: 0 0 0 1px rgba(170, 200, 255, .6), 0 0 70px rgba(80, 130, 255, .3); }
+html[data-skin="nival"] .nv-lens .nv-bglit { inset: auto; left: 0; top: 0; width: 100%; height: 100%; will-change: transform; filter: none; }
 html[data-skin="nival"] .nv-bgscene .scene { position: absolute; inset: 0; z-index: 0; }
 html[data-skin="nival"] .nv-bgscene .scene::after { display: none; }
 html[data-skin="nival"] .nv-bgscene .scene.lit { -webkit-mask-image: none; mask-image: none; --ember: #ff8a3d; --accent: #f3c66e; }
@@ -333,11 +333,9 @@ html[data-skin="nival"] .nv-bgscene .scene.lit { -webkit-mask-image: none; mask-
 html[data-skin="nival"] .nv-tint { position: absolute; inset: 0; background: #1b3f95; mix-blend-mode: color; opacity: .9; }
 html[data-skin="nival"] .nv-shade { position: absolute; inset: 0;
   background: linear-gradient(90deg, rgba(8, 18, 46, .78) 0%, rgba(8, 18, 46, .3) 52%, rgba(8, 18, 46, .6) 100%), linear-gradient(180deg, rgba(8, 18, 46, .55) 0%, transparent 24%, transparent 62%, #0a1636 100%); }
-html[data-skin="nival"] .nv-head .spot-glow { z-index: 0; }
 /* foto já tingida: sem filtro nem mistura em tempo real; o respirar vira só opacidade (roda na GPU) */
 html[data-skin="nival"] .nv-bg.pre { filter: hue-rotate(var(--hero-hue, 0deg)) saturate(var(--hero-sat, 1)); }
 html[data-skin="nival"] .nv-bgwrap.pre .nv-tint { display: none; }
-html[data-skin="nival"] .nv-bglit { filter: none; }
 html[data-skin="nival"] .nv-bgwrap::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; background: radial-gradient(60% 70% at 50% 58%, rgba(90, 140, 255, .2), transparent 72%); }
 html[data-skin="nival"] .nv-head.awake .nv-bgwrap::after { opacity: .55; }
 
@@ -348,12 +346,6 @@ html[data-skin="nival"] .nv-head.awake .nv-bgwrap::after { opacity: .55; }
 }
 
 /* brilho do spotlight em azul claro (sem o dourado do tema antigo) e texto fantasma mais discreto sobre a foto */
-html[data-skin="nival"] .nv-head .spot-glow {
-  z-index: 2;
-  background:
-    radial-gradient(circle var(--sr, 200px) at var(--sx, -9999px) var(--sy, -9999px), transparent calc(var(--sr, 200px) * .985 - 1px), rgba(170, 200, 255, .55) calc(var(--sr, 200px) * .985), transparent calc(var(--sr, 200px) * .985 + 1.5px)),
-    radial-gradient(circle calc(var(--sr, 200px) * 1.2) at var(--sx, -9999px) var(--sy, -9999px), rgba(80, 130, 255, .14), transparent 70%);
-}
 html[data-skin="nival"] .nv-ghost { color: rgba(143, 177, 255, .08); }
 
 
@@ -365,4 +357,14 @@ html[data-skin="nival"] .topbar::before { background: rgba(10, 22, 54, .84); bac
 html[data-skin="nival"] .pendbar, html[data-skin="nival"] .tabbar, html[data-skin="nival"] .who > button,
 html[data-skin="nival"] .nv-soc, html[data-skin="nival"] .nv-mat, html[data-skin="nival"] .nv-av, html[data-skin="nival"] .nv-count,
 html[data-skin="nival"] .nv-pill, html[data-skin="nival"] .nv-o { backdrop-filter: none; -webkit-backdrop-filter: none; }
-html[data-skin="nival"] .nv-head .nv-bglit, html[data-skin="nival"] .nv-head .nv-bg { will-change: auto; }
+
+
+/* ---------- foto do hero normal, sem azul por cima ---------- */
+html[data-skin="nival"] .nv-bg, html[data-skin="nival"] .nv-bg.pre { filter: none; transition: none; }
+html[data-skin="nival"] .nv-tint, html[data-skin="nival"] .nv-lens { display: none; }
+html[data-skin="nival"] .nv-shade { background: linear-gradient(180deg, rgba(8, 18, 46, .5) 0%, transparent 22%, transparent 68%, #0a1636 100%); }
+html[data-skin="nival"] .nv-feats, html[data-skin="nival"] .nv-creator, html[data-skin="nival"] .nv-ghost { text-shadow: 0 1px 10px rgba(0, 0, 0, .75), 0 0 2px rgba(0, 0, 0, .6); }
+html[data-skin="nival"] .nv-ghost { display: none; }
+html[data-skin="nival"] .nv-head .nv-bgwrap::after { display: none; }
+html[data-skin="nival"] .nv-creator, html[data-skin="nival"] .nv-creator div, html[data-skin="nival"] .nv-series { color: #fff; }
+html[data-skin="nival"] .nv-series { opacity: .85; }

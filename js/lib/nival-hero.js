@@ -22,7 +22,7 @@ let sel = 0;
 
 /** Monta o herói do lobby no estilo Nival: título grande, palavras fantasma, cartão de vidro, galeria e holofote. */
 /** versões da foto já tingidas de azul (evita filtro + mistura de cor em tempo real, que travava) */
-const PRE = { '/assets/hero-fatality.jpg': '/assets/hero-fatality-blue.jpg' };
+const PRE = {};   // foto original, sem tingir
 
 export function nivalHero({ war, mine, going, people, open, cities, main, chars, nick }) {
   const g = state.settings.guild_name || 'Guild';
@@ -45,16 +45,15 @@ export function nivalHero({ war, mine, going, people, open, cities, main, chars,
   // a mesma foto de hero que já está no site (banner do painel); sem foto, usa o cenário gerado
   const ph = state.settings.banner_url;
   const bg = ph
-    ? [`<div class="nv-bg${PRE[ph] ? ' pre' : ''}" style="background-image:url('${esc(encodeURI(PRE[ph] || ph))}')"></div>`, `<div class="nv-bglit" style="background-image:url('${esc(encodeURI(ph))}')"></div>`]
-    : [`<div class="nv-bg nv-bgscene">${sceneHTML('nv')}</div>`, `<div class="nv-bglit nv-bgscene">${sceneHTML('nv lit')}</div>`];
-  return `<div class="nv-bgwrap${PRE[ph] ? ' pre' : ''}" aria-hidden="true">${bg[0]}<div class="nv-tint"></div><div class="nv-shade"></div>${bg[1]}<div class="spot-glow"></div></div><div class="nv-stage">
-    <h1 class="nv-h" id="home"><span class="nv-hl">${esc(g)} — a guerra</span><span class="nv-hl nv-hl2">${CHAIN}<span>começa na chamada</span></span></h1>
+    ? [`<div class="nv-bg${PRE[ph] ? ' pre' : ''}" style="background-image:url('${esc(encodeURI(PRE[ph] || ph))}')"></div>`, '']
+    : [`<div class="nv-bg nv-bgscene">${sceneHTML('nv')}</div>`, ''];
+  return `<div class="nv-bgwrap${PRE[ph] ? ' pre' : ''}" aria-hidden="true">${bg[0]}<div class="nv-tint"></div><div class="nv-shade"></div>${bg[1]}</div><div class="nv-stage">
+    <h1 class="nv-sr" id="home" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">${esc(g)}</h1>
     <div class="nv-feats">${links.map(([p, l], i) => `<a class="nv-feat" href="#${p}"><span>${l}</span><b>/0${i + 1}</b></a>`).join('')}</div>
     ${main ? `<div class="nv-creator"><i class="nv-ver">${CHECK}</i><div><div>Por ${esc(main.nick)}</div><div class="nv-series">${esc(className(main.class_code))} · lv ${esc(String(main.level ?? ''))}</div></div></div>` : ''}
     <div class="nv-art">
       <div class="nv-ghost g1" aria-hidden="true">H<i class="nv-gap"></i>NRA</div>
       <div class="nv-ghost g2" aria-hidden="true">GUERRA</div>
-      <div class="nv-o" aria-hidden="true"><img src="${esc(logoUrl())}" alt=""></div>
     </div>
     ${war && mine === 'going' ? '' : `    <aside class="nv-card" aria-label="Próxima guerra">
       <div class="nv-top"><div class="nv-count"><strong>${people}</strong><small>guerreiros</small></div></div>
@@ -80,7 +79,7 @@ export function bindNival(head) {
     const r = st.getBoundingClientRect();
     m.x = e.clientX - r.left; m.y = e.clientY - r.top; last = performance.now();
   }, { passive: true });
-  head.addEventListener('pointerleave', () => { m.x = m.y = -9999; }, { passive: true });
+  head.addEventListener('pointerleave', () => { m.x = m.y = -9999; s.x = s.y = -9999; const l = head.querySelector('.nv-lens'); if (l) l.style.transform = 'translate3d(-9999px,-9999px,0)'; }, { passive: true });
   head.addEventListener('click', (e) => {
     const av = e.target.closest('[data-av]');
     if (av) { choose(head, +av.dataset.av); return; }
@@ -98,18 +97,24 @@ export function bindNival(head) {
         const w = st.offsetWidth, h = st.offsetHeight;
         m.x = w * (.5 + .3 * Math.sin(now / 2400)); m.y = h * (.42 + .2 * Math.sin(now / 1700 + 1));
       }
-      if (s.x < -5000 && m.x > -5000) { s.x = m.x; s.y = m.y; }   // chegou agora: aparece sob o cursor, sem voar de fora
+      let snapped = false;
+      if (s.x < -5000 && m.x > -5000) { s.x = m.x; s.y = m.y; snapped = true; }   // chegou agora: aparece sob o cursor, sem voar de fora
       const dx = m.x - s.x, dy = m.y - s.y;
-      if (Math.abs(dx) > .4 || Math.abs(dy) > .4) {   // parado: não mexe em nada
+      if (snapped || Math.abs(dx) > .4 || Math.abs(dy) > .4) {   // parado: não mexe em nada
         s.x += dx * .1; s.y += dy * .1;
-        // as variáveis ficam só na camada de fundo (não na seção inteira), para o navegador recalcular pouca coisa por quadro
-        const bw = st.querySelector('.nv-bgwrap') || st;
-        bw.style.setProperty('--sx', s.x.toFixed(1) + 'px'); bw.style.setProperty('--sy', s.y.toFixed(1) + 'px');
+        // a "lente" é um círculo pequeno que se move só com transform (GPU); a foto em cores dentro dela anda ao contrário
+        const lens = st.querySelector('.nv-lens'), inner = lens?.firstElementChild;
+        if (lens) {
+          const bw = st.querySelector('.nv-bgwrap'), R = lens.offsetWidth / 2;
+          if (inner.offsetWidth !== bw.offsetWidth || inner.offsetHeight !== bw.offsetHeight) { inner.style.width = bw.offsetWidth + 'px'; inner.style.height = bw.offsetHeight + 'px'; }
+          const lx = s.x - R, ly = s.y - R;
+          lens.style.transform = `translate3d(${lx.toFixed(1)}px,${ly.toFixed(1)}px,0)`;
+          inner.style.transform = `translate3d(${(-lx).toFixed(1)}px,${(-ly).toFixed(1)}px,0)`;
+        }
       }
     }
     raf = requestAnimationFrame(loop);
   }
-  if (!reduce) raf = requestAnimationFrame(loop);
   return () => { alive = false; cancelAnimationFrame(raf); };
 }
 
