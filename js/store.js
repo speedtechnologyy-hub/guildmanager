@@ -1,4 +1,4 @@
-import { sb, q } from './supabase.js?v=20261122a';
+import { sb, q } from './supabase.js?v=20261122c';
 
 export const state = {
   session: null, user: null, profile: null, priv: null, chars: [], perms: {},

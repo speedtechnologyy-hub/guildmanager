@@ -1,8 +1,8 @@
-import { esc } from '../../../lib/util.js?v=20261122a';
-import { PRESET_FONTS } from '../../../theme.js?v=20261122a';
-import { FEATURES, EFFECTS, LOBBY_BLOCKS, SCREENS } from '../../../lib/features.js?v=20261122a';
-import { fText, fArea, fSelect, fCheck, fRange, fColor, fImage, grip, heroFrame } from './kit.js?v=20261122a';
-import { blockList } from './blocks-ui.js?v=20261122a';
+import { esc } from '../../../lib/util.js?v=20261122c';
+import { PRESET_FONTS } from '../../../theme.js?v=20261122c';
+import { FEATURES, EFFECTS, LOBBY_BLOCKS, SCREENS } from '../../../lib/features.js?v=20261122c';
+import { fText, fArea, fSelect, fCheck, fRange, fColor, fImage, grip, heroFrame } from './kit.js?v=20261122c';
+import { blockList } from './blocks-ui.js?v=20261122c';
 
 const TZ = ['America/Sao_Paulo', 'America/Manaus', 'America/Bahia', 'America/Fortaleza', 'America/Cuiaba', 'America/Rio_Branco', 'Europe/Lisbon'];
 const ROLE3 = [['member', 'Todos'], ['leader', 'Sub Líderes'], ['master', 'Master'], ['owner', 'Só Admin']];

@@ -1,8 +1,8 @@
-import { sb, q } from '../supabase.js?v=20261122a';
-import { state } from '../store.js?v=20261122a';
-import { esc, clsBadge, clsRgb, clsIcon, crown, mainChar, lineageName } from '../lib/util.js?v=20261122a';
-import { empty } from '../lib/ui.js?v=20261122a';
-import { attendanceStats } from '../lib/stats.js?v=20261122a';
+import { sb, q } from '../supabase.js?v=20261122c';
+import { state } from '../store.js?v=20261122c';
+import { esc, clsBadge, clsRgb, clsIcon, crown, mainChar, lineageName } from '../lib/util.js?v=20261122c';
+import { empty } from '../lib/ui.js?v=20261122c';
+import { attendanceStats } from '../lib/stats.js?v=20261122c';
 
 export default async function ranking(root) {
   root.innerHTML = `<div class="wrap"><div class="page-head"><h1>Ranking</h1><p>Presença nas guerras realizadas. Só conta guerra com chamada marcada pela liderança.</p></div>

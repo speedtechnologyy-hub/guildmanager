@@ -1,6 +1,6 @@
-import { state } from '../store.js?v=20261122a';
-import { esc } from '../lib/util.js?v=20261122a';
-import { plate, empty } from '../lib/ui.js?v=20261122a';
+import { state } from '../store.js?v=20261122c';
+import { esc } from '../lib/util.js?v=20261122c';
+import { plate, empty } from '../lib/ui.js?v=20261122c';
 
 export default async function voice(root) {
   const d = state.settings.discord || {};

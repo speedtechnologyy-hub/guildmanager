@@ -1,9 +1,9 @@
-import { sb } from '../supabase.js?v=20261122a';
-import { esc, $ } from '../lib/util.js?v=20261122a';
-import { busy } from '../lib/ui.js?v=20261122a';
-import { sceneHTML } from '../layout.js?v=20261122a';
-import { mountTurnstile } from '../lib/turnstile.js?v=20261122a';
-import { logoUrl } from '../theme.js?v=20261122a';
+import { sb } from '../supabase.js?v=20261122c';
+import { esc, $ } from '../lib/util.js?v=20261122c';
+import { busy } from '../lib/ui.js?v=20261122c';
+import { sceneHTML } from '../layout.js?v=20261122c';
+import { mountTurnstile } from '../lib/turnstile.js?v=20261122c';
+import { logoUrl } from '../theme.js?v=20261122c';
 
 /** Acesso reservado do Admin: e-mail e senha (rota oculta, fora do menu). */
 export default async function master(root) {

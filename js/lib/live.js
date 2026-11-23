@@ -1,5 +1,5 @@
-import { sb } from '../supabase.js?v=20261122a';
-import { state, setSetting, loadPages } from '../store.js?v=20261122a';
+import { sb } from '../supabase.js?v=20261122c';
+import { state, setSetting, loadPages } from '../store.js?v=20261122c';
 
 /** Chaves que mudam só o visual (CSS) e não pedem para redesenhar a página aberta. */
 const CSS_ONLY = new Set(['theme', 'custom_fonts', 'effects']);

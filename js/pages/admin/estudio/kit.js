@@ -1,4 +1,4 @@
-import { esc } from '../../../lib/util.js?v=20261122a';
+import { esc } from '../../../lib/util.js?v=20261122c';
 
 export const clone = (v) => (v === undefined ? undefined : JSON.parse(JSON.stringify(v)));
 export function getPath(o, path) {
@@ -72,7 +72,7 @@ export const heroFrame = (ctx, sfx) => {
   const u = ctx.get('banner_url') || '/assets/hero-fatality.jpg';
   const nm = sfx ? 'Celular' : 'Computador';
   return `<div class="hpos-grp ${sfx ? 'm' : 'd'}"><div class="stack-s"><h4 class="sh2">${nm}</h4>
-    ${fRange(ctx, 'theme.hero_zoom' + sfx, 'Zoom', { min: 50, max: 300, unit: '%' })}
+    ${fRange(ctx, 'theme.hero_zoom' + sfx, 'Zoom (100% = foto inteira preenchendo)', { min: 100, max: 300, unit: '%' })}
     ${fRange(ctx, 'theme.hero_x' + sfx, 'Esquerda ⇄ direita', { min: 0, max: 100, unit: '%' })}
     ${fRange(ctx, 'theme.hero_y' + sfx, 'Cima ⇅ baixo', { min: 0, max: 100, unit: '%' })}
     <button class="sbtn mini" type="button" data-hreset="${sfx}">Restaurar padrão</button></div>

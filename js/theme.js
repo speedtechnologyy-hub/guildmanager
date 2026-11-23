@@ -1,4 +1,4 @@
-import { state } from './store.js?v=20261122a';
+import { state } from './store.js?v=20261122c';
 
 export const CREST = 'assets/crest.svg';
 export const logoUrl = () => state.settings.logo_url || CREST;
@@ -105,10 +105,10 @@ export function applyTheme(theme = state.settings.theme) {
   set('--wrap-w', `${Math.min(1600, Math.max(860, +t.wrap_w || 1120))}px`);
   set('--hero-h', `${Math.min(100, Math.max(30, +t.hero_h || 92))}vh`);
   const n = (v, d, lo, hi) => Math.min(hi, Math.max(lo, Number.isFinite(+v) && v !== '' && v != null ? +v : d));
-  set('--hz', String(n(t.hero_zoom, 100, 50, 300) / 100));
+  set('--hz', String(n(t.hero_zoom, 100, 100, 300) / 100));
   set('--hx', `${n(t.hero_x, 72, 0, 100)}%`);
   set('--hy', `${n(t.hero_y, 94, 0, 100)}%`);
-  set('--hzm', String(n(t.hero_zoom_m, 100, 50, 300) / 100));
+  set('--hzm', String(n(t.hero_zoom_m, 100, 100, 300) / 100));
   set('--hxm', `${n(t.hero_x_m, 56, 0, 100)}%`);
   set('--hym', `${n(t.hero_y_m, 42, 0, 100)}%`);
   set('--hero-dim', String(Math.min(100, Math.max(0, t.hero_overlay ?? 40)) / 100));

@@ -1,7 +1,7 @@
-import { sb, q, fn } from '../../supabase.js?v=20261122a';
-import { state } from '../../store.js?v=20261122a';
-import { esc, can, fmtDateTime, fmtShort, fmtTime, clsBadge } from '../../lib/util.js?v=20261122a';
-import { toast, modal, closeModal, busy, errMsg, confirmBox, empty, formData } from '../../lib/ui.js?v=20261122a';
+import { sb, q, fn } from '../../supabase.js?v=20261122c';
+import { state } from '../../store.js?v=20261122c';
+import { esc, can, fmtDateTime, fmtShort, fmtTime, clsBadge } from '../../lib/util.js?v=20261122c';
+import { toast, modal, closeModal, busy, errMsg, confirmBox, empty, formData } from '../../lib/ui.js?v=20261122c';
 
 const VARS = ['nome', 'nick', 'classe', 'evento', 'horario', 'faltam', 'link', 'guild'];
 const STATE = { open: ['ok', 'Conectado'], connecting: ['', 'Aguardando leitura do QR'], close: ['bad', 'Desconectado'], not_created: ['bad', 'Instância ainda não criada'], error: ['bad', 'Não foi possível consultar'], unknown: ['', 'Desconhecido'] };

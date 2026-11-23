@@ -1,4 +1,4 @@
-import { esc, $ } from './util.js?v=20261122a';
+import { esc, $ } from './util.js?v=20261122c';
 
 /** Traduz erros técnicos do Supabase para mensagens que o membro entende. */
 export function errMsg(e) {

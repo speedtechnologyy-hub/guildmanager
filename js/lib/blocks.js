@@ -1,4 +1,4 @@
-import { esc, md, can } from './util.js?v=20261122a';
+import { esc, md, can } from './util.js?v=20261122c';
 
 /** Aceita só endereços seguros: interno (/ ou #), https, mailto. */
 export function safeUrl(u) {

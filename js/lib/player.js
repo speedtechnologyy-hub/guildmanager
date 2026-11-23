@@ -1,5 +1,5 @@
-import { state } from '../store.js?v=20261122a';
-import { esc } from './util.js?v=20261122a';
+import { state } from '../store.js?v=20261122c';
+import { esc } from './util.js?v=20261122c';
 
 const TABS = [['eletronica', 'Eletrônica'], ['funk', 'Funk'], ['trap', 'Trap'], ['rock', 'Rock'], ['sertanejo', 'Sertanejo'], ['jovempan', 'Jovem Pan'], ['gospel', 'Gospel'], ['pordeus', 'PorDeus.fm']];
 const okUrl = (u) => /^https:\/\/[^\s]+$/i.test(String(u || '').trim());

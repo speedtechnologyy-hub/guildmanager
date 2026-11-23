@@ -1,8 +1,8 @@
-import { sb, q } from '../../supabase.js?v=20261122a';
-import { state, loadGame } from '../../store.js?v=20261122a';
-import { canEdit } from '../../lib/admin-tabs.js?v=20261122a';
-import { esc, fmtDateTime, zonedToISO, can } from '../../lib/util.js?v=20261122a';
-import { toast, modal, closeModal, busy, errMsg, confirmBox, empty, formData } from '../../lib/ui.js?v=20261122a';
+import { sb, q } from '../../supabase.js?v=20261122c';
+import { state, loadGame } from '../../store.js?v=20261122c';
+import { canEdit } from '../../lib/admin-tabs.js?v=20261122c';
+import { esc, fmtDateTime, zonedToISO, can } from '../../lib/util.js?v=20261122c';
+import { toast, modal, closeModal, busy, errMsg, confirmBox, empty, formData } from '../../lib/ui.js?v=20261122c';
 
 const DAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
 const hm = (t) => String(t || '').slice(0, 5);

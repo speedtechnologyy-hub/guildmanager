@@ -1,13 +1,13 @@
-import { sb } from './supabase.js?v=20261122a';
-import { state } from './store.js?v=20261122a';
-import { mountPlayer, unmountPlayer } from './lib/player.js?v=20261122a';
-import { esc, can, clsRgb, initial, mainChar } from './lib/util.js?v=20261122a';
-import { logoUrl } from './theme.js?v=20261122a';
-import { featureAllowed, pathFeature } from './lib/features.js?v=20261122a';
-import { safeUrl } from './lib/blocks.js?v=20261122a';
-import { startStream, stopStream } from './lib/stream-live.js?v=20261122a';
-import { startDraws, stopDraws } from './lib/draws-live.js?v=20261122a';
-import { startPending, stopPending, paintPending, canApprove } from './lib/pending.js?v=20261122a';
+import { sb } from './supabase.js?v=20261122c';
+import { state } from './store.js?v=20261122c';
+import { mountPlayer, unmountPlayer } from './lib/player.js?v=20261122c';
+import { esc, can, clsRgb, initial, mainChar } from './lib/util.js?v=20261122c';
+import { logoUrl } from './theme.js?v=20261122c';
+import { featureAllowed, pathFeature } from './lib/features.js?v=20261122c';
+import { safeUrl } from './lib/blocks.js?v=20261122c';
+import { startStream, stopStream } from './lib/stream-live.js?v=20261122c';
+import { startDraws, stopDraws } from './lib/draws-live.js?v=20261122c';
+import { startPending, stopPending, paintPending, canApprove } from './lib/pending.js?v=20261122c';
 
 /** Cenário do herói: banner enviado pelo admin ou o cenário gerado (castelo ao entardecer). */
 export function sceneHTML(kind = 'hero') {

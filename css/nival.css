@@ -340,3 +340,4 @@ html[data-skin="nival"] #view a.hx-soc, html[data-skin="nival"] a.hx-soc { color
 .hpos-grp.m { grid-template-columns: minmax(0,1fr) 110px; }
 .hpos-grp + .hpos-grp { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(120,160,255,.15); }
 @media (max-width: 560px) { .hpos-grp, .hpos-grp.m { grid-template-columns: 1fr; } .hpos-grp .hf { max-width: 240px; } }
+
