@@ -1,8 +1,8 @@
-import { sb, q } from '../../supabase.js?v=20261122d';
-import { state } from '../../store.js?v=20261122d';
-import { esc, can, clsBadge, ROLE_LABEL, roleLabel, rank, fmtDate, debounce, mainChar } from '../../lib/util.js?v=20261122d';
-import { toast, modal, closeModal, busy, errMsg, confirmBox, empty, formData } from '../../lib/ui.js?v=20261122d';
-import { charsPanel } from '../../lib/characters.js?v=20261122d';
+import { sb, q } from '../../supabase.js?v=20261123a';
+import { state } from '../../store.js?v=20261123a';
+import { esc, can, clsBadge, ROLE_LABEL, roleLabel, rank, fmtDate, debounce, mainChar } from '../../lib/util.js?v=20261123a';
+import { toast, modal, closeModal, busy, errMsg, confirmBox, empty, formData } from '../../lib/ui.js?v=20261123a';
+import { charsPanel } from '../../lib/characters.js?v=20261123a';
 
 export default async function membros(el) {
   let people = [], term = '';

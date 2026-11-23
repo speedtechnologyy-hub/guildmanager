@@ -1,8 +1,8 @@
-import { sb, q } from '../../supabase.js?v=20261122d';
-import { state } from '../../store.js?v=20261122d';
-import { esc, can, copyText, fmtDateTime, ROLE_LABEL, roleLabel } from '../../lib/util.js?v=20261122d';
-import { refreshPending } from '../../lib/pending.js?v=20261122d';
-import { toast, modal, closeModal, busy, formData, confirmBox, empty, errMsg } from '../../lib/ui.js?v=20261122d';
+import { sb, q } from '../../supabase.js?v=20261123a';
+import { state } from '../../store.js?v=20261123a';
+import { esc, can, copyText, fmtDateTime, ROLE_LABEL, roleLabel } from '../../lib/util.js?v=20261123a';
+import { refreshPending } from '../../lib/pending.js?v=20261123a';
+import { toast, modal, closeModal, busy, formData, confirmBox, empty, errMsg } from '../../lib/ui.js?v=20261123a';
 
 const code = () => Array.from(crypto.getRandomValues(new Uint8Array(9)), (b) => 'abcdefghjkmnpqrstuvwxyz23456789'[b % 31]).join('');
 const base = () => (state.settings.site_url || location.origin + location.pathname).replace(/\/$/, '').replace(/index\.html$/, '');

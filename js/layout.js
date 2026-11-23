@@ -1,13 +1,13 @@
-import { sb } from './supabase.js?v=20261122d';
-import { state } from './store.js?v=20261122d';
-import { mountPlayer, unmountPlayer } from './lib/player.js?v=20261122d';
-import { esc, can, clsRgb, initial, mainChar } from './lib/util.js?v=20261122d';
-import { logoUrl } from './theme.js?v=20261122d';
-import { featureAllowed, pathFeature } from './lib/features.js?v=20261122d';
-import { safeUrl } from './lib/blocks.js?v=20261122d';
-import { startStream, stopStream } from './lib/stream-live.js?v=20261122d';
-import { startDraws, stopDraws } from './lib/draws-live.js?v=20261122d';
-import { startPending, stopPending, paintPending, canApprove } from './lib/pending.js?v=20261122d';
+import { sb } from './supabase.js?v=20261123a';
+import { state } from './store.js?v=20261123a';
+import { mountPlayer, unmountPlayer } from './lib/player.js?v=20261123a';
+import { esc, can, clsRgb, initial, mainChar } from './lib/util.js?v=20261123a';
+import { logoUrl } from './theme.js?v=20261123a';
+import { featureAllowed, pathFeature } from './lib/features.js?v=20261123a';
+import { safeUrl } from './lib/blocks.js?v=20261123a';
+import { startStream, stopStream } from './lib/stream-live.js?v=20261123a';
+import { startDraws, stopDraws } from './lib/draws-live.js?v=20261123a';
+import { startPending, stopPending, paintPending, canApprove } from './lib/pending.js?v=20261123a';
 
 /** Cenário do herói: banner enviado pelo admin ou o cenário gerado (castelo ao entardecer). */
 export function sceneHTML(kind = 'hero') {
@@ -99,6 +99,8 @@ export function renderShell(kind = 'full', force = false) {
   const tabs = menuItems().filter((i) => i.path && !i.url && i.path !== '/admin').slice(0, 4);
   const tabbar = `<nav class="tabbar" id="tabbar" aria-label="Navegação principal">${tabs.map((i) => `<a href="#${esc(i.path)}" data-path="${esc(i.path)}">${tabIcon(i.path)}<span>${esc(i.label)}</span></a>`).join('')}<button type="button" id="tabMore" aria-label="Abrir o menu completo">${tabIcon('')}<span>Mais</span></button></nav>`;
 
+  /* ao redesenhar o topo (ex.: o master salvou algo), mantém a página aberta e as barras de aviso no lugar */
+  const keep = force ? ['view', 'pendBar', 'drawBar'].map((id) => document.getElementById(id)).filter(Boolean) : [];
   app.innerHTML = `
     <header class="topbar"><div class="wrap">
       <a class="brand" href="#/"><img src="${esc(logoUrl())}" alt=""><b>${esc(s.guild_name)}</b></a>
@@ -123,6 +125,7 @@ export function renderShell(kind = 'full', force = false) {
     <main id="view"></main>
     <footer class="foot"><div class="orn" aria-hidden="true"><i></i></div>${esc(s.texts.footer || s.guild_name)}</footer>
     ${tabbar}`;
+  keep.forEach((old) => { const nu = document.getElementById(old.id); if (nu) nu.replaceWith(old); });
 
   const nav = document.getElementById('nav');
   const burger = app.querySelector('.burger');

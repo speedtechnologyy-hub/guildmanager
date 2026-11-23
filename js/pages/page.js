@@ -1,7 +1,7 @@
-import { sb, q } from '../supabase.js?v=20261122d';
-import { esc, md } from '../lib/util.js?v=20261122d';
-import { empty } from '../lib/ui.js?v=20261122d';
-import { renderBlocks } from '../lib/blocks.js?v=20261122d';
+import { sb, q } from '../supabase.js?v=20261123a';
+import { esc, md } from '../lib/util.js?v=20261123a';
+import { empty } from '../lib/ui.js?v=20261123a';
+import { renderBlocks } from '../lib/blocks.js?v=20261123a';
 
 export default async function page(root, [slug]) {
   const rows = await q(sb.from('cms_pages').select('*').eq('slug', slug).eq('published', true).limit(1));

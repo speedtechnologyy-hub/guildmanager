@@ -1,13 +1,13 @@
-import { sb, q } from '../../supabase.js?v=20261122d';
-import { state, DEFAULTS, normalize, setSetting } from '../../store.js?v=20261122d';
-import { esc, $ } from '../../lib/util.js?v=20261122d';
-import { loadAllPresetFonts } from '../../theme.js?v=20261122d';
-import { normalizeLobby } from '../../lib/features.js?v=20261122d';
-import { toast, errMsg, confirmBox } from '../../lib/ui.js?v=20261122d';
-import { clone, getPath, setPath, sortable, move, heroDefaults } from './estudio/kit.js?v=20261122d';
-import { SECTIONS, PRESETS, render } from './estudio/sections.js?v=20261122d';
-import { newBlock, newItem } from './estudio/blocks-ui.js?v=20261122d';
-import { pagesList, renderPages, renderWhats, renderBackup, renderTeam, setSubLeader, savePerm, setMaster } from './estudio/extra.js?v=20261122d';
+import { sb, q } from '../../supabase.js?v=20261123a';
+import { state, DEFAULTS, normalize, setSetting } from '../../store.js?v=20261123a';
+import { esc, $ } from '../../lib/util.js?v=20261123a';
+import { loadAllPresetFonts } from '../../theme.js?v=20261123a';
+import { normalizeLobby } from '../../lib/features.js?v=20261123a';
+import { toast, errMsg, confirmBox } from '../../lib/ui.js?v=20261123a';
+import { clone, getPath, setPath, sortable, move, heroDefaults } from './estudio/kit.js?v=20261123a';
+import { SECTIONS, PRESETS, render } from './estudio/sections.js?v=20261123a';
+import { newBlock, newItem } from './estudio/blocks-ui.js?v=20261123a';
+import { pagesList, renderPages, renderWhats, renderBackup, renderTeam, setSubLeader, savePerm, setMaster } from './estudio/extra.js?v=20261123a';
 
 /** Chaves de site_settings que o Estúdio controla (rascunho + publicação). */
 const KEYS = ['admin_access', 'theme', 'texts', 'menu', 'features', 'effects', 'layouts', 'custom_fonts', 'guild_name', 'logo_url', 'favicon_url', 'banner_url', 'login_bg_url', 'vitrine_url', 'app_bg_url', 'discord', 'music', 'timezone', 'site_url'];
@@ -125,7 +125,7 @@ export default async function estudio(root) {
       sortable(box, (f, t) => { move(c.get(path), f, t); commit(); draw(); });
     });
     panel.scrollTop = top;
-    if (ui.section === 'whatsapp') (await import('./avisos.js?v=20261122d')).default($('#wa', panel));
+    if (ui.section === 'whatsapp') (await import('./avisos.js?v=20261123a')).default($('#wa', panel));
   }
 
   /* ---------- eventos do painel ---------- */

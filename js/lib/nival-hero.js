@@ -1,10 +1,10 @@
-import { state } from '../store.js?v=20261122d';
-import { esc, clsRgb, clsIcon, className, relDay, fmtTime } from './util.js?v=20261122d';
-import { rsvpButtons } from './rsvp.js?v=20261122d';
-import { toast } from './ui.js?v=20261122d';
-import { featureAllowed } from './features.js?v=20261122d';
-import { sceneHTML } from '../layout.js?v=20261122d';
-import { logoUrl } from '../theme.js?v=20261122d';
+import { state } from '../store.js?v=20261123a';
+import { esc, clsRgb, clsIcon, className, relDay, fmtTime } from './util.js?v=20261123a';
+import { rsvpButtons } from './rsvp.js?v=20261123a';
+import { toast } from './ui.js?v=20261123a';
+import { featureAllowed } from './features.js?v=20261123a';
+import { sceneHTML } from '../layout.js?v=20261123a';
+import { logoUrl } from '../theme.js?v=20261123a';
 
 const SOC = {
   discord: '<path d="M7.5 7.2A12 12 0 0 1 12 6c1.6 0 3 .3 4.5 1.2 1.2 1.7 2.3 4.4 2.5 8-1.1.9-2.3 1.4-3.6 1.8l-.9-1.5c.5-.2 1-.4 1.4-.7-.9-.5-2-.8-3.9-.8s-3 .3-3.9.8c.4.3.9.5 1.4.7l-.9 1.5C6.3 16.600 5.100 16.100 4 15.200c.2-3.600 1.300-6.300 2.500-8 .3-.1.700-.1 1-.0Z M9.700 11.800a1.100 1.300 0 1 0 0 2.600 1.100 1.300 0 0 0 0-2.600Zm4.600 0a1.100 1.300 0 1 0 0 2.600 1.100 1.300 0 0 0 0-2.600Z"/>',

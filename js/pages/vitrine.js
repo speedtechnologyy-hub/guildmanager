@@ -1,6 +1,6 @@
-import { state } from '../store.js?v=20261122d';
-import { esc } from '../lib/util.js?v=20261122d';
-import { sceneHTML } from '../layout.js?v=20261122d';
+import { state } from '../store.js?v=20261123a';
+import { esc } from '../lib/util.js?v=20261123a';
+import { sceneHTML } from '../layout.js?v=20261123a';
 
 /** Domínio puro, sem conta: só o banner em tela cheia. Sem botões nem menu. */
 export default function vitrine(root) {
