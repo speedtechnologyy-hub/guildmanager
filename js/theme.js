@@ -1,4 +1,4 @@
-import { state } from './store.js?v=20261122c';
+import { state } from './store.js?v=20261122d';
 
 export const CREST = 'assets/crest.svg';
 export const logoUrl = () => state.settings.logo_url || CREST;
@@ -111,6 +111,8 @@ export function applyTheme(theme = state.settings.theme) {
   set('--hzm', String(n(t.hero_zoom_m, 100, 100, 300) / 100));
   set('--hxm', `${n(t.hero_x_m, 56, 0, 100)}%`);
   set('--hym', `${n(t.hero_y_m, 42, 0, 100)}%`);
+  root.toggleAttribute('data-hfit', t.hero_fit === 'contain');
+  root.toggleAttribute('data-hfit-m', t.hero_fit_m === 'contain');
   set('--hero-dim', String(Math.min(100, Math.max(0, t.hero_overlay ?? 40)) / 100));
   set('--app-bg-dim', String(Math.min(100, Math.max(0, t.app_bg_dim ?? 70)) / 100));
   set('--login-dim', String(Math.min(100, Math.max(0, t.login_dim ?? 55)) / 100));

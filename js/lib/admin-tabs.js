@@ -1,5 +1,5 @@
-import { state } from '../store.js?v=20261122c';
-import { can } from './util.js?v=20261122c';
+import { state } from '../store.js?v=20261122d';
+import { can } from './util.js?v=20261122d';
 
 /** Áreas do painel. `db` = o banco também barra quem não tem permissão (não só a tela). */
 export const GROUPS = ['Guild', 'Guerra', 'Comunicação', 'Site'];

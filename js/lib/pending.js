@@ -1,8 +1,8 @@
-import { sb, q } from '../supabase.js?v=20261122c';
-import { state } from '../store.js?v=20261122c';
-import { esc, can, fmtDateTime } from './util.js?v=20261122c';
-import { toast, modal, closeModal, errMsg } from './ui.js?v=20261122c';
-import { levelOf } from './admin-tabs.js?v=20261122c';
+import { sb, q } from '../supabase.js?v=20261122d';
+import { state } from '../store.js?v=20261122d';
+import { esc, can, fmtDateTime } from './util.js?v=20261122d';
+import { toast, modal, closeModal, errMsg } from './ui.js?v=20261122d';
+import { levelOf } from './admin-tabs.js?v=20261122d';
 
 /** Quem vê o aviso: Admin, Master e sub líderes com acesso de edição em "Membros". */
 export const canApprove = () => state.profile?.status === 'active' && can('leader') && levelOf('membros') >= 2;

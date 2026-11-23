@@ -1,5 +1,5 @@
-import { fn } from '../supabase.js?v=20261122c';
-import { state } from '../store.js?v=20261122c';
+import { fn } from '../supabase.js?v=20261122d';
+import { state } from '../store.js?v=20261122d';
 
 /** Confere de tempos em tempos se o streamer está ao vivo e põe uma bolinha vermelha no item "Streamer" do menu. */
 let timer = 0;

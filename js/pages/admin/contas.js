@@ -1,10 +1,10 @@
-import { sb, q } from '../../supabase.js?v=20261122c';
-import { state } from '../../store.js?v=20261122c';
-import { esc, can, fmtDate, roleLabel, ROLE_LABEL, initial, mainChar, crown } from '../../lib/util.js?v=20261122c';
-import { refreshPending } from '../../lib/pending.js?v=20261122c';
-import { toast, modal, closeModal, confirmBox, errMsg, empty } from '../../lib/ui.js?v=20261122c';
-import { GRANTABLE, LEVELS, canEdit, globalLevel, levelName } from '../../lib/admin-tabs.js?v=20261122c';
-import { savePerm } from './estudio/extra.js?v=20261122c';
+import { sb, q } from '../../supabase.js?v=20261122d';
+import { state } from '../../store.js?v=20261122d';
+import { esc, can, fmtDate, roleLabel, ROLE_LABEL, initial, mainChar, crown } from '../../lib/util.js?v=20261122d';
+import { refreshPending } from '../../lib/pending.js?v=20261122d';
+import { toast, modal, closeModal, confirmBox, errMsg, empty } from '../../lib/ui.js?v=20261122d';
+import { GRANTABLE, LEVELS, canEdit, globalLevel, levelName } from '../../lib/admin-tabs.js?v=20261122d';
+import { savePerm } from './estudio/extra.js?v=20261122d';
 
 const STATUS = { pending: ['Aguardando', 'warn'], active: ['Ativo', 'ok'], inactive: ['Inativo', ''], banned: ['Bloqueado', 'bad'] };
 const FILTERS = [['all', 'Todos'], ['pending', 'Aguardando'], ['active', 'Ativos'], ['blocked', 'Bloqueados']];

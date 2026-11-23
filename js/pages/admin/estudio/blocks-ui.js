@@ -1,6 +1,6 @@
-import { esc } from '../../../lib/util.js?v=20261122c';
-import { BLOCK_TYPES } from '../../../lib/blocks.js?v=20261122c';
-import { fText, fArea, fSelect, fImage, fRange, grip, uid } from './kit.js?v=20261122c';
+import { esc } from '../../../lib/util.js?v=20261122d';
+import { BLOCK_TYPES } from '../../../lib/blocks.js?v=20261122d';
+import { fText, fArea, fSelect, fImage, fRange, grip, uid } from './kit.js?v=20261122d';
 
 const ROLE_OPTS = [['member', 'Todos'], ['leader', 'Sub Líderes'], ['master', 'Master'], ['owner', 'Só Admin']];
 

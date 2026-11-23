@@ -1,13 +1,13 @@
-import { sb, q } from '../../supabase.js?v=20261122c';
-import { state, DEFAULTS, normalize, setSetting } from '../../store.js?v=20261122c';
-import { esc, $ } from '../../lib/util.js?v=20261122c';
-import { loadAllPresetFonts } from '../../theme.js?v=20261122c';
-import { normalizeLobby } from '../../lib/features.js?v=20261122c';
-import { toast, errMsg, confirmBox } from '../../lib/ui.js?v=20261122c';
-import { clone, getPath, setPath, sortable, move, heroDefaults } from './estudio/kit.js?v=20261122c';
-import { SECTIONS, PRESETS, render } from './estudio/sections.js?v=20261122c';
-import { newBlock, newItem } from './estudio/blocks-ui.js?v=20261122c';
-import { pagesList, renderPages, renderWhats, renderBackup, renderTeam, setSubLeader, savePerm, setMaster } from './estudio/extra.js?v=20261122c';
+import { sb, q } from '../../supabase.js?v=20261122d';
+import { state, DEFAULTS, normalize, setSetting } from '../../store.js?v=20261122d';
+import { esc, $ } from '../../lib/util.js?v=20261122d';
+import { loadAllPresetFonts } from '../../theme.js?v=20261122d';
+import { normalizeLobby } from '../../lib/features.js?v=20261122d';
+import { toast, errMsg, confirmBox } from '../../lib/ui.js?v=20261122d';
+import { clone, getPath, setPath, sortable, move, heroDefaults } from './estudio/kit.js?v=20261122d';
+import { SECTIONS, PRESETS, render } from './estudio/sections.js?v=20261122d';
+import { newBlock, newItem } from './estudio/blocks-ui.js?v=20261122d';
+import { pagesList, renderPages, renderWhats, renderBackup, renderTeam, setSubLeader, savePerm, setMaster } from './estudio/extra.js?v=20261122d';
 
 /** Chaves de site_settings que o Estúdio controla (rascunho + publicação). */
 const KEYS = ['admin_access', 'theme', 'texts', 'menu', 'features', 'effects', 'layouts', 'custom_fonts', 'guild_name', 'logo_url', 'favicon_url', 'banner_url', 'login_bg_url', 'vitrine_url', 'app_bg_url', 'discord', 'music', 'timezone', 'site_url'];
@@ -125,7 +125,7 @@ export default async function estudio(root) {
       sortable(box, (f, t) => { move(c.get(path), f, t); commit(); draw(); });
     });
     panel.scrollTop = top;
-    if (ui.section === 'whatsapp') (await import('./avisos.js?v=20261122c')).default($('#wa', panel));
+    if (ui.section === 'whatsapp') (await import('./avisos.js?v=20261122d')).default($('#wa', panel));
   }
 
   /* ---------- eventos do painel ---------- */
@@ -167,7 +167,7 @@ export default async function estudio(root) {
   panel.addEventListener('pointerup', hend); panel.addEventListener('pointercancel', hend);
   panel.addEventListener('click', (e) => {
     const b = e.target.closest('[data-hreset]'); if (!b) return;
-    const sfx = b.dataset.hreset, k = hp(sfx), d = heroDefaults(sfx);
+    const sfx = b.dataset.hreset, k = hp(sfx), d = heroDefaults(sfx, c.get('theme.hero_fit' + sfx));
     c.set(k.z, d[0]); c.set(k.x, d[1]); c.set(k.y, d[2]);
     hpSync(b.closest('.hpos-grp'), sfx); commit();
   });
@@ -181,6 +181,10 @@ export default async function estudio(root) {
     if (t.dataset.pp) { try { await savePerm(t.dataset.pp, t.dataset.tab, t.value); toast('Acesso atualizado.', 'ok'); } catch (err) { toast(errMsg(err), 'bad'); } }
     if (t.dataset.addmaster != null && t.value) { try { await setMaster(t.value, true); toast('Master adicionado.', 'ok'); } catch (err) { toast(errMsg(err), 'bad'); } draw(); }
     if (t.dataset.subslot) { try { await setSubLeader(+t.dataset.subslot, t.value); toast('Sub líder atualizado.', 'ok'); } catch (err) { toast(errMsg(err), 'bad'); } draw(); }
+    if (/^theme\.hero_fit/.test(t.dataset.p || '')) {
+      const sfx = t.dataset.p.endsWith('_m') ? '_m' : '', k = hp(sfx), d = heroDefaults(sfx, t.value);
+      c.set(k.z, d[0]); c.set(k.x, d[1]); c.set(k.y, d[2]); commit(); draw(); return;
+    }
     if (t.dataset.fx) { c.set(`effects.${t.dataset.fx}`, t.checked); commit(); }
     if (t.dataset.dest != null) {
       const m = draft.menu[+t.dataset.dest];

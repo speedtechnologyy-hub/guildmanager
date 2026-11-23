@@ -1,9 +1,9 @@
-import { sb, q } from '../../../supabase.js?v=20261122c';
-import { esc } from '../../../lib/util.js?v=20261122c';
-import { fText, fArea, fSelect, fCheck, fImage } from './kit.js?v=20261122c';
-import { blockList } from './blocks-ui.js?v=20261122c';
-import { GRANTABLE, LEVELS } from '../../../lib/admin-tabs.js?v=20261122c';
-import { can } from '../../../lib/util.js?v=20261122c';
+import { sb, q } from '../../../supabase.js?v=20261122d';
+import { esc } from '../../../lib/util.js?v=20261122d';
+import { fText, fArea, fSelect, fCheck, fImage } from './kit.js?v=20261122d';
+import { blockList } from './blocks-ui.js?v=20261122d';
+import { GRANTABLE, LEVELS } from '../../../lib/admin-tabs.js?v=20261122d';
+import { can } from '../../../lib/util.js?v=20261122d';
 
 const head = (t, d) => `<h3 class="sh">${esc(t)}</h3>${d ? `<p class="muted small">${d}</p>` : ''}`;
 

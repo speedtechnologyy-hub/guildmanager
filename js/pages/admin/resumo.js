@@ -1,7 +1,7 @@
-import { sb, q } from '../../supabase.js?v=20261122c';
-import { state } from '../../store.js?v=20261122c';
-import { esc, can, clsRgb, mainChar, fmtShort } from '../../lib/util.js?v=20261122c';
-import { attendanceStats } from '../../lib/stats.js?v=20261122c';
+import { sb, q } from '../../supabase.js?v=20261122d';
+import { state } from '../../store.js?v=20261122d';
+import { esc, can, clsRgb, mainChar, fmtShort } from '../../lib/util.js?v=20261122d';
+import { attendanceStats } from '../../lib/stats.js?v=20261122d';
 
 function donut(parts) {
   const total = parts.reduce((a, p) => a + p.n, 0) || 1; let acc = 0; const R = 15.9155;

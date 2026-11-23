@@ -1,10 +1,10 @@
-import { state } from '../store.js?v=20261122c';
-import { esc, clsRgb, clsIcon, className, relDay, fmtTime } from './util.js?v=20261122c';
-import { rsvpButtons } from './rsvp.js?v=20261122c';
-import { toast } from './ui.js?v=20261122c';
-import { featureAllowed } from './features.js?v=20261122c';
-import { sceneHTML } from '../layout.js?v=20261122c';
-import { logoUrl } from '../theme.js?v=20261122c';
+import { state } from '../store.js?v=20261122d';
+import { esc, clsRgb, clsIcon, className, relDay, fmtTime } from './util.js?v=20261122d';
+import { rsvpButtons } from './rsvp.js?v=20261122d';
+import { toast } from './ui.js?v=20261122d';
+import { featureAllowed } from './features.js?v=20261122d';
+import { sceneHTML } from '../layout.js?v=20261122d';
+import { logoUrl } from '../theme.js?v=20261122d';
 
 const SOC = {
   discord: '<path d="M7.5 7.2A12 12 0 0 1 12 6c1.6 0 3 .3 4.5 1.2 1.2 1.7 2.3 4.4 2.5 8-1.1.9-2.3 1.4-3.6 1.8l-.9-1.5c.5-.2 1-.4 1.4-.7-.9-.5-2-.8-3.9-.8s-3 .3-3.9.8c.4.3.9.5 1.4.7l-.9 1.5C6.3 16.600 5.100 16.100 4 15.200c.2-3.600 1.300-6.300 2.500-8 .3-.1.700-.1 1-.0Z M9.700 11.800a1.100 1.300 0 1 0 0 2.600 1.100 1.300 0 0 0 0-2.600Zm4.600 0a1.100 1.300 0 1 0 0 2.600 1.100 1.300 0 0 0 0-2.600Z"/>',
@@ -44,7 +44,7 @@ export function nivalHero({ war, mine, going, people, open, cities, nick }) {
     ? `<a class="hx-status ok" href="#/guerras"><span class="hx-tick" aria-hidden="true">✓</span><span><b>Presença confirmada</b><small>${esc(war.event_types?.name || 'Guerra')} · <span data-cd="${war.starts_at}" data-done="é agora">--</span></small></span></a>`
     : !war ? `<a class="hx-status" href="#/guerras"><span><b>Sem guerra marcada</b><small>Ver guerras anteriores</small></span></a>` : '';
 
-  return `<div class="nv-bgwrap" aria-hidden="true">${bg}<div class="nv-shade"></div></div>
+  return `<div class="nv-bgwrap" aria-hidden="true"${ph ? ` style="--bgimg:url('${esc(encodeURI(ph))}')"` : ''}>${bg}<div class="nv-shade"></div></div>
   <div class="hx">
     <div class="hx-left">
       <p class="hx-hi">Salve, <b>${esc(nick)}</b></p>

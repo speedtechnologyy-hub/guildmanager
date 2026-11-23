@@ -1,7 +1,7 @@
-import { sb, q } from '../supabase.js?v=20261122c';
-import { state } from '../store.js?v=20261122c';
-import { esc, can, clsRgb, mainChar, fmtDateTime } from '../lib/util.js?v=20261122c';
-import { plate, empty, loadingHTML, modal, closeModal, confirmBox, toast, busy, formData } from '../lib/ui.js?v=20261122c';
+import { sb, q } from '../supabase.js?v=20261122d';
+import { state } from '../store.js?v=20261122d';
+import { esc, can, clsRgb, mainChar, fmtDateTime } from '../lib/util.js?v=20261122d';
+import { plate, empty, loadingHTML, modal, closeModal, confirmBox, toast, busy, formData } from '../lib/ui.js?v=20261122d';
 
 const MODES = {
   roleta: { name: 'Roleta', icon: '🎡', desc: 'Uma roda gira e para no vencedor, um de cada vez.' },

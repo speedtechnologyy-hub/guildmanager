@@ -1,8 +1,8 @@
-import { sb, q, fn } from '../supabase.js?v=20261122c';
-import { state, loadProfile } from '../store.js?v=20261122c';
-import { esc, $, maskPhone, fmtPhone } from '../lib/util.js?v=20261122c';
-import { plate, busy, toast, errMsg, formData } from '../lib/ui.js?v=20261122c';
-import { charsPanel } from '../lib/characters.js?v=20261122c';
+import { sb, q, fn } from '../supabase.js?v=20261122d';
+import { state, loadProfile } from '../store.js?v=20261122d';
+import { esc, $, maskPhone, fmtPhone } from '../lib/util.js?v=20261122d';
+import { plate, busy, toast, errMsg, formData } from '../lib/ui.js?v=20261122d';
+import { charsPanel } from '../lib/characters.js?v=20261122d';
 
 export default async function profile(root) {
   const priv = (await q(sb.from('profile_private').select('*').eq('id', state.user.id)))[0] || {};

@@ -1,8 +1,8 @@
-import { sb, q } from '../supabase.js?v=20261122c';
-import { state } from '../store.js?v=20261122c';
-import { esc, clsBadge, clsRgb, clsIcon, crown, lineageName, className, mainChar, debounce, pubRoleLabel, fmtDate } from '../lib/util.js?v=20261122c';
-import { empty, modal } from '../lib/ui.js?v=20261122c';
-import { attendanceStats } from '../lib/stats.js?v=20261122c';
+import { sb, q } from '../supabase.js?v=20261122d';
+import { state } from '../store.js?v=20261122d';
+import { esc, clsBadge, clsRgb, clsIcon, crown, lineageName, className, mainChar, debounce, pubRoleLabel, fmtDate } from '../lib/util.js?v=20261122d';
+import { empty, modal } from '../lib/ui.js?v=20261122d';
+import { attendanceStats } from '../lib/stats.js?v=20261122d';
 
 export default async function members(root) {
   const [people, att] = await Promise.all([

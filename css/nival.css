@@ -341,3 +341,14 @@ html[data-skin="nival"] #view a.hx-soc, html[data-skin="nival"] a.hx-soc { color
 .hpos-grp + .hpos-grp { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(120,160,255,.15); }
 @media (max-width: 560px) { .hpos-grp, .hpos-grp.m { grid-template-columns: 1fr; } .hpos-grp .hf { max-width: 240px; } }
 
+
+/* Ajuste "foto inteira": mostra a imagem sem cortar; as sobras são preenchidas com a própria foto desfocada */
+@media (min-width: 761px) {
+  html[data-skin="nival"][data-hfit] .nv-bg { background-size: contain; background-repeat: no-repeat; }
+  html[data-skin="nival"][data-hfit] .nv-bgwrap::before { content: ''; position: absolute; inset: -40px; background: var(--bgimg) center / cover; filter: blur(28px) brightness(.6) saturate(1.1); }
+}
+@media (max-width: 760px) {
+  html[data-skin="nival"][data-hfit-m] .nv-bg { background-size: contain; background-repeat: no-repeat; }
+  html[data-skin="nival"][data-hfit-m] .nv-bgwrap::before { content: ''; position: absolute; inset: -40px -40px auto -40px; height: calc(clamp(400px, 112vw, 560px) + 80px); background: var(--bgimg) center / cover; filter: blur(28px) brightness(.6) saturate(1.1); }
+}
+.hpos-grp .hf.fit i { background-size: contain; background-repeat: no-repeat; }
