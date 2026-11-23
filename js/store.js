@@ -1,4 +1,4 @@
-import { sb, q } from './supabase.js?v=20261117a';
+import { sb, q } from './supabase.js?v=20261122a';
 
 export const state = {
   session: null, user: null, profile: null, priv: null, chars: [], perms: {},
@@ -16,7 +16,7 @@ export const DEFAULTS = {
     // opcionais: vazio = usa o padrão da pele
     frame: '', heading_color: '', hero_title: '', link: '', topbar_bg: '', footer_bg: '',
     btn_style: 'flat', btn_radius: 10, btn_bg: '', btn_text: '', btn_primary_text: '', btn_upper: false,
-    radius: 14, wrap_w: 1120, font_scale: 100, hero_h: 70, hero_overlay: 40, topbar_style: 'glass',
+    radius: 14, wrap_w: 1120, font_scale: 100, hero_h: 70, hero_overlay: 40, hero_zoom: 100, hero_x: 72, hero_y: 94, hero_zoom_m: 100, hero_x_m: 56, hero_y_m: 42, topbar_style: 'glass',
     app_bg_dim: 70, login_dim: 55, nav_align: 'right',
   },
   features: {}, effects: {}, layouts: {}, custom_fonts: [], admin_access: {},

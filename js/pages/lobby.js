@@ -1,16 +1,16 @@
-import { sb, q } from '../supabase.js?v=20261117a';
-import { state } from '../store.js?v=20261117a';
-import { can, warVisible, esc, md, mainChar, fmtDate, fmtTime, relDay, clsRgb, clsIcon, className, every } from '../lib/util.js?v=20261117a';
-import { plate, empty } from '../lib/ui.js?v=20261117a';
-import { sceneHTML } from '../layout.js?v=20261117a';
-import { lobbyLayout } from '../lib/features.js?v=20261117a';
-import { renderBlock } from '../lib/blocks.js?v=20261117a';
-import { callPlate, bindRsvp, rsvpButtons, rsvpState } from '../lib/rsvp.js?v=20261117a';
-import { charsPanel } from '../lib/characters.js?v=20261117a';
-import { attendanceStats } from '../lib/stats.js?v=20261117a';
-import { spotlight } from '../lib/spotlight.js?v=20261117a';
-import { lobbyIntro, nivalIntro } from '../lib/intro.js?v=20261117a';
-import { nivalHero, bindNival, paintNival } from '../lib/nival-hero.js?v=20261117a';
+import { sb, q } from '../supabase.js?v=20261122a';
+import { state } from '../store.js?v=20261122a';
+import { can, warVisible, esc, md, mainChar, fmtDate, fmtTime, relDay, clsRgb, clsIcon, className, every } from '../lib/util.js?v=20261122a';
+import { plate, empty } from '../lib/ui.js?v=20261122a';
+import { sceneHTML } from '../layout.js?v=20261122a';
+import { lobbyLayout } from '../lib/features.js?v=20261122a';
+import { renderBlock } from '../lib/blocks.js?v=20261122a';
+import { callPlate, bindRsvp, rsvpButtons, rsvpState } from '../lib/rsvp.js?v=20261122a';
+import { charsPanel } from '../lib/characters.js?v=20261122a';
+import { attendanceStats } from '../lib/stats.js?v=20261122a';
+import { spotlight } from '../lib/spotlight.js?v=20261122a';
+import { lobbyIntro, nivalIntro } from '../lib/intro.js?v=20261122a';
+import { nivalHero, bindNival, paintNival } from '../lib/nival-hero.js?v=20261122a';
 
 /** A abertura completa roda uma vez por sessão; nas próximas visitas, uma versão mais curta. */
 let introSeen = false;

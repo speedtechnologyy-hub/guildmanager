@@ -1,6 +1,6 @@
-import { sb, q } from '../../supabase.js?v=20261117a';
-import { esc, fmtDateTime } from '../../lib/util.js?v=20261117a';
-import { empty } from '../../lib/ui.js?v=20261117a';
+import { sb, q } from '../../supabase.js?v=20261122a';
+import { esc, fmtDateTime } from '../../lib/util.js?v=20261122a';
+import { empty } from '../../lib/ui.js?v=20261122a';
 
 export default async function log(el) {
   const [rows, ps] = await Promise.all([q(sb.from('audit_log').select('*').order('created_at', { ascending: false }).limit(150)), q(sb.from('profiles').select('id,display_name'))]);

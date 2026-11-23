@@ -1,4 +1,4 @@
-import { esc } from '../../../lib/util.js?v=20261117a';
+import { esc } from '../../../lib/util.js?v=20261122a';
 
 export const clone = (v) => (v === undefined ? undefined : JSON.parse(JSON.stringify(v)));
 export function getPath(o, path) {
@@ -63,3 +63,19 @@ export function sortable(box, onMove) {
 export const move = (arr, from, to) => { const [x] = arr.splice(from, 1); arr.splice(to, 0, x); };
 export const grip = '<span class="grip" data-drag draggable="true" title="Arraste para reordenar">⠿</span>';
 export const uid = () => Math.random().toString(36).slice(2, 8);
+
+/** Ajuste da imagem do topo: sliders + quadro que se arrasta. sfx '' = computador, '_m' = celular. */
+const HP_DEF = { '': [100, 72, 94], _m: [100, 56, 42] };
+export const heroFrame = (ctx, sfx) => {
+  const [dz, dx, dy] = HP_DEF[sfx];
+  const z = ctx.get('theme.hero_zoom' + sfx) ?? dz, x = ctx.get('theme.hero_x' + sfx) ?? dx, y = ctx.get('theme.hero_y' + sfx) ?? dy;
+  const u = ctx.get('banner_url') || '/assets/hero-fatality.jpg';
+  const nm = sfx ? 'Celular' : 'Computador';
+  return `<div class="hpos-grp ${sfx ? 'm' : 'd'}"><div class="stack-s"><h4 class="sh2">${nm}</h4>
+    ${fRange(ctx, 'theme.hero_zoom' + sfx, 'Zoom', { min: 50, max: 300, unit: '%' })}
+    ${fRange(ctx, 'theme.hero_x' + sfx, 'Esquerda ⇄ direita', { min: 0, max: 100, unit: '%' })}
+    ${fRange(ctx, 'theme.hero_y' + sfx, 'Cima ⇅ baixo', { min: 0, max: 100, unit: '%' })}
+    <button class="sbtn mini" type="button" data-hreset="${sfx}">Restaurar padrão</button></div>
+    <div class="hf ${sfx ? 'm' : 'd'}" data-hf="${sfx}" title="Arraste para mover a imagem"><i style="background-image:url('${esc(encodeURI(u))}');background-position:${x}% ${y}%;transform:scale(${z / 100});transform-origin:${x}% ${y}%"></i><b>${nm}</b></div></div>`;
+};
+export const heroDefaults = (sfx) => HP_DEF[sfx];

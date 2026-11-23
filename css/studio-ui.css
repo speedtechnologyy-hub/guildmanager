@@ -309,3 +309,7 @@ body.stage-open { overflow: hidden; }
 .nav a:has(.ldot) { position: relative; }
 .nav a .ldot { position: absolute; top: 0; right: -10px; width: 8px; height: 8px; border-radius: 50%; background: #ff3b3b; box-shadow: 0 0 8px #ff3b3b; animation: stlive 1.4s infinite; }
 @media (max-width: 920px) { .nav a .ldot { position: static; display: inline-block; margin-left: 8px; } }
+
+/* o controle deslizante do Estúdio (.sf.rg) herdava o grid da roleta (.rg) e saía cortado */
+.sf.rg { display: flex; flex-direction: column; grid-template-columns: none; width: auto; max-width: 100%; gap: 6px; }
+.sf.rg span { width: 100%; }

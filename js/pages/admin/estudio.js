@@ -1,13 +1,13 @@
-import { sb, q } from '../../supabase.js?v=20261117a';
-import { state, DEFAULTS, normalize, setSetting } from '../../store.js?v=20261117a';
-import { esc, $ } from '../../lib/util.js?v=20261117a';
-import { loadAllPresetFonts } from '../../theme.js?v=20261117a';
-import { normalizeLobby } from '../../lib/features.js?v=20261117a';
-import { toast, errMsg, confirmBox } from '../../lib/ui.js?v=20261117a';
-import { clone, getPath, setPath, sortable, move } from './estudio/kit.js?v=20261117a';
-import { SECTIONS, PRESETS, render } from './estudio/sections.js?v=20261117a';
-import { newBlock, newItem } from './estudio/blocks-ui.js?v=20261117a';
-import { pagesList, renderPages, renderWhats, renderBackup, renderTeam, setSubLeader, savePerm, setMaster } from './estudio/extra.js?v=20261117a';
+import { sb, q } from '../../supabase.js?v=20261122a';
+import { state, DEFAULTS, normalize, setSetting } from '../../store.js?v=20261122a';
+import { esc, $ } from '../../lib/util.js?v=20261122a';
+import { loadAllPresetFonts } from '../../theme.js?v=20261122a';
+import { normalizeLobby } from '../../lib/features.js?v=20261122a';
+import { toast, errMsg, confirmBox } from '../../lib/ui.js?v=20261122a';
+import { clone, getPath, setPath, sortable, move, heroDefaults } from './estudio/kit.js?v=20261122a';
+import { SECTIONS, PRESETS, render } from './estudio/sections.js?v=20261122a';
+import { newBlock, newItem } from './estudio/blocks-ui.js?v=20261122a';
+import { pagesList, renderPages, renderWhats, renderBackup, renderTeam, setSubLeader, savePerm, setMaster } from './estudio/extra.js?v=20261122a';
 
 /** Chaves de site_settings que o Estúdio controla (rascunho + publicação). */
 const KEYS = ['admin_access', 'theme', 'texts', 'menu', 'features', 'effects', 'layouts', 'custom_fonts', 'guild_name', 'logo_url', 'favicon_url', 'banner_url', 'login_bg_url', 'vitrine_url', 'app_bg_url', 'discord', 'music', 'timezone', 'site_url'];
@@ -125,7 +125,7 @@ export default async function estudio(root) {
       sortable(box, (f, t) => { move(c.get(path), f, t); commit(); draw(); });
     });
     panel.scrollTop = top;
-    if (ui.section === 'whatsapp') (await import('./avisos.js?v=20261117a')).default($('#wa', panel));
+    if (ui.section === 'whatsapp') (await import('./avisos.js?v=20261122a')).default($('#wa', panel));
   }
 
   /* ---------- eventos do painel ---------- */
@@ -136,10 +136,41 @@ export default async function estudio(root) {
     if (t.type === 'range') { const o = t.nextElementSibling; if (o) o.textContent = t.value + (o.dataset.unit || ''); }
     if (t.type === 'checkbox') t.closest('.brow')?.classList.toggle('off', !t.checked);
     if (t.type === 'color') { const code = t.parentElement.querySelector('code'); if (code) code.textContent = t.value; }
+    if (/^theme\.hero_(zoom|x|y)/.test(t.dataset.p)) { const g = t.closest('.hpos-grp'); if (g) hpSync(g, g.querySelector('.hf').dataset.hf); }
     if (t.dataset.p.startsWith('__page.')) return;
     commit();
   };
   panel.addEventListener('input', onInput);
+  /* ajuste do hero: arrastar o quadro e restaurar */
+  const hp = (sfx) => ({ z: 'theme.hero_zoom' + sfx, x: 'theme.hero_x' + sfx, y: 'theme.hero_y' + sfx });
+  const hpSync = (grp, sfx) => {
+    const k = hp(sfx);
+    [k.z, k.x, k.y].forEach((p) => { const i = grp.querySelector(`[data-p="${p}"]`); if (!i) return; i.value = c.get(p); const o = i.nextElementSibling; if (o) o.textContent = i.value + (o.dataset.unit || ''); });
+    const f = grp.querySelector('.hf i'); if (f) { const x = c.get(k.x), y = c.get(k.y); f.style.backgroundPosition = `${x}% ${y}%`; f.style.transformOrigin = `${x}% ${y}%`; f.style.transform = `scale(${c.get(k.z) / 100})`; }
+  };
+  let hd = null;
+  panel.addEventListener('pointerdown', (e) => {
+    const f = e.target.closest('[data-hf]'); if (!f) return;
+    const sfx = f.dataset.hf, k = hp(sfx);
+    hd = { f, sfx, k, sx: e.clientX, sy: e.clientY, x: +c.get(k.x), y: +c.get(k.y), grp: f.closest('.hpos-grp') };
+    f.setPointerCapture?.(e.pointerId); e.preventDefault();
+  });
+  panel.addEventListener('pointermove', (e) => {
+    if (!hd) return;
+    const r = hd.f.getBoundingClientRect(), z = Math.max(0.5, c.get(hd.k.z) / 100);
+    const cl = (v) => Math.round(Math.min(100, Math.max(0, v)));
+    c.set(hd.k.x, cl(hd.x - ((e.clientX - hd.sx) / r.width) * 100 / z));
+    c.set(hd.k.y, cl(hd.y - ((e.clientY - hd.sy) / r.height) * 100 / z));
+    hpSync(hd.grp, hd.sfx); commit();
+  });
+  const hend = () => { hd = null; };
+  panel.addEventListener('pointerup', hend); panel.addEventListener('pointercancel', hend);
+  panel.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-hreset]'); if (!b) return;
+    const sfx = b.dataset.hreset, k = hp(sfx), d = heroDefaults(sfx);
+    c.set(k.z, d[0]); c.set(k.x, d[1]); c.set(k.y, d[2]);
+    hpSync(b.closest('.hpos-grp'), sfx); commit();
+  });
   panel.addEventListener('change', async (e) => {
     const t = e.target;
     if (t.type === 'color' && t.dataset.p) { onInput(e); return draw(); }

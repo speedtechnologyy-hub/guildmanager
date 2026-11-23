@@ -1,4 +1,4 @@
-import { state } from '../store.js?v=20261117a';
+import { state } from '../store.js?v=20261122a';
 
 let loading;
 function load() {

@@ -242,7 +242,8 @@ html[data-skin="nival"] #view *, html[data-skin="nival"] .pendbar, html[data-ski
    Foto de fundo + saudação, frase da guild, cartão da guerra à esquerda; números, status e redes à direita. */
 html[data-skin="nival"] .nv-head { min-height: clamp(540px, 80vh, 800px); display: flex; align-items: flex-end; margin-top: 0; }
 html[data-skin="nival"] .nv-bgwrap { inset: 0 !important; height: auto !important; bottom: 0 !important; -webkit-mask-image: none !important; mask-image: none !important; contain: none; }
-html[data-skin="nival"] .nv-bg { background-size: cover; background-position: 72% 94%; filter: none; image-rendering: auto; }
+html[data-skin="nival"] .nv-bgwrap { background: #0a1636; overflow: hidden; }
+html[data-skin="nival"] .nv-bg { background-size: cover; background-position: var(--hx, 72%) var(--hy, 94%); transform: scale(var(--hz, 1)); transform-origin: var(--hx, 72%) var(--hy, 94%); filter: none; image-rendering: auto; }
 html[data-skin="nival"] .nv-shade { background:
   linear-gradient(0deg, rgba(8, 18, 46, .96) 0%, rgba(8, 18, 46, .72) 22%, rgba(8, 18, 46, .25) 48%, transparent 68%),
   linear-gradient(90deg, rgba(8, 18, 46, .72) 0%, rgba(8, 18, 46, .32) 34%, transparent 58%); }
@@ -274,7 +275,7 @@ html[data-skin="nival"] .nv-shade { background:
   .hx-chips { justify-content: flex-start; }
   .hx-card { width: 100%; }
   html[data-skin="nival"] .nv-bgwrap { background: #0a1636; }
-  html[data-skin="nival"] .nv-bg { bottom: auto; height: clamp(400px, 112vw, 560px); background-position: 56% 42%; }
+  html[data-skin="nival"] .nv-bg { bottom: auto; height: clamp(400px, 112vw, 560px); background-position: var(--hxm, 56%) var(--hym, 42%); transform: scale(var(--hzm, 1)); transform-origin: var(--hxm, 56%) var(--hym, 42%); }
   html[data-skin="nival"] .nv-shade { background: linear-gradient(180deg, rgba(8, 18, 46, .35) 0%, transparent 18%), linear-gradient(180deg, transparent clamp(150px, 52vw, 300px), #0a1636 clamp(400px, 112vw, 560px)); }
   .hx { padding-top: clamp(330px, 92vw, 470px); }
   .hx-h { max-width: 11em; font-size: clamp(1.9rem, 8.4vw, 2.6rem); }
@@ -326,3 +327,16 @@ html[data-skin="nival"] .gate .plate { background: rgba(9, 20, 50, .86) !importa
 html[data-skin="nival"] .gate .btn.oauth { background: rgba(255, 255, 255, .1) !important; color: #fff !important; }
 html[data-skin="nival"] .gate-scene::after { content: ''; position: absolute; inset: 0; background: rgba(6, 14, 38, .35); }
 html[data-skin="nival"] #view a.hx-soc, html[data-skin="nival"] a.hx-soc { color: #fff; }
+
+/* Estúdio: ajuste da imagem do topo (computador / celular) */
+
+.hpos-grp .hf { position: relative; overflow: hidden; border-radius: 10px; background: #0a1636; border: 1px solid rgba(120,160,255,.28); cursor: grab; touch-action: none; user-select: none; }
+.hpos-grp .hf.d { aspect-ratio: 2 / 1; }
+.hpos-grp .hf.m { aspect-ratio: 390 / 437; }
+.hpos-grp .hf:active { cursor: grabbing; }
+.hpos-grp .hf i { position: absolute; inset: 0; background-size: cover; pointer-events: none; }
+.hpos-grp .hf b { position: absolute; left: 6px; top: 6px; font: 600 10px/1 system-ui; padding: 3px 6px; border-radius: 6px; background: rgba(5,10,30,.75); color: #cfe0ff; pointer-events: none; }
+.hpos-grp { display: grid; grid-template-columns: minmax(0,1fr) 150px; gap: 14px; align-items: start; }
+.hpos-grp.m { grid-template-columns: minmax(0,1fr) 110px; }
+.hpos-grp + .hpos-grp { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(120,160,255,.15); }
+@media (max-width: 560px) { .hpos-grp, .hpos-grp.m { grid-template-columns: 1fr; } .hpos-grp .hf { max-width: 240px; } }
